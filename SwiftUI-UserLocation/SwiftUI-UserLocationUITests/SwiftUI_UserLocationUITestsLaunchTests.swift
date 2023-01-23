@@ -1,13 +1,13 @@
 //
-//  MyLocationUITestsLaunchTests.swift
-//  MyLocationUITests
+//  SwiftUI_UserLocationUITestsLaunchTests.swift
+//  SwiftUI-UserLocationUITests
 //
-//  Created by CS Lab Account on 1/16/23.
+//  Created by CS Lab Account on 1/20/23.
 //
 
 import XCTest
 
-class MyLocationUITestsLaunchTests: XCTestCase {
+class SwiftUI_UserLocationUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

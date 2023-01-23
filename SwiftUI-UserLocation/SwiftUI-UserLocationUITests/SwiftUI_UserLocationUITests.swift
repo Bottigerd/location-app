@@ -1,13 +1,13 @@
 //
-//  MyLocationUITests.swift
-//  MyLocationUITests
+//  SwiftUI_UserLocationUITests.swift
+//  SwiftUI-UserLocationUITests
 //
-//  Created by CS Lab Account on 1/16/23.
+//  Created by CS Lab Account on 1/20/23.
 //
 
 import XCTest
 
-class MyLocationUITests: XCTestCase {
+class SwiftUI_UserLocationUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
