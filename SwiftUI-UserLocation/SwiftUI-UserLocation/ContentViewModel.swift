@@ -53,6 +53,7 @@ private func checkLocationAuthorization(){
             region = MKCoordinateRegion(center: locationManager.location!.coordinate,
                                     span: MapDetails.defaultSpan)
             coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
+        getLocationName()
         @unknown default:
             break
         }
@@ -65,6 +66,26 @@ private func checkLocationAuthorization(){
     }
     
     func getCoordinatesString(coordinates2d: CLLocationCoordinate2D) -> String {
-        return coordinates2d.latitude.description + ", " + coordinates2d.longitude.description
+        return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
+
+    func getLocationName(){
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&key=APIKEY") else{return}
+
+        let task = URLSession.shared.dataTask(with: url){
+            data, response, error in
+            
+            if let data = data, let string = String(data: data, encoding: .utf8){
+                print(string)
+            }
+            
+        }
+        task.resume()
+    }
+    
 }
+
+
+
+
+
