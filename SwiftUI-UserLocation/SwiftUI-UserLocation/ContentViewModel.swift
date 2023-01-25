@@ -20,6 +20,8 @@ final class ContentViewModel: NSObject, ObservableObject,
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
                                                span: MapDetails.defaultSpan)
     
+    @Published var coordinates: String = "0"
+    
     var locationManager: CLLocationManager?
     
     func checkIfLocationServicesIsEnabled(){
@@ -27,6 +29,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             locationManager = CLLocationManager()
             locationManager!.delegate = self
             //checkLocationAuthorization()
+            
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
         }
@@ -47,8 +50,9 @@ private func checkLocationAuthorization(){
         case .authorizedAlways, .authorizedWhenInUse:
         //NOTE: not working with iPhone12 Pro and ProMax -> error:
         //Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-        region = MKCoordinateRegion(center: locationManager.location!.coordinate,
+            region = MKCoordinateRegion(center: locationManager.location!.coordinate,
                                     span: MapDetails.defaultSpan)
+            coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
         @unknown default:
             break
         }
@@ -58,5 +62,9 @@ private func checkLocationAuthorization(){
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthorization()
+    }
+    
+    func getCoordinatesString(coordinates2d: CLLocationCoordinate2D) -> String {
+        return coordinates2d.latitude.description + ", " + coordinates2d.longitude.description
     }
 }

@@ -11,15 +11,20 @@ import MapKit
 struct ContentView: View {
     //takes you to region
     @StateObject private var viewModel = ContentViewModel()
-
+    
 
     var body: some View {
+        Text("Coordinates: " + viewModel.coordinates);
         Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
             .ignoresSafeArea()
             .accentColor(Color(.systemPink))
             .onAppear {
                 viewModel.checkIfLocationServicesIsEnabled()
             }
+            .onTapGesture {
+                viewModel.checkIfLocationServicesIsEnabled()
+            }
+
     }
 }
 
