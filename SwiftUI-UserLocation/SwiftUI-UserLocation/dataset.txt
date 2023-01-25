@@ -1,0 +1,27 @@
+# dataset
+
+
+
+## Overview
+
+Timestamp, Name
+1:00pm,   Sayles
+2:00pm,   Sayles
+3:00pm,   Anderson
+4:00pm,   Library
+5:00pm,   Library
+6:00pm,   Burton
+7:00pm,   Burton
+8:00pm,   Olin
+9:00pm,   Weitz
+10:00pm,  Cassat
+11:00pm,  Cassat
+12:00am,  Cassat
+1:00am,   Cassat
+2:00am,   Cassat
+3:00am,  Cassat
+4:00am,   Cassat
+5:00am,   Cassat
+6:00am,  Cassat
+7:00am,  West Gym
+8:00am,    Burton
