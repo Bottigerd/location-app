@@ -126,7 +126,7 @@ private func checkLocationAuthorization(){
         //Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
             region = MKCoordinateRegion(center: locationManager.location!.coordinate,
                                     span: MapDetails.defaultSpan)
-            //coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
+            coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
             location = getLocationName()
         @unknown default:
             break
