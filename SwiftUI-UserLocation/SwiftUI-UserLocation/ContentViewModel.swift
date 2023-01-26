@@ -12,6 +12,47 @@ enum MapDetails {
     static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
 }
 
+struct Response: Decodable {
+    let results: [Component]
+    let status: String
+
+    struct Component: Decodable {
+        let address_components: [Address]
+        let formatted_address: String
+        let geometry: Geometry
+        let place_id: String
+        let plus_code: PlusCode?
+        let types: [String]
+    }
+
+    struct Address: Decodable {
+        let long_name: String
+        let short_name: String
+        let types : [String]
+    }
+
+    struct Geometry: Decodable {
+        let location: Location
+        let location_type: String
+        let viewport: Viewport
+    }
+
+    struct Viewport: Decodable {
+        let northeast: Location
+        let southwest: Location
+    }
+
+    struct PlusCode: Decodable {
+        let compound_code: String
+        let global_code: String
+    }
+
+    struct Location: Decodable {
+        let lat: Float
+        let lng: Float
+    }
+}
+
 final class ContentViewModel: NSObject, ObservableObject,
                               CLLocationManagerDelegate {
     
@@ -34,7 +75,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             print("Show an alert letting them know this is off and to go turn it on.")
         }
     }
-    
+
 private func checkLocationAuthorization(){
     guard let locationManager = locationManager else { return }
         
@@ -68,12 +109,25 @@ private func checkLocationAuthorization(){
     func getCoordinatesString(coordinates2d: CLLocationCoordinate2D) -> String {
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
-
+    
     func getLocationName(){
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&key=APIKEY") else{return}
-
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&key=AIzaSyAcuBecW01Qa7Gb5XsTWhdcIvt1Avq9hNI") else{return}
         let task = URLSession.shared.dataTask(with: url){
             data, response, error in
+            
+            
+            let decoder = JSONDecoder()
+
+//                    if let data = data{
+//                        do{
+//                            let tasks = try decoder.decode([Response].self, from: data)
+//                            tasks.forEach{ i in
+//                                print(i.status)
+//                            }
+//                        }catch{
+//                            print(error)
+//                        }
+//                    }
             
             if let data = data, let string = String(data: data, encoding: .utf8){
                 print(string)
