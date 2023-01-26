@@ -151,11 +151,8 @@ private func checkLocationAuthorization(){
             if let data = data{
                 do {
                     let tasks = try decoder.decode(Response.self, from: data)
-                    print(tasks.plusCode)
-                    
                 } catch {
                     print(error)
-                    
                 }
             }
             
