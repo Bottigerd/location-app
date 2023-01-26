@@ -12,45 +12,73 @@ enum MapDetails {
     static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
 }
 
-struct Response: Decodable {
-    let results: [Component]
+struct Response: Codable {
+    let plusCode: PlusCode
+    let results: [Result]
     let status: String
 
-    struct Component: Decodable {
-        let address_components: [Address]
-        let formatted_address: String
-        let geometry: Geometry
-        let place_id: String
-        let plus_code: PlusCode?
-        let types: [String]
+    enum CodingKeys: String, CodingKey {
+        case plusCode = "plus_code"
+        case results, status
     }
+}
 
-    struct Address: Decodable {
-        let long_name: String
-        let short_name: String
-        let types : [String]
-    }
+struct PlusCode: Codable {
+    let compoundCode, globalCode: String
 
-    struct Geometry: Decodable {
-        let location: Location
-        let location_type: String
-        let viewport: Viewport
+    enum CodingKeys: String, CodingKey {
+        case compoundCode = "compound_code"
+        case globalCode = "global_code"
     }
+}
 
-    struct Viewport: Decodable {
-        let northeast: Location
-        let southwest: Location
-    }
+struct Result: Codable {
+    let addressComponents: [AddressComponent]
+    let formattedAddress: String
+    let geometry: Geometry
+    let placeID: String
+    let plusCode: PlusCode
+    let types: [String]
 
-    struct PlusCode: Decodable {
-        let compound_code: String
-        let global_code: String
+    enum CodingKeys: String, CodingKey {
+        case addressComponents = "address_components"
+        case formattedAddress = "formatted_address"
+        case geometry
+        case placeID = "place_id"
+        case plusCode = "plus_code"
+        case types
     }
+}
 
-    struct Location: Decodable {
-        let lat: Float
-        let lng: Float
+struct AddressComponent: Codable {
+    let longName, shortName: String
+    let types: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case longName = "long_name"
+        case shortName = "short_name"
+        case types
     }
+}
+
+struct Geometry: Codable {
+    let location: Location
+    let locationType: String
+    let viewport: Viewport
+
+    enum CodingKeys: String, CodingKey {
+        case location
+        case locationType = "location_type"
+        case viewport
+    }
+}
+
+struct Location: Codable {
+    let lat, lng: Double
+}
+
+struct Viewport: Codable {
+    let northeast, southwest: Location
 }
 
 final class ContentViewModel: NSObject, ObservableObject,
@@ -63,7 +91,8 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     @Published var coordinates: String = "0"
     
-    var API_KEY: String = "0"
+    // DO NOT PUSH WITH THIS FILLED
+    var API_KEY: String = ""
     
     var locationManager: CLLocationManager?
     
@@ -87,7 +116,7 @@ private func checkLocationAuthorization(){
             //switch to always in use?
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
-            print("Your location is restricted likely due to parental controls")
+            print("location is restricted likely due to parental controls")
         case .denied:
             print("You have denied this app location permission. Go into settings to change it.")
         case .authorizedAlways, .authorizedWhenInUse:
@@ -96,7 +125,7 @@ private func checkLocationAuthorization(){
             region = MKCoordinateRegion(center: locationManager.location!.coordinate,
                                     span: MapDetails.defaultSpan)
             coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
-        getLocationName()
+            getLocationName()
         @unknown default:
             break
         }
@@ -119,18 +148,18 @@ private func checkLocationAuthorization(){
             
             
             let decoder = JSONDecoder()
-
-//                    if let data = data{
-//                        do{
-//                            let tasks = try decoder.decode([Response].self, from: data)
-//                            tasks.forEach{ i in
-//                                print(i.status)
-//                            }
-//                        }catch{
-//                            print(error)
-//                        }
-//                    }
+            if let data = data{
+                do {
+                    let tasks = try decoder.decode(Response.self, from: data)
+                    print(tasks.plusCode)
+                    
+                } catch {
+                    print(error)
+                    
+                }
+            }
             
+            // print JSON for testing purposes
             if let data = data, let string = String(data: data, encoding: .utf8){
                 print(string)
             }
