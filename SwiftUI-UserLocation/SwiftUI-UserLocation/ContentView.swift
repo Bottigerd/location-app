@@ -14,7 +14,7 @@ struct ContentView: View {
     
 
     var body: some View {
-        Text("Coordinates: " + viewModel.coordinates);
+        Text("Location: " + viewModel.location);
         Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
             .ignoresSafeArea()
             .accentColor(Color(.systemPink))

@@ -91,6 +91,8 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     @Published var coordinates: String = "0"
     
+    @Published var location: String = "Fake Location"
+    
     // DO NOT PUSH WITH THIS FILLED
     var API_KEY: String = ""
     
@@ -124,8 +126,8 @@ private func checkLocationAuthorization(){
         //Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
             region = MKCoordinateRegion(center: locationManager.location!.coordinate,
                                     span: MapDetails.defaultSpan)
-            coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
-            getLocationName()
+            //coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
+            location = getLocationName()
         @unknown default:
             break
         }
@@ -141,8 +143,10 @@ private func checkLocationAuthorization(){
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
     
-    func getLocationName(){
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY) else{return}
+    func getLocationName() -> String {
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY) else{return "Error 404"}
+        var location = "N/A"
+        
         let task = URLSession.shared.dataTask(with: url){
             data, response, error in
             
@@ -151,6 +155,7 @@ private func checkLocationAuthorization(){
             if let data = data{
                 do {
                     let tasks = try decoder.decode(Response.self, from: data)
+                    location = tasks.results[0].formattedAddress
                 } catch {
                     print(error)
                 }
@@ -163,6 +168,7 @@ private func checkLocationAuthorization(){
             
         }
         task.resume()
+        return location
     }
     
 }
