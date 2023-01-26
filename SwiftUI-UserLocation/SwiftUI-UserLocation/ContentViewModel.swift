@@ -63,6 +63,8 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     @Published var coordinates: String = "0"
     
+    var API_KEY: String = "0"
+    
     var locationManager: CLLocationManager?
     
     func checkIfLocationServicesIsEnabled(){
@@ -111,7 +113,7 @@ private func checkLocationAuthorization(){
     }
     
     func getLocationName(){
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&key=AIzaSyAcuBecW01Qa7Gb5XsTWhdcIvt1Avq9hNI") else{return}
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY) else{return}
         let task = URLSession.shared.dataTask(with: url){
             data, response, error in
             
