@@ -145,7 +145,7 @@ struct DataView: View {
                 
             
                 if (count==1){
-                    debugPrint("here")
+//                    debugPrint("here")
                     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                     fetchRequest.predicate = NSPredicate(format: "(name = %@)", name)
                     let result = try! viewContext.fetch(fetchRequest)
@@ -192,7 +192,7 @@ struct DataView: View {
         let result = try! viewContext.fetch(fetchRequest)
         let objectUpdate = result[0] as! NSManagedObject
         let curCount = objectUpdate.value(forKey: "count") as! Int
-        debugPrint(curCount)
+//        debugPrint(curCount)
         
         if curCount>1{
             objectUpdate.setValue(curCount-1, forKey: "count")
@@ -265,16 +265,16 @@ struct DataView: View {
                         let count = getCount(Name: columns[4])
                         
                         if (count==1){
-                            debugPrint("here")
+//                            debugPrint("here")
                             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                             fetchRequest.predicate = NSPredicate(format: "(name = %@)", columns[4])
                             let result = try! viewContext.fetch(fetchRequest)
-                            debugPrint(result)
+//                            debugPrint(result)
                             let objectUpdate = result[0] as! NSManagedObject
         //                    objectUpdate.setValue(, forKey: "name")
                             let curCount = objectUpdate.value(forKey: "count")
                             objectUpdate.setValue(curCount as! Int+1, forKey: "count")
-                            debugPrint(objectUpdate.value(forKey: "count"))
+//                            debugPrint(objectUpdate.value(forKey: "count"))
                         }
                         else{
                             name_db.name=columns[4]
