@@ -31,8 +31,8 @@ struct DataView: View {
     @FetchRequest(entity: Location.entity(), sortDescriptors: [])
     private var locations: FetchedResults<Location>
     
-    @FetchRequest(entity: Timestamp.entity(), sortDescriptors: [])
-    private var timestamps: FetchedResults<Timestamp>
+    @FetchRequest(entity: Name.entity(), sortDescriptors: [])
+    private var names: FetchedResults<Name>
 
     var body: some View {
             NavigationView {
@@ -78,17 +78,17 @@ struct DataView: View {
                    .frame(maxWidth: .infinity)
                    
                     List {
-                        ForEach(timestamps) { timestamp in
+                        ForEach(locations) { location in
                             HStack {
-                                Text(castToString(givenDate:timestamp.time!) )
+                                Text(castToString(givenDate:location.time!) )
                                 Spacer()
-                                Text(timestamp.place!.name ?? "no")
+                                Text(location.name ?? "no")
                                 Spacer()
-                                Text( String(format: "%f", timestamp.place!.latitude) )
+                                Text( String(format: "%f", location.latitude) )
                                 Spacer()
-                                Text(String(format: "%f", timestamp.place!.longitude) )
+                                Text(String(format: "%f", location.longitude) )
                                 Spacer()
-                                Text(String(format: "%f", timestamp.place!.altitude) )
+                                Text(String(format: "%f", location.altitude) )
                                 Spacer()
 
                             }
@@ -125,25 +125,54 @@ struct DataView: View {
     private func addLocation() {
             
             withAnimation {
-                let timestamp = Timestamp(context: viewContext)
+                let name_db = Name(context: viewContext)
                 let location = Location(context: viewContext)
                 let addDateFormatter = DateFormatter()
                 addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                timestamp.time = addDateFormatter.date(from: time) ?? Date()
+                location.time = addDateFormatter.date(from: time) ?? Date()
 //                debugPrint(time)
 //                debugPrint(addDateFormatter.date(from: time))
-                location.addToTimes(timestamp)
+//                location.addToTimes(timestamp)
                 location.latitude = Double(latitude) ?? 0.0
                 location.longitude = Double(longitude) ?? 0.0
                 location.altitude = Double(altitude) ?? 0.0
+                let count = getCount(Name: name)
                 location.name = name
                 // find if exists first
                 // if no, initialize count to 1
                 // if yes, fetch request, modify count to +1
-                location.count = 1
+                
+                
+            
+                if (count==1){
+                    debugPrint("here")
+                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+                    fetchRequest.predicate = NSPredicate(format: "(name = %@)", name)
+                    let result = try! viewContext.fetch(fetchRequest)
+//                    debugPrint(result)
+                    let objectUpdate = result[0] as! NSManagedObject
+//                    objectUpdate.setValue(, forKey: "name")
+                    let curCount = objectUpdate.value(forKey: "count")
+//                    debugPrint(objectUpdate.value(forKey: "count"))
+                    objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+//                    debugPrint(objectUpdate.value(forKey: "count"))
+                }
+                else{
+                    name_db.name=name
+                    name_db.count = 1
+                }
+        
                 saveContext()
             }
         }
+    
+    private func getCount(Name: String) -> Int {
+       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+       fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
+        let count = try! viewContext.count(for:fetchRequest)
+//        debugPrint(count)
+       return count
+    }
         
         private func saveContext() {
             do {
@@ -156,10 +185,34 @@ struct DataView: View {
     
     private func deleteLocations(offsets: IndexSet) {
         // not sure if actually deletes properly or nah, but looks like it
+//        debugPrint(offsets.map {locations[$0]}[0].value(forKey: "name")!)
+        let deleted_name = offsets.map{locations[$0]}[0].value(forKey: "name") as! NSString
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+        fetchRequest.predicate = NSPredicate(format: "(name = %@)", deleted_name)
+        let result = try! viewContext.fetch(fetchRequest)
+        let objectUpdate = result[0] as! NSManagedObject
+        let curCount = objectUpdate.value(forKey: "count") as! Int
+        debugPrint(curCount)
+        
+        if curCount>1{
+            objectUpdate.setValue(curCount-1, forKey: "count")
+        } else{
+            viewContext.delete(objectUpdate)
+        }
+        
+        saveContext()
+        
         withAnimation {
-            offsets.map { timestamps[$0] }.forEach(viewContext.delete)
+            offsets.map { locations[$0] }.forEach(viewContext.delete)
                 saveContext()
+            
             }
+
+//        let fetchRequest2 = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+//        fetchRequest2.predicate = NSPredicate(format: "(name = %@)", deleted_name)
+//        let result2 = try! viewContext.fetch(fetchRequest2)
+//        debugPrint(result2)
+        
     }
     
     func exportCSV() {
@@ -167,8 +220,8 @@ struct DataView: View {
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
             var csvText = "Timestamp,Longitude,Latitude,Altitude,Name\n"
 
-            for timestamp in timestamps {
-                csvText += "\(timestamp.time! ), \(timestamp.place!.longitude  ),\(timestamp.place!.latitude ),\(timestamp.place!.altitude ),\(timestamp.place!.name ?? "Not Found")\n"
+            for location in locations {
+                csvText += "\(location.time! ), \(location.longitude  ),\(location.latitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
             }
 
             do {
@@ -200,19 +253,35 @@ struct DataView: View {
                 for row in rows {
                     if !row.isEmpty{
                         let columns = row.components(separatedBy: ",")
-                        let timestamp = Timestamp(context: viewContext)
                         let location = Location(context: viewContext)
+                        let name_db = Name(context: viewContext)
                         let castedDate = importDateFormatter.date(from: columns[0] )
-//                        debugPrint(columns[0])
-//                        debugPrint(castedDate)
-                        timestamp.time = castedDate ?? Date()
+                        location.time = castedDate ?? Date()
                         location.longitude = Double(columns[1]) ?? 0.0
                         location.latitude = Double(columns[2]) ?? 0.0
                         location.altitude = Double(columns[3]) ?? 0.0
                         location.name = columns[4]
-                        location.addToTimes(timestamp)
-                        location.count = 1
+//                        location.count = 1
+                        let count = getCount(Name: columns[4])
+                        
+                        if (count==1){
+                            debugPrint("here")
+                            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+                            fetchRequest.predicate = NSPredicate(format: "(name = %@)", columns[4])
+                            let result = try! viewContext.fetch(fetchRequest)
+                            debugPrint(result)
+                            let objectUpdate = result[0] as! NSManagedObject
+        //                    objectUpdate.setValue(, forKey: "name")
+                            let curCount = objectUpdate.value(forKey: "count")
+                            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+                            debugPrint(objectUpdate.value(forKey: "count"))
+                        }
+                        else{
+                            name_db.name=columns[4]
+                            name_db.count = 1
+                        }
                         saveContext()
+                        
                         
                     }
                     

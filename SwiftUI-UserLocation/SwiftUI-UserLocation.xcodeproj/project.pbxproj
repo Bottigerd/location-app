@@ -18,10 +18,10 @@
 		7CCB3F7D29821104005DB670 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F7C29821104005DB670 /* DataView.swift */; };
 		7CCB3F7F29821326005DB670 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F7E29821326005DB670 /* Persistence.swift */; };
 		7CCB3F8229821372005DB670 /* Locations.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F8029821372005DB670 /* Locations.xcdatamodeld */; };
-		7CCB3F872982141B005DB670 /* Timestamp+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F832982141B005DB670 /* Timestamp+CoreDataClass.swift */; };
-		7CCB3F882982141B005DB670 /* Timestamp+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F842982141B005DB670 /* Timestamp+CoreDataProperties.swift */; };
-		7CCB3F892982141B005DB670 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F852982141B005DB670 /* Location+CoreDataClass.swift */; };
-		7CCB3F8A2982141B005DB670 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F862982141B005DB670 /* Location+CoreDataProperties.swift */; };
+		7CD934EB29861FB400E98C33 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E729861FB400E98C33 /* Location+CoreDataClass.swift */; };
+		7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */; };
+		7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */; };
+		7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,10 +56,11 @@
 		7CCB3F7C29821104005DB670 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
 		7CCB3F7E29821326005DB670 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		7CCB3F8129821372005DB670 /* Locations.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Locations.xcdatamodel; sourceTree = "<group>"; };
-		7CCB3F832982141B005DB670 /* Timestamp+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timestamp+CoreDataClass.swift"; sourceTree = "<group>"; };
-		7CCB3F842982141B005DB670 /* Timestamp+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timestamp+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		7CCB3F852982141B005DB670 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
-		7CCB3F862982141B005DB670 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7CD934DE29861C6100E98C33 /* Locations Updated.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Locations Updated.xcdatamodel"; sourceTree = "<group>"; };
+		7CD934E729861FB400E98C33 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,10 +152,10 @@
 		7CCB3F8B29821420005DB670 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				7CCB3F832982141B005DB670 /* Timestamp+CoreDataClass.swift */,
-				7CCB3F842982141B005DB670 /* Timestamp+CoreDataProperties.swift */,
-				7CCB3F852982141B005DB670 /* Location+CoreDataClass.swift */,
-				7CCB3F862982141B005DB670 /* Location+CoreDataProperties.swift */,
+				7CD934E729861FB400E98C33 /* Location+CoreDataClass.swift */,
+				7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */,
+				7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */,
+				7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -289,14 +290,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */,
+				7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */,
+				7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */,
+				7CD934EB29861FB400E98C33 /* Location+CoreDataClass.swift in Sources */,
 				7CB2CC07297B83FE005C248E /* ContentView.swift in Sources */,
 				7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */,
 				7CCB3F7D29821104005DB670 /* DataView.swift in Sources */,
 				7CB2CC2F297B9458005C248E /* ContentViewModel.swift in Sources */,
-				7CCB3F8A2982141B005DB670 /* Location+CoreDataProperties.swift in Sources */,
-				7CCB3F882982141B005DB670 /* Timestamp+CoreDataProperties.swift in Sources */,
-				7CCB3F872982141B005DB670 /* Timestamp+CoreDataClass.swift in Sources */,
-				7CCB3F892982141B005DB670 /* Location+CoreDataClass.swift in Sources */,
 				7CCB3F8229821372005DB670 /* Locations.xcdatamodeld in Sources */,
 				7CCB3F7F29821326005DB670 /* Persistence.swift in Sources */,
 			);
@@ -624,9 +625,10 @@
 		7CCB3F8029821372005DB670 /* Locations.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7CD934DE29861C6100E98C33 /* Locations Updated.xcdatamodel */,
 				7CCB3F8129821372005DB670 /* Locations.xcdatamodel */,
 			);
-			currentVersion = 7CCB3F8129821372005DB670 /* Locations.xcdatamodel */;
+			currentVersion = 7CD934DE29861C6100E98C33 /* Locations Updated.xcdatamodel */;
 			path = Locations.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

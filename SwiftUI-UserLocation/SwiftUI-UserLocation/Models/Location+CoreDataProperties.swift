@@ -2,7 +2,7 @@
 //  Location+CoreDataProperties.swift
 //  SwiftUI-UserLocation
 //
-//  Created by CS Lab Account on 1/25/23.
+//  Created by CS Lab Account on 1/28/23.
 //
 //
 
@@ -20,25 +20,7 @@ extension Location {
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var name: String?
-    @NSManaged public var count: Int16
-    @NSManaged public var times: NSSet?
-
-}
-
-// MARK: Generated accessors for times
-extension Location {
-
-    @objc(addTimesObject:)
-    @NSManaged public func addToTimes(_ value: Timestamp)
-
-    @objc(removeTimesObject:)
-    @NSManaged public func removeFromTimes(_ value: Timestamp)
-
-    @objc(addTimes:)
-    @NSManaged public func addToTimes(_ values: NSSet)
-
-    @objc(removeTimes:)
-    @NSManaged public func removeFromTimes(_ values: NSSet)
+    @NSManaged public var time: Date?
 
 }
 
