@@ -91,7 +91,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     @Published var coordinates: String = "0"
     
-    @Published var location: String = "Fake Location"
+    @Published var location: String = "Pending Location"
     
     // DO NOT PUSH WITH THIS FILLED
     var API_KEY: String = ""
@@ -124,10 +124,10 @@ private func checkLocationAuthorization(){
         case .authorizedAlways, .authorizedWhenInUse:
         //NOTE: not working with iPhone12 Pro and ProMax -> error:
         //Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-            region = MKCoordinateRegion(center: locationManager.location!.coordinate,
-                                    span: MapDetails.defaultSpan)
-            coordinates = getCoordinatesString(coordinates2d: locationManager.location!.coordinate)
-            location = getLocationName()
+            region = MKCoordinateRegion(center: locationManager.location?.coordinate ?? MapDetails.startingLocation,
+                                 span: MapDetails.defaultSpan)
+            coordinates = getCoordinatesString(coordinates2d: locationManager.location?.coordinate ?? MapDetails.startingLocation)
+            getLocationName()
         @unknown default:
             break
         }
@@ -143,21 +143,23 @@ private func checkLocationAuthorization(){
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
     
-    func getLocationName() -> String {
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY) else{return "Error 404"}
-        var location = "N/A"
+    func getLocationName() {
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY)
+        else{
+            print("ERROR: Malformed Request")
+            return
+        }
         
-        let task = URLSession.shared.dataTask(with: url){
+        let task = URLSession.shared.dataTask(with: url) {
             data, response, error in
             
-            
             let decoder = JSONDecoder()
-            if let data = data{
+            if let data = data {
                 do {
                     let tasks = try decoder.decode(Response.self, from: data)
-                    location = tasks.results[0].formattedAddress
+                    self.location = tasks.results[0].formattedAddress
                 } catch {
-                    print(error)
+                    print("ERROR: Could not decode JSON response")
                 }
             }
             
@@ -168,7 +170,6 @@ private func checkLocationAuthorization(){
             
         }
         task.resume()
-        return location
     }
     
 }

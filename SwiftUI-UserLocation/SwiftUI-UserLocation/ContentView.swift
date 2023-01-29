@@ -14,14 +14,19 @@ struct ContentView: View {
     
 
     var body: some View {
-        Text("Location: " + viewModel.location);
+        Text(viewModel.location);
+        Button(action: { viewModel.checkIfLocationServicesIsEnabled()}){
+            Text("Get Location")
+                .foregroundColor(Color.white)
+                .padding()
+            }
+            .buttonStyle(.bordered)
+            .background(Color.green)
+            .cornerRadius(10)
         Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
             .ignoresSafeArea()
             .accentColor(Color(.systemPink))
             .onAppear {
-                viewModel.checkIfLocationServicesIsEnabled()
-            }
-            .onTapGesture {
                 viewModel.checkIfLocationServicesIsEnabled()
             }
 
