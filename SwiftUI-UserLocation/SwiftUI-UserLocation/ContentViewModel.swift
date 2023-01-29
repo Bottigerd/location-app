@@ -12,8 +12,8 @@ enum MapDetails {
     static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
 }
 
-struct Response: Codable {
-    let plusCode: PlusCode
+struct ResponseStruct: Codable {
+    let plusCode: PlusCodeStruct
     let results: [Result]
     let status: String
 
@@ -23,7 +23,7 @@ struct Response: Codable {
     }
 }
 
-struct PlusCode: Codable {
+struct PlusCodeStruct: Codable {
     let compoundCode, globalCode: String
 
     enum CodingKeys: String, CodingKey {
@@ -33,11 +33,11 @@ struct PlusCode: Codable {
 }
 
 struct Result: Codable {
-    let addressComponents: [AddressComponent]
+    let addressComponents: [AddressComponentStruct]
     let formattedAddress: String
-    let geometry: Geometry
+    let geometry: GeometryStruct
     let placeID: String
-    let plusCode: PlusCode
+    let plusCode: PlusCodeStruct
     let types: [String]
 
     enum CodingKeys: String, CodingKey {
@@ -50,7 +50,7 @@ struct Result: Codable {
     }
 }
 
-struct AddressComponent: Codable {
+struct AddressComponentStruct: Codable {
     let longName, shortName: String
     let types: [String]
 
@@ -61,10 +61,10 @@ struct AddressComponent: Codable {
     }
 }
 
-struct Geometry: Codable {
-    let location: Location
+struct GeometryStruct: Codable {
+    let location: LocationStruct
     let locationType: String
-    let viewport: Viewport
+    let viewport: ViewportStruct
 
     enum CodingKeys: String, CodingKey {
         case location
@@ -73,12 +73,12 @@ struct Geometry: Codable {
     }
 }
 
-struct Location: Codable {
+struct LocationStruct: Codable {
     let lat, lng: Double
 }
 
-struct Viewport: Codable {
-    let northeast, southwest: Location
+struct ViewportStruct: Codable {
+    let northeast, southwest: LocationStruct
 }
 
 final class ContentViewModel: NSObject, ObservableObject,
@@ -91,7 +91,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     @Published var coordinates: String = "0"
     
-    @Published var location: String = "Pending Location"
+    @Published var address: String = "Pending Address"
     
     // DO NOT PUSH WITH THIS FILLED
     var API_KEY: String = ""
@@ -156,8 +156,8 @@ private func checkLocationAuthorization(){
             let decoder = JSONDecoder()
             if let data = data {
                 do {
-                    let tasks = try decoder.decode(Response.self, from: data)
-                    self.location = tasks.results[0].formattedAddress
+                    let tasks = try decoder.decode(ResponseStruct.self, from: data)
+                    self.address = tasks.results[0].formattedAddress
                 } catch {
                     print("ERROR: Could not decode JSON response")
                 }
