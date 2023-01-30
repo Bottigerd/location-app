@@ -1,0 +1,72 @@
+{
+   "plus_code" : {
+      "compound_code" : "FV62+53X Northfield, MN, USA",
+      "global_code" : "86P8FV62+53X"
+   },
+   "results" : [
+      {
+         "address_components" : [
+            {
+               "long_name" : "715",
+               "short_name" : "715",
+               "types" : [ "street_number" ]
+            },
+            {
+               "long_name" : "Evans Drive",
+               "short_name" : "Evans Dr",
+               "types" : [ "route" ]
+            },
+            {
+               "long_name" : "Rice",
+               "short_name" : "Rice",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Rice County",
+               "short_name" : "Rice County",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "Minnesota",
+               "short_name" : "MN",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "United States",
+               "short_name" : "US",
+               "types" : [ "country", "political" ]
+            },
+            {
+               "long_name" : "55057",
+               "short_name" : "55057",
+               "types" : [ "postal_code" ]
+            }
+         ],
+         "formatted_address" : "715 Evans Dr, Rice, MN 55057, USA",
+         "geometry" : {
+            "location" : {
+               "lat" : 44.4605167,
+               "lng" : -93.1496901
+            },
+            "location_type" : "ROOFTOP",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 44.4618656802915,
+                  "lng" : -93.14834111970849
+               },
+               "southwest" : {
+                  "lat" : 44.4591677197085,
+                  "lng" : -93.15103908029151
+               }
+            }
+         },
+         "place_id" : "ChIJhzudb7BT9ocRWxttpsHoQ_4",
+         "plus_code" : {
+            "compound_code" : "FV62+64 Northfield, MN, USA",
+            "global_code" : "86P8FV62+64"
+         },
+         "types" : [ "street_address" ]
+      }
+   ],
+   "status" : "OK"
+}
