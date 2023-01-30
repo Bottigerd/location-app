@@ -9,7 +9,6 @@ import SwiftUI
 
 @main
 struct SwiftUI_UserLocationApp: App {
-    
     var body: some Scene {
         WindowGroup {
             TabView {
@@ -25,8 +24,7 @@ struct SwiftUI_UserLocationApp: App {
                     .tabItem {
                         Label("Inference", systemImage: "list.number")
                     }
-            }
-            
+            }  
         }
     }
 }
