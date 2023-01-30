@@ -9,9 +9,24 @@ import SwiftUI
 
 @main
 struct SwiftUI_UserLocationApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                ContentView()
+                    .tabItem {
+                        Label("Map", systemImage: "map.fill")
+                    }
+                InferenceView() //Replace with DataView when merged
+                    .tabItem {
+                        Label("Data", systemImage: "chart.bar")
+                    }
+                InferenceView()
+                    .tabItem {
+                        Label("Inference", systemImage: "list.number")
+                    }
+            }
+            
         }
     }
 }
