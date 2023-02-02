@@ -1,4 +1,3 @@
-
 //  DataView.swift
 //  DataDemo
 //
@@ -122,6 +121,37 @@ struct DataView: View {
         return castedDate
     }
     
+    // requires Date in datetime format "yyyy-MM-dd HH:mm:ss". Latitude,Longitude and Altitude in Doubles and a Name in String format.
+    func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+        let name_db = Name(context: viewContext)
+        let location = Location(context: viewContext)
+        location.time=givenTime
+        location.latitude = Double(givenLat)
+        location.longitude = Double(givenLong)
+        location.altitude = Double(givenAlt)
+        let count = getCount(Name: givenName)
+        location.name = givenName
+        
+        
+        // find if exists first
+        // if no, initialize count to 1
+        // if yes, fetch request, modify count to +1
+        if (count==1){
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
+            let result = try! viewContext.fetch(fetchRequest)
+            let objectUpdate = result[0] as! NSManagedObject
+            let curCount = objectUpdate.value(forKey: "count")
+            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+        }
+        else{
+            name_db.name=givenName
+            name_db.count = 1
+        }
+
+        saveContext()
+    }
+    
     private func addLocation() {
             
             withAnimation {
@@ -130,32 +160,23 @@ struct DataView: View {
                 let addDateFormatter = DateFormatter()
                 addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 location.time = addDateFormatter.date(from: time) ?? Date()
-//                debugPrint(time)
-//                debugPrint(addDateFormatter.date(from: time))
-//                location.addToTimes(timestamp)
                 location.latitude = Double(latitude) ?? 0.0
                 location.longitude = Double(longitude) ?? 0.0
                 location.altitude = Double(altitude) ?? 0.0
                 let count = getCount(Name: name)
                 location.name = name
+                
+                
                 // find if exists first
                 // if no, initialize count to 1
                 // if yes, fetch request, modify count to +1
-                
-                
-            
                 if (count==1){
-//                    debugPrint("here")
                     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                     fetchRequest.predicate = NSPredicate(format: "(name = %@)", name)
                     let result = try! viewContext.fetch(fetchRequest)
-//                    debugPrint(result)
                     let objectUpdate = result[0] as! NSManagedObject
-//                    objectUpdate.setValue(, forKey: "name")
                     let curCount = objectUpdate.value(forKey: "count")
-//                    debugPrint(objectUpdate.value(forKey: "count"))
                     objectUpdate.setValue(curCount as! Int+1, forKey: "count")
-//                    debugPrint(objectUpdate.value(forKey: "count"))
                 }
                 else{
                     name_db.name=name
@@ -170,7 +191,6 @@ struct DataView: View {
        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
        fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
         let count = try! viewContext.count(for:fetchRequest)
-//        debugPrint(count)
        return count
     }
         
@@ -218,10 +238,10 @@ struct DataView: View {
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
-            var csvText = "Timestamp,Longitude,Latitude,Altitude,Name\n"
+            var csvText = "Timestamp,Latitude,Longitude,Altitude,Name\n"
 
             for location in locations {
-                csvText += "\(location.time! ), \(location.longitude  ),\(location.latitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
+                csvText += "\(location.time! ),\(location.latitude  ),\(location.longitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
             }
 
             do {
@@ -257,8 +277,8 @@ struct DataView: View {
                         let name_db = Name(context: viewContext)
                         let castedDate = importDateFormatter.date(from: columns[0] )
                         location.time = castedDate ?? Date()
-                        location.longitude = Double(columns[1]) ?? 0.0
-                        location.latitude = Double(columns[2]) ?? 0.0
+                        location.latitude = Double(columns[1]) ?? 0.0
+                        location.longitude = Double(columns[2]) ?? 0.0
                         location.altitude = Double(columns[3]) ?? 0.0
                         location.name = columns[4]
 //                        location.count = 1
