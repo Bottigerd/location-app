@@ -20,6 +20,8 @@ struct ContentView: View {
                 .foregroundColor(Color.white)
                 .padding()
             }
+
+                
             .buttonStyle(.bordered)
             .background(Color.green)
             .cornerRadius(10)

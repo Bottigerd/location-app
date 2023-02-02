@@ -1,9 +1,12 @@
 //
-//  Config.xcconfig
+//  dev.xcconfig
 //  SwiftUI-UserLocation
 //
 //  Created by Amir Al-Sheikh on 2/1/23.
 //
 
 // Configuration settings file format documentation can be found at:
-// https://help.apple.com/xcode/#/dev745c5c974
+
+API_KEY = AIzaSyAcuBecW01Qa7Gb5XsTWhdcIvt1Avq9hNI
+
+

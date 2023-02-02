@@ -122,7 +122,10 @@ struct DataView: View {
     }
     
     // requires Date in datetime format "yyyy-MM-dd HH:mm:ss". Latitude,Longitude and Altitude in Doubles and a Name in String format.
-    func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+    func getLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+        addLocationFromAPI(givenTime: givenTime, givenLat: givenLat, givenLong: givenLong, givenAlt: givenAlt, givenName: givenName)
+    }
+    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
         let name_db = Name(context: viewContext)
         let location = Location(context: viewContext)
         location.time=givenTime

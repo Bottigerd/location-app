@@ -6,6 +6,11 @@
 //
 
 import MapKit
+extension Date {
+    func currentTimeMillis() -> Int64 {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
+}
 
 enum MapDetails {
     static let startingLocation = CLLocationCoordinate2D(latitude: 37.331516,                                                                              longitude: -121.891054)
@@ -73,6 +78,8 @@ struct GeometryStruct: Codable {
     }
 }
 
+
+
 struct LocationStruct: Codable {
     let lat, lng: Double
 }
@@ -89,13 +96,11 @@ final class ContentViewModel: NSObject, ObservableObject,
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
                                                span: MapDetails.defaultSpan)
     
-    @Published var coordinates: String = "0"
+    @Published var coordinates: Array<String> = ["0","0"]
     
     @Published var address: String = "Pending Address"
     
-    // DO NOT PUSH WITH THIS FILLED
-    var API_KEY: String = ""
-    
+    var placeID: String = "temp"
     var locationManager: CLLocationManager?
     
     func checkIfLocationServicesIsEnabled(){
@@ -110,6 +115,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
 
 private func checkLocationAuthorization(){
+    
     guard let locationManager = locationManager else { return }
         
     switch locationManager.authorizationStatus {
@@ -128,28 +134,36 @@ private func checkLocationAuthorization(){
                                  span: MapDetails.defaultSpan)
             coordinates = getCoordinatesString(coordinates2d: locationManager.location?.coordinate ?? MapDetails.startingLocation)
             getLocationName()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //DataView().getLocationFromAPI(givenTime: Date() , givenLat: Double(coordinates[0]) ?? 0.0 , givenLong: Double(coordinates[1]) ?? 0.0, givenAlt: 0, givenName: placeID)
+        
         @unknown default:
             break
         }
 
+    
+
+    
     }
+
     
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthorization()
     }
     
-    func getCoordinatesString(coordinates2d: CLLocationCoordinate2D) -> String {
-        return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
+    func getCoordinatesString(coordinates2d: CLLocationCoordinate2D) -> Array<String> {
+        return [coordinates2d.latitude.description, coordinates2d.longitude.description]
     }
     
     func getLocationName() {
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY)
+    
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates[0] + "," + coordinates[1] + "&location_type=ROOFTOP&result_type=street_address&key=\(Configuration.apiKey)")
         else{
             print("ERROR: Malformed Request")
             return
         }
-        
         let task = URLSession.shared.dataTask(with: url) {
             data, response, error in
             
@@ -157,21 +171,29 @@ private func checkLocationAuthorization(){
             if let data = data {
                 do {
                     let tasks = try decoder.decode(ResponseStruct.self, from: data)
-                    self.address = tasks.results[0].formattedAddress
+                    //self.address = tasks.results[0].formattedAddress //causing thread error, commenting out for now
+                    
+                    self.placeID = " tasks.results[0].placeID"
+                    
                 } catch {
                     print("ERROR: Could not decode JSON response")
                 }
             }
             
+            
             // print JSON for testing purposes
             if let data = data, let string = String(data: data, encoding: .utf8){
                 print(string)
             }
-            
         }
         task.resume()
+        
+
     }
+        
+  
     
+
 }
 
 

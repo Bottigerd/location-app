@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		297648BA298B827C009A57B6 /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297648B9298B827C009A57B6 /* config.swift */; };
 		7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */; };
 		7CB2CC07297B83FE005C248E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC06297B83FE005C248E /* ContentView.swift */; };
 		7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CB2CC08297B8400005C248E /* Assets.xcassets */; };
@@ -42,6 +43,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		297648B9298B827C009A57B6 /* config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
+		297648BB298B82F1009A57B6 /* dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = dev.xcconfig; sourceTree = "<group>"; };
+		297648BC298B837A009A57B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7CB2CC01297B83FE005C248E /* SwiftUI-UserLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-UserLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_UserLocationApp.swift; sourceTree = "<group>"; };
 		7CB2CC06297B83FE005C248E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 		7CB2CC03297B83FE005C248E /* SwiftUI-UserLocation */ = {
 			isa = PBXGroup;
 			children = (
+				297648BC298B837A009A57B6 /* Info.plist */,
 				7CCB3F8B29821420005DB670 /* Models */,
 				7CCB3F8029821372005DB670 /* Locations.xcdatamodeld */,
 				7CCB3F7E29821326005DB670 /* Persistence.swift */,
@@ -120,6 +125,8 @@
 				7CB2CC08297B8400005C248E /* Assets.xcassets */,
 				7CB2CC0A297B8400005C248E /* Preview Content */,
 				7CB2CC2E297B9458005C248E /* ContentViewModel.swift */,
+				297648B9298B827C009A57B6 /* config.swift */,
+				297648BB298B82F1009A57B6 /* dev.xcconfig */,
 			);
 			path = "SwiftUI-UserLocation";
 			sourceTree = "<group>";
@@ -293,6 +300,7 @@
 				7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */,
 				7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */,
 				7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */,
+				297648BA298B827C009A57B6 /* config.swift in Sources */,
 				7CD934EB29861FB400E98C33 /* Location+CoreDataClass.swift in Sources */,
 				7CB2CC07297B83FE005C248E /* ContentView.swift in Sources */,
 				7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */,
@@ -338,6 +346,7 @@
 /* Begin XCBuildConfiguration section */
 		7CB2CC23297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 297648BB298B82F1009A57B6 /* dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -452,6 +461,7 @@
 		};
 		7CB2CC26297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 297648BB298B82F1009A57B6 /* dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -460,6 +470,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI-UserLocation/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SwiftUI-UserLocation/Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to show it on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -489,6 +500,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI-UserLocation/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SwiftUI-UserLocation/Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to show it on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
