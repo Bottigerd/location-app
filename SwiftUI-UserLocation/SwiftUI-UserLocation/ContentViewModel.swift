@@ -13,8 +13,9 @@ enum MapDetails {
 }
 
 /*
- MARK: - ReverseGeoCodingResponseStruct
+ MARK: - STRUCTS
  */
+// MARK: - ReverseGeoCodingResponseStruct
 struct ReverseGeoCodingResponseStruct: Codable {
     let plusCode: PlusCodeStruct?
     let results: [ReverseGeoCodingResult]?
@@ -102,6 +103,56 @@ struct PlaceResult: Codable {
     let name: String
 }
 
+// MARK: - Config Reader
+
+private struct ConfigStruct: Codable {
+    let api_key: String
+}
+
+private class Config {
+    private var config: ConfigStruct?
+    
+    init(fileName: String){
+        print("Initilize Config")
+        let json_raw = readJSONfile(name: fileName)
+        if (json_raw != nil){
+            config = parse(jsonData: json_raw!) ?? ConfigStruct(api_key: "")
+        } else {
+            config = ConfigStruct(api_key: "")
+        }
+        
+    }
+    
+    private func readJSONfile(name: String) -> Data? {
+        print("Read Config")
+        do {
+            if let filePath = Bundle.main.path(forResource: name, ofType: "json") {
+                let fileUrl = URL(fileURLWithPath: filePath)
+                let data = try Data(contentsOf: fileUrl)
+                return data
+            }
+        } catch {
+            print("error: \(error)")
+        }
+        return nil
+    }
+    
+    private func parse(jsonData: Data) -> ConfigStruct? {
+        print("Parse Config")
+        do {
+            let decodedData = try JSONDecoder().decode(ConfigStruct.self, from: jsonData)
+            return decodedData
+        } catch {
+            print("error: \(error)")
+        }
+        return nil
+    }
+    
+    func get_api_key() -> String {
+        return config?.api_key ?? ""
+    }
+}
+
 /*
  MARK: - CONTENT VIEW MODEL
  */
@@ -110,22 +161,15 @@ final class ContentViewModel: NSObject, ObservableObject,
                               CLLocationManagerDelegate {
     
     // MARK: - Important Variables
-    //whenever this region changes our UI will update
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
-                                               span: MapDetails.defaultSpan)
-    
-    // published so it can be referenced by ContentView
-    @Published var address: String = "Pending Address"
-    
+                                                                   span: MapDetails.defaultSpan)
+    @Published var address = "Pending Address"
+    private var config = Config(fileName: "config")
     var previous_coordinates = MapDetails.startingLocation
     
     // API Responses (URLSession discards response before completion, so we save to a global variable
     var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
     var place_results: PlaceResponseStruct?
-    
-    // DO NOT PUSH WITH THIS FILLED
-    var API_KEY: String = ""
-    
     var locationManager: CLLocationManager?
     
     func checkIfLocationServicesIsEnabled(){
@@ -192,10 +236,12 @@ final class ContentViewModel: NSObject, ObservableObject,
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
     
+    // MARK: - API CALLS
+    
     // MARK: - Reverse Geocoding
     // transforms the json from the reverse geocoding API call into a struct for referencing
     internal func getReverseGeocode(coordinates: String) {
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY)
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + config.get_api_key())
         else{
             print("ERROR: Malformed Request (GET REVERSE GEOCODE)")
             return
@@ -218,12 +264,10 @@ final class ContentViewModel: NSObject, ObservableObject,
             }
             
             print("REVERSE GEOCODING API CALL: " + coordinates)
-            /*
             // print JSON for testing purposes
             if let data = data, let string = String(data: data, encoding: .utf8){
                 print(string)
             }
-             */
             
         }
         task.resume()
@@ -233,7 +277,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     internal func getPlace(place_id: String) {
         
         guard let url = URL(string: "https://maps.googleapis.com/maps/api/place/details/json?place_id="
-                            + place_id + "&fields=name%2Crating%2Cformatted_phone_number&key=" + API_KEY)
+                            + place_id + "&fields=name%2Crating%2Cformatted_phone_number&key=" + config.get_api_key())
         else{
             print("ERROR: Malformed Request (GET PLACE)")
             return
@@ -256,12 +300,10 @@ final class ContentViewModel: NSObject, ObservableObject,
             }
             
             print("PLACE API CALL: " + place_id)
-            /*
             // print JSON for testing purposes
             if let data = data, let string = String(data: data, encoding: .utf8){
                 print(string)
             }
-             */
             
         }
         task.resume()
