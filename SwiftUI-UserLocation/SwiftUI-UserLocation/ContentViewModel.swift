@@ -12,7 +12,10 @@ enum MapDetails {
     static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
 }
 
-struct ResponseStruct: Codable {
+/*
+    Google API Reverse Geocoding Response Struct
+ */
+struct ReverseGeoCodingResponseStruct: Codable {
     let plusCode: PlusCodeStruct
     let results: [Result]
     let status: String
@@ -89,9 +92,10 @@ final class ContentViewModel: NSObject, ObservableObject,
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
                                                span: MapDetails.defaultSpan)
     
-    @Published var coordinates: String = "0"
-    
+    // published so it can be referenced by ContentView
     @Published var address: String = "Pending Address"
+    
+    var previous_coordinates = MapDetails.startingLocation
     
     // DO NOT PUSH WITH THIS FILLED
     var API_KEY: String = ""
@@ -102,7 +106,7 @@ final class ContentViewModel: NSObject, ObservableObject,
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
-            //checkLocationAuthorization()
+            checkLocationAuthorization()
             
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
@@ -115,19 +119,22 @@ private func checkLocationAuthorization(){
     switch locationManager.authorizationStatus {
             
         case .notDetermined:
-            //switch to always in use?
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
             print("location is restricted likely due to parental controls")
         case .denied:
             print("You have denied this app location permission. Go into settings to change it.")
         case .authorizedAlways, .authorizedWhenInUse:
-        //NOTE: not working with iPhone12 Pro and ProMax -> error:
-        //Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-            region = MKCoordinateRegion(center: locationManager.location?.coordinate ?? MapDetails.startingLocation,
+        
+            let coordinates = locationManager.location?.coordinate ?? previous_coordinates
+            region = MKCoordinateRegion(center: coordinates,
                                  span: MapDetails.defaultSpan)
-            coordinates = getCoordinatesString(coordinates2d: locationManager.location?.coordinate ?? MapDetails.startingLocation)
-            getLocationName()
+            
+            let coordinates_string = getCoordinatesString(coordinates2d: coordinates)
+            previous_coordinates =  coordinates
+            // in case the next get location fails, save the current coordinates as the previous ones
+        
+            getLocationName(coordinates: coordinates_string)
         @unknown default:
             break
         }
@@ -143,7 +150,7 @@ private func checkLocationAuthorization(){
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
     
-    func getLocationName() {
+    func getLocationName(coordinates: String) {
         guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + API_KEY)
         else{
             print("ERROR: Malformed Request")
@@ -156,7 +163,7 @@ private func checkLocationAuthorization(){
             let decoder = JSONDecoder()
             if let data = data {
                 do {
-                    let tasks = try decoder.decode(ResponseStruct.self, from: data)
+                    let tasks = try decoder.decode(ReverseGeoCodingResponseStruct.self, from: data)
                     self.address = tasks.results[0].formattedAddress
                 } catch {
                     print("ERROR: Could not decode JSON response")
