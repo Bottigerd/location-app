@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C7589DF29871BC300A2443A /* InferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7589DE29871BC300A2443A /* InferenceView.swift */; };
+		7C7589E1298736CE00A2443A /* dataset.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C7589E0298736CE00A2443A /* dataset.txt */; };
 		7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */; };
 		7CB2CC07297B83FE005C248E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC06297B83FE005C248E /* ContentView.swift */; };
 		7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CB2CC08297B8400005C248E /* Assets.xcassets */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7C7589DE29871BC300A2443A /* InferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceView.swift; sourceTree = "<group>"; };
+		7C7589E0298736CE00A2443A /* dataset.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dataset.txt; sourceTree = "<group>"; };
 		7CB2CC01297B83FE005C248E /* SwiftUI-UserLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-UserLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_UserLocationApp.swift; sourceTree = "<group>"; };
 		7CB2CC06297B83FE005C248E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -116,10 +120,12 @@
 				7CCB3F7E29821326005DB670 /* Persistence.swift */,
 				7CCB3F7C29821104005DB670 /* DataView.swift */,
 				7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */,
+				7CB2CC2E297B9458005C248E /* ContentViewModel.swift */,
 				7CB2CC06297B83FE005C248E /* ContentView.swift */,
+				7C7589DE29871BC300A2443A /* InferenceView.swift */,
+				7C7589E0298736CE00A2443A /* dataset.txt */,
 				7CB2CC08297B8400005C248E /* Assets.xcassets */,
 				7CB2CC0A297B8400005C248E /* Preview Content */,
-				7CB2CC2E297B9458005C248E /* ContentViewModel.swift */,
 			);
 			path = "SwiftUI-UserLocation";
 			sourceTree = "<group>";
@@ -265,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CB2CC0C297B8400005C248E /* Preview Assets.xcassets in Resources */,
+				7C7589E1298736CE00A2443A /* dataset.txt in Resources */,
 				7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -290,6 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C7589DF29871BC300A2443A /* InferenceView.swift in Sources */,
 				7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */,
 				7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */,
 				7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */,

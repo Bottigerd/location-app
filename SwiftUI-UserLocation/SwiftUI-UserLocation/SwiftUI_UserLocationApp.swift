@@ -9,33 +9,22 @@ import SwiftUI
 
 @main
 struct SwiftUI_UserLocationApp: App {
-    let persistenceController = PersistenceController.shared
-    @State private var showData = false
     var body: some Scene {
         WindowGroup {
-            if (showData){
-                DataView().environment(\.managedObjectContext, persistenceController.container.viewContext)
-                Button(action: { showData = false
-                                }, label: {
-                                    Text("Map")
-                                        .frame(width: 200, height: 40)
-                                        .background(Color.green)
-                                        .cornerRadius(15)
-                                        .padding()
-                                })
-            }
-            
-            else{
-            ContentView()
-            Button(action: { showData = true
-                            }, label: {
-                                Text("Data")
-                                    .frame(width: 200, height: 40)
-                                    .background(Color.green)
-                                    .cornerRadius(15)
-                                    .padding()
-                            })
-            }
+            TabView {
+                ContentView()
+                    .tabItem {
+                        Label("Map", systemImage: "map.fill")
+                    }
+                DataView() //Replace with DataView when merged
+                    .tabItem {
+                        Label("Data", systemImage: "chart.bar")
+                    }
+                InferenceView()
+                    .tabItem {
+                        Label("Inference", systemImage: "list.number")
+                    }
+            }  
         }
     }
 }
