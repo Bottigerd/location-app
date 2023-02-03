@@ -16,7 +16,7 @@ struct SwiftUI_UserLocationApp: App {
                     .tabItem {
                         Label("Map", systemImage: "map.fill")
                     }
-                InferenceView() //Replace with DataView when merged
+                DataView() //Replace with DataView when merged
                     .tabItem {
                         Label("Data", systemImage: "chart.bar")
                     }
