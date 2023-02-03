@@ -5,6 +5,7 @@
 //  Created by CS Lab Account on 1/20/23.
 //
 
+import CoreData
 import MapKit
 extension Date {
     func currentTimeMillis() -> Int64 {
@@ -96,18 +97,20 @@ final class ContentViewModel: NSObject, ObservableObject,
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
                                                span: MapDetails.defaultSpan)
     
+    
     @Published var coordinates: Array<String> = ["0","0"]
     
     @Published var address: String = "Pending Address"
     
     var placeID: String = "temp"
     var locationManager: CLLocationManager?
+    var viewContext = PersistenceController.shared.container.viewContext
     
     func checkIfLocationServicesIsEnabled(){
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
-            //checkLocationAuthorization()
+            checkLocationAuthorization()
             
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
@@ -115,8 +118,8 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
 
 private func checkLocationAuthorization(){
-    
     guard let locationManager = locationManager else { return }
+
         
     switch locationManager.authorizationStatus {
             
@@ -136,17 +139,64 @@ private func checkLocationAuthorization(){
             getLocationName()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        //DataView().getLocationFromAPI(givenTime: Date() , givenLat: Double(coordinates[0]) ?? 0.0 , givenLong: Double(coordinates[1]) ?? 0.0, givenAlt: 0, givenName: placeID)
+        addLocationFromAPI(givenTime: Date() , givenLat: Double(coordinates[0]) ?? 0.0 , givenLong: Double(coordinates[1]) ?? 0.0, givenAlt: 0, givenName: placeID)
+        
+
         
         @unknown default:
             break
         }
-
-    
-
     
     }
+    
+    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+        
+        let name_db = Name(context: viewContext)
+        let location = Location(context: viewContext)
+        location.time=givenTime
+        location.latitude = Double(givenLat)
+        location.longitude = Double(givenLong)
+        location.altitude = Double(givenAlt)
+        let count = getCount(Name: givenName)
+        location.name = givenName
+        
+        
+        // find if exists first
+        // if no, initialize count to 1
+        // if yes, fetch request, modify count to +1
+        if (count==1){
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
+            let result = try! viewContext.fetch(fetchRequest)
+            let objectUpdate = result[0] as! NSManagedObject
+            let curCount = objectUpdate.value(forKey: "count")
+            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+        }
+        else{
+            name_db.name=givenName
+            name_db.count = 1
+        }
 
+        saveContext()
+    }
+    
+    private func getCount(Name: String) -> Int {
+       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+       fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
+        let count = try! viewContext.count(for:fetchRequest)
+       return count
+    }
+    
+    private func saveContext() {
+        do {
+            try viewContext.save()
+        } catch {
+            let error = error as NSError
+            fatalError("An error occured: \(error)")
+        }
+    }
+
+    
     
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

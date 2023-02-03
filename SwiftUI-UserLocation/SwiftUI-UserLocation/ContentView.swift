@@ -10,15 +10,21 @@ import MapKit
 
 struct ContentView: View {
     //takes you to region
+    let persistenceController = PersistenceController.shared
     @StateObject private var viewModel = ContentViewModel()
+    let Data=DataView()
+    
     
 
     var body: some View {
+        
         Text(viewModel.address);
-        Button(action: { viewModel.checkIfLocationServicesIsEnabled()}){
+        Button(action: { viewModel.checkIfLocationServicesIsEnabled()
+        }){
             Text("Get Location")
                 .foregroundColor(Color.white)
                 .padding()
+            
             }
 
                 

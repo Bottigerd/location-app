@@ -122,38 +122,39 @@ struct DataView: View {
     }
     
     // requires Date in datetime format "yyyy-MM-dd HH:mm:ss". Latitude,Longitude and Altitude in Doubles and a Name in String format.
-    func getLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
-        addLocationFromAPI(givenTime: givenTime, givenLat: givenLat, givenLong: givenLong, givenAlt: givenAlt, givenName: givenName)
-    }
-    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
-        let name_db = Name(context: viewContext)
-        let location = Location(context: viewContext)
-        location.time=givenTime
-        location.latitude = Double(givenLat)
-        location.longitude = Double(givenLong)
-        location.altitude = Double(givenAlt)
-        let count = getCount(Name: givenName)
-        location.name = givenName
-        
-        
-        // find if exists first
-        // if no, initialize count to 1
-        // if yes, fetch request, modify count to +1
-        if (count==1){
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
-            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
-            let result = try! viewContext.fetch(fetchRequest)
-            let objectUpdate = result[0] as! NSManagedObject
-            let curCount = objectUpdate.value(forKey: "count")
-            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
-        }
-        else{
-            name_db.name=givenName
-            name_db.count = 1
-        }
-
-        saveContext()
-    }
+//    func getLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+//        addLocationFromAPI(givenTime: givenTime, givenLat: givenLat, givenLong: givenLong, givenAlt: givenAlt, givenName: givenName)
+//    }
+//    
+//    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+//        let name_db = Name(context: viewContext)
+//        let location = Location(context: viewContext)
+//        location.time=givenTime
+//        location.latitude = Double(givenLat)
+//        location.longitude = Double(givenLong)
+//        location.altitude = Double(givenAlt)
+//        let count = getCount(Name: givenName)
+//        location.name = givenName
+//        
+//        
+//        // find if exists first
+//        // if no, initialize count to 1
+//        // if yes, fetch request, modify count to +1
+//        if (count==1){
+//            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+//            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
+//            let result = try! viewContext.fetch(fetchRequest)
+//            let objectUpdate = result[0] as! NSManagedObject
+//            let curCount = objectUpdate.value(forKey: "count")
+//            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+//        }
+//        else{
+//            name_db.name=givenName
+//            name_db.count = 1
+//        }
+//
+//        saveContext()
+//    }
     
     private func addLocation() {
             

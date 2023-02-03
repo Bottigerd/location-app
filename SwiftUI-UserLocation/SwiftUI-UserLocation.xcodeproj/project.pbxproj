@@ -44,7 +44,6 @@
 
 /* Begin PBXFileReference section */
 		297648B9298B827C009A57B6 /* config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
-		297648BB298B82F1009A57B6 /* dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = dev.xcconfig; sourceTree = "<group>"; };
 		297648BC298B837A009A57B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7CB2CC01297B83FE005C248E /* SwiftUI-UserLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-UserLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_UserLocationApp.swift; sourceTree = "<group>"; };
@@ -126,7 +125,6 @@
 				7CB2CC0A297B8400005C248E /* Preview Content */,
 				7CB2CC2E297B9458005C248E /* ContentViewModel.swift */,
 				297648B9298B827C009A57B6 /* config.swift */,
-				297648BB298B82F1009A57B6 /* dev.xcconfig */,
 			);
 			path = "SwiftUI-UserLocation";
 			sourceTree = "<group>";
@@ -346,7 +344,6 @@
 /* Begin XCBuildConfiguration section */
 		7CB2CC23297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 297648BB298B82F1009A57B6 /* dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -461,7 +458,6 @@
 		};
 		7CB2CC26297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 297648BB298B82F1009A57B6 /* dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
