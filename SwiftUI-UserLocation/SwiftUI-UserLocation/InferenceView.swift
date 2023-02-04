@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct InferenceView: View {
+    
     var body: some View {
         VStack{
             Text("Information we know based on your location data: ")
@@ -15,6 +17,13 @@ struct InferenceView: View {
         }
     }
     
+    
+    //here's some sample code on how to access the data from getAllLocationHistory()
+    //let data = getAllLocationHistory()
+    //for location in data {
+    //            var singleRow=[location.name!,location.latitude,location.altitude,location.longitude,location.time!] as [Any]
+    //            do xyz....
+    //        }
 
     private func gethome() -> String{
         var home = Dictionary<String, Int>()
@@ -49,6 +58,16 @@ struct InferenceView: View {
         let address = "HOME: Cassat"
         return address
 
+    }
+    
+    
+    
+    // gets all location data from CoreData. Location data includes name,latitude,longitude,altitude and timestamp
+    private func getAllLocationHistory() -> [Location] {
+        let viewContext = PersistenceController.shared.container.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        let result = try! viewContext.fetch(fetchRequest) as! [Location]
+        return result
     }
 
 }
