@@ -189,20 +189,19 @@ final class ContentViewModel: NSObject, ObservableObject,
         guard let locationManager = locationManager else { return false }
         
         switch locationManager.authorizationStatus {
-            
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-            return false
-        case .restricted:
-            print("location is restricted likely due to parental controls")
-            return false
-        case .denied:
-            print("You have denied this app location permission. Go into settings to change it.")
-            return false
-        case .authorizedAlways, .authorizedWhenInUse:
-            return true
-        @unknown default:
-            break
+            case .notDetermined:
+                locationManager.requestWhenInUseAuthorization()
+                return false
+            case .restricted:
+                print("location is restricted likely due to parental controls")
+                return false
+            case .denied:
+                print("You have denied this app location permission. Go into settings to change it.")
+                return false
+            case .authorizedAlways, .authorizedWhenInUse:
+                return true
+            @unknown default:
+                break
         }
         return false
     }
@@ -244,7 +243,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             if (place_id != nil) {
                 getPlace(place_id: place_id!)
                 if (place_results?.status == "OK"){
-                    temp_address = place_results!.result.name
+                    temp_address = getPlaceName()
                 }
                 
             }
@@ -256,6 +255,23 @@ final class ContentViewModel: NSObject, ObservableObject,
     // returns coordinates from a CLLocationCoordinate2D as a string for API usage
     internal func getCoordinatesString(coordinates2d: CLLocationCoordinate2D) -> String {
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
+    }
+    
+    internal func getPlaceName() -> String {
+        var name = place_results!.result.name
+        
+        for address_component in reverse_geo_code_results!.results![0].addressComponents {
+            if (address_component.types.contains("locality")) {
+                name = name + " " + address_component.longName
+            } else if (address_component.types.contains("administrative_area_level_1")) {
+                name = name + ", " + address_component.shortName
+            } else if (address_component.types.contains("postal_code")) {
+                name = name + " " + address_component.shortName
+            } else if (address_component.types.contains("country")) {
+                name = name + ", " + address_component.shortName
+            }
+        }
+        return name
     }
     
     // MARK: - API Calls
@@ -286,12 +302,12 @@ final class ContentViewModel: NSObject, ObservableObject,
             }
             
             print("REVERSE GEOCODING API CALL: " + coordinates)
-            /*
+            
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
-             //print(string)
+                 print(string)
              }
-             */
+            
             
         }
         task.resume()
@@ -327,7 +343,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
-             //print(string)
+                print(string)
              }
              */
             
