@@ -14,21 +14,24 @@ struct ContentView: View {
     
 
     var body: some View {
-        Text(viewModel.address);
-        Button(action: { viewModel.updateDisplay()}){
-            Text("Get Location")
-                .foregroundColor(Color.white)
-                .padding()
-            }
-            .buttonStyle(.bordered)
-            .background(Color.green)
-            .cornerRadius(10)
-        Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
-            .ignoresSafeArea()
-            .accentColor(Color(.systemPink))
-            .onAppear {
-                viewModel.checkIfLocationServicesIsEnabled()
-            }
+        VStack{
+            Text(viewModel.address);
+            Button(action: { viewModel.updateDisplay()}){
+                Text("Get Location")
+                    .foregroundColor(Color.white)
+                    .padding()
+                }
+                .buttonStyle(.bordered)
+                .background(Color.green)
+                .cornerRadius(10)
+            Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
+                .ignoresSafeArea()
+                .accentColor(Color(.systemPink))
+                .onAppear {
+                    viewModel.checkIfLocationServicesIsEnabled()
+                }
+
+        }
 
     }
 }
