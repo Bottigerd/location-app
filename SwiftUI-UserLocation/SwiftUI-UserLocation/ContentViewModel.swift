@@ -303,10 +303,12 @@ final class ContentViewModel: NSObject, ObservableObject,
             
             print("REVERSE GEOCODING API CALL: " + coordinates)
             
+            /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
                  print(string)
              }
+            */
             
             
         }
