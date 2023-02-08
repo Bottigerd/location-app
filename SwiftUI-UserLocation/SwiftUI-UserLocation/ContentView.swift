@@ -15,7 +15,7 @@ struct ContentView: View {
 
     var body: some View {
         Text(viewModel.address);
-        Button(action: { viewModel.checkIfLocationServicesIsEnabled()}){
+        Button(action: { viewModel.updateDisplay()}){
             Text("Get Location")
                 .foregroundColor(Color.white)
                 .padding()

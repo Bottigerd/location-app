@@ -162,73 +162,95 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     // MARK: - Important Variables
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
-                                                                   span: MapDetails.defaultSpan)
-    @Published var address = "Pending Address"
+                                               span: MapDetails.defaultSpan)
+    @Published var address = "Pending Location"
     private var config = Config(fileName: "config")
     var previous_coordinates = MapDetails.startingLocation
     
-    // API Responses (URLSession discards response before completion, so we save to a global variable
+    // API Responses (URLSession discards response before completion, so we save to a class variable
     var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
     
-    func checkIfLocationServicesIsEnabled(){
+    func checkIfLocationServicesIsEnabled() -> Bool {
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
-            checkLocationAuthorization()
+            return checkLocationAuthorizationType()
             
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
+            return false
         }
     }
     
-    // MARK: - Check Location
-    private func checkLocationAuthorization(){
-        guard let locationManager = locationManager else { return }
+    // MARK: - Location Functions
+    func checkLocationAuthorizationType() -> Bool {
+        guard let locationManager = locationManager else { return false }
         
         switch locationManager.authorizationStatus {
             
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
+            return false
         case .restricted:
             print("location is restricted likely due to parental controls")
+            return false
         case .denied:
             print("You have denied this app location permission. Go into settings to change it.")
+            return false
         case .authorizedAlways, .authorizedWhenInUse:
-            
-            // if locationManager fails to get location, revert to previously fetched coordinates
-            let coordinates = locationManager.location?.coordinate ?? previous_coordinates
-            region = MKCoordinateRegion(center: coordinates,
-                                        span: MapDetails.defaultSpan)
-            
-            let coordinates_string = getCoordinatesString(coordinates2d: coordinates)
-            previous_coordinates =  coordinates
-            // in case the next get location fails, save the current coordinates as the previous ones
-            
-            getReverseGeocode(coordinates: coordinates_string)
-            var place_id: String?
-            if (reverse_geo_code_results?.status == "OK") {
-                place_id = reverse_geo_code_results?.results?[0].placeID ?? nil
-                
-                if (place_id != nil) {
-                    getPlace(place_id: place_id!)
-                    if (place_results?.status == "OK"){
-                        // force upwrapping because we should only go into the if statement if its not nil
-                        
-                        address = place_results?.result.name ?? reverse_geo_code_results?.results?[0].formattedAddress ?? "PendingLocation"
-                    }
-                    
-                } else {
-                    address = reverse_geo_code_results?.results?[0].formattedAddress ?? "Pending Location"
-                }
-                
-            }
-            print()
+            return true
         @unknown default:
             break
         }
+        return false
+    }
+    
+    /*
+     Fetches new location and updates the location display with the new information.
+     Public so it can be called from ContentView
+     */
+    func updateDisplay(){
+        let locServicesEnabled = checkIfLocationServicesIsEnabled()
+        let locServicesValidType = checkLocationAuthorizationType()
+        if (locServicesEnabled && locServicesValidType){
+            let coordinates = updateLocation()
+            updateAddress(coordinates: coordinates)
+        }
+    }
+    
+    // gets updated coordinates from location manager, also updates mapview.
+    private func updateLocation() -> CLLocationCoordinate2D {
+        // if locationManager fails to get location, revert to previously fetched coordinates
+        let coordinates = locationManager?.location?.coordinate ?? previous_coordinates
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
         
+        previous_coordinates = coordinates
+        return coordinates
+    }
+    
+    // using location manager coordinates, updates displayed address
+    private func updateAddress(coordinates: CLLocationCoordinate2D) {
+        let coordinates_string = getCoordinatesString(coordinates2d: coordinates)
+        var temp_address: String?
+        
+        getReverseGeocode(coordinates: coordinates_string, completion: {
+            if (self.reverse_geo_code_results?.status == "OK") {
+                let place_id = self.reverse_geo_code_results?.results?[0].placeID ?? nil
+                temp_address = self.reverse_geo_code_results?.results?[0].formattedAddress ?? "Pending Location"
+                
+                if (place_id != nil) {
+                    self.getPlace(place_id: place_id!, completion: {
+                        if (self.place_results?.status == "OK"){
+                            temp_address = self.place_results!.result.name
+                        }
+                    })
+                }
+            }
+            self.address = temp_address ?? "Pending Location"
+        })
     }
     
     // returns coordinates from a CLLocationCoordinate2D as a string for API usage
@@ -236,11 +258,11 @@ final class ContentViewModel: NSObject, ObservableObject,
         return coordinates2d.latitude.description + "," + coordinates2d.longitude.description
     }
     
-    // MARK: - API CALLS
+    // MARK: - API Calls
     
-    // MARK: - Reverse Geocoding
+    // MARK: - Reverse Geocoding API
     // transforms the json from the reverse geocoding API call into a struct for referencing
-    internal func getReverseGeocode(coordinates: String) {
+    internal func getReverseGeocode(coordinates: String, completion: @escaping () -> Void) {
         guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + config.get_api_key())
         else{
             print("ERROR: Malformed Request (GET REVERSE GEOCODE)")
@@ -266,15 +288,16 @@ final class ContentViewModel: NSObject, ObservableObject,
             print("REVERSE GEOCODING API CALL: " + coordinates)
             // print JSON for testing purposes
             if let data = data, let string = String(data: data, encoding: .utf8){
-                print(string)
+                //print(string)
             }
             
         }
         task.resume()
+        completion()
     }
     
-    // MARK: - Place
-    internal func getPlace(place_id: String) {
+    // MARK: - Places API
+    internal func getPlace(place_id: String, completion: @escaping () -> Void) {
         
         guard let url = URL(string: "https://maps.googleapis.com/maps/api/place/details/json?place_id="
                             + place_id + "&fields=name%2Crating%2Cformatted_phone_number&key=" + config.get_api_key())
@@ -302,12 +325,12 @@ final class ContentViewModel: NSObject, ObservableObject,
             print("PLACE API CALL: " + place_id)
             // print JSON for testing purposes
             if let data = data, let string = String(data: data, encoding: .utf8){
-                print(string)
+                //print(string)
             }
             
         }
         task.resume()
-        return
+        completion()
     }
     
 }
