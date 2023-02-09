@@ -176,7 +176,7 @@ final class ContentViewModel: NSObject, ObservableObject,
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
-            return checkLocationAuthorizationType()
+            return true
             
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
@@ -235,13 +235,18 @@ final class ContentViewModel: NSObject, ObservableObject,
         let coordinates_string = getCoordinatesString(coordinates2d: coordinates)
         var temp_address: String?
         
-        getReverseGeocode(coordinates: coordinates_string)
+        let globalQueue = DispatchQueue.global()
+        globalQueue.sync {
+            getReverseGeocode(coordinates: coordinates_string)
+        }
         if (reverse_geo_code_results?.status == "OK") {
             let place_id = reverse_geo_code_results?.results?[0].placeID ?? nil
             temp_address = reverse_geo_code_results?.results?[0].formattedAddress
             
             if (place_id != nil) {
-                getPlace(place_id: place_id!)
+                globalQueue.sync {
+                    getPlace(place_id: place_id!)
+                }
                 if (place_results?.status == "OK"){
                     temp_address = getPlaceName()
                 }
@@ -258,20 +263,24 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
     
     internal func getPlaceName() -> String {
-        var name = place_results!.result.name
+        var place_name = place_results!.result.name
+        var locality: String?
+        var admin_area_1: String?
+        var postal_code: String?
+        var country: String?
         
         for address_component in reverse_geo_code_results!.results![0].addressComponents {
             if (address_component.types.contains("locality")) {
-                name = name + " " + address_component.longName
+                locality = address_component.longName
             } else if (address_component.types.contains("administrative_area_level_1")) {
-                name = name + ", " + address_component.shortName
+                admin_area_1 = address_component.shortName
             } else if (address_component.types.contains("postal_code")) {
-                name = name + " " + address_component.shortName
+                postal_code = address_component.shortName
             } else if (address_component.types.contains("country")) {
-                name = name + ", " + address_component.shortName
+                country = address_component.shortName
             }
         }
-        return name
+        return place_name + ", " + locality + ", " + admin_area_1 + " " + postal_code + ", " + country
     }
     
     // MARK: - API Calls
