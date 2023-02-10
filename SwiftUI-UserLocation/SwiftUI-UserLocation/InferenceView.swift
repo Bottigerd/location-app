@@ -34,32 +34,44 @@ struct InferenceView: View {
     //            do xyz....
     //        }
 
-    private mutating func gethome() -> String{
+    private func gethome() -> String{
         var home = Dictionary<String, Int>()
-        storeData()
+        //storeData()
+
+        //end is today current time
+        //start is 4 days before today (10 pm)
+        
+//        let data = getAllLocationWithinRange(start, end)
+        
+        //filter the data to only include 10pm-7am
+        
+        //loop through
+        //calculate time for each name change, add it to map (Name = key, TimeSpent = value)
         for i in 0...times.count{
            
             var hoursSpent = times[i+1].timeIntervalSince(times[i])
             print(hoursSpent)
         }
         
+        //go through map to find highest value -> that key is home
+        
         let address = "HOME: Cassat"
         return address
 
     }
     
-    private mutating func storeData() {
-        let data = getAllLocationHistory()
-        for i in data{
-            //print(i.name ?? "hi")
-            let j = String(i.name ?? "hi")
-            places.append(j)
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy/MM/dd HH:mm"
-            let someDateTime = formatter.date(from: "2016/10/08 22:31")
-            times.append((i.time ?? someDateTime)!)
-        }
-    }
+//    private func storeData() {
+//        let data = getAllLocationHistory()
+//        for i in data{
+//            //print(i.name ?? "hi")
+//            let j = String(i.name ?? "hi")
+//            places.append(j)
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "yyyy/MM/dd HH:mm"
+//            let someDateTime = formatter.date(from: "2016/10/08 22:31")
+//            times.append((i.time ?? someDateTime)!)
+//        }
+//    }
     
     
     
