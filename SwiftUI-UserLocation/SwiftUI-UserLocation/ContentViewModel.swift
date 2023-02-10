@@ -172,10 +172,13 @@ final class ContentViewModel: NSObject, ObservableObject,
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
     
-    func checkIfLocationServicesIsEnabled() -> Bool {
+    // Checks for locaiton permissions, sets up location manager if true
+    func setupLocationManager() -> Bool {
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
+            locationManager!.desiredAccuracy = kCLLocationAccuracyBest;
+            locationManager!.distanceFilter = 50; // Distance in meters, trigger for location update
             return true
             
         } else {
@@ -184,24 +187,45 @@ final class ContentViewModel: NSObject, ObservableObject,
         }
     }
     
+    func startUpdatingLocation(){
+        let locServicesEnabled = setupLocationManager()
+        let locServicesValidType = checkLocationAuthorizationType()
+        if (locServicesEnabled && locServicesValidType){
+            locationManager?.startUpdatingLocation()
+        }
+    }
+    
+    /*
+     Handles automated location updating, uses distance filter set up in setupLocationManager
+     */
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
+        let coordinates = fetchCoordinates()
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
+        updateAddress(coordinates: coordinates)
+    }
+    
     // MARK: - Location Functions
     func checkLocationAuthorizationType() -> Bool {
         guard let locationManager = locationManager else { return false }
         
         switch locationManager.authorizationStatus {
-            case .notDetermined:
-                locationManager.requestWhenInUseAuthorization()
-                return false
-            case .restricted:
-                print("location is restricted likely due to parental controls")
-                return false
-            case .denied:
-                print("You have denied this app location permission. Go into settings to change it.")
-                return false
-            case .authorizedAlways, .authorizedWhenInUse:
-                return true
-            @unknown default:
-                break
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            return false
+        case .restricted:
+            print("location is restricted likely due to parental controls")
+            return false
+        case .denied:
+            print("You have denied this app location permission. Go into settings to change it.")
+            return false
+        case .authorizedAlways, .authorizedWhenInUse:
+            return true
+        @unknown default:
+            break
         }
         return false
     }
@@ -211,21 +235,16 @@ final class ContentViewModel: NSObject, ObservableObject,
      Public so it can be called from ContentView
      */
     func updateDisplay(){
-        let locServicesEnabled = checkIfLocationServicesIsEnabled()
-        let locServicesValidType = checkLocationAuthorizationType()
-        if (locServicesEnabled && locServicesValidType){
-            let coordinates = updateLocation()
-            updateAddress(coordinates: coordinates)
-        }
+        let coordinates = fetchCoordinates()
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
+        updateAddress(coordinates: coordinates)
     }
     
     // gets updated coordinates from location manager, also updates mapview.
-     func updateLocation() -> CLLocationCoordinate2D {
+    func fetchCoordinates() -> CLLocationCoordinate2D {
         // if locationManager fails to get location, revert to previously fetched coordinates
         let coordinates = locationManager?.location?.coordinate ?? previous_coordinates
-        region = MKCoordinateRegion(center: coordinates,
-                                    span: MapDetails.defaultSpan)
-        
         previous_coordinates = coordinates
         return coordinates
     }
@@ -253,7 +272,7 @@ final class ContentViewModel: NSObject, ObservableObject,
                 
             }
         }
-        self.address = temp_address ?? "Pending Location"
+        address = temp_address ?? "Pending Location"
         
     }
     
@@ -285,7 +304,7 @@ final class ContentViewModel: NSObject, ObservableObject,
          It's weird to split this up, I know, but it was occassionally causing this error:
          The compiler is unable to type-check this expression in reasonable time;
          try breaking up the expression into distinct sub-expressions.
-        */
+         */
         let full_name_pt1 = place_name + ", " + locality + ", " + admin_area_1
         let full_name_pt2 = " " + postal_code + ", " + country
         return full_name_pt1 + full_name_pt2
@@ -323,9 +342,9 @@ final class ContentViewModel: NSObject, ObservableObject,
             /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
-                 print(string)
+             print(string)
              }
-            */
+             */
             
             
         }
@@ -362,7 +381,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
-                print(string)
+             print(string)
              }
              */
             
