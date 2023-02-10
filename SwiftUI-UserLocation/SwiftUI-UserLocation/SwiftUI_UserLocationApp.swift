@@ -9,23 +9,24 @@ import SwiftUI
 
 @main
 struct SwiftUI_UserLocationApp: App {
-    var body: some Scene {
-        WindowGroup {
-            TabView {
-                ContentView()
-                    .tabItem {
-                        Label("Map", systemImage: "map.fill")
-                    }
-                DataView() //Replace with DataView when merged
-                    .tabItem {
-                        Label("Data", systemImage: "chart.bar")
-                    }
-                InferenceView()
-                    .tabItem {
-                        Label("Inference", systemImage: "list.number")
-                    }
-            }  
-        }
+  let persistenceController = PersistenceController.shared
+  var body: some Scene {
+    WindowGroup {
+      TabView {
+        ContentView().environment(\.managedObjectContext, persistenceController.container.viewContext)
+          .tabItem {
+            Label("Map", systemImage: "map.fill")
+          }
+        DataView().environment(\.managedObjectContext, persistenceController.container.viewContext)
+          .tabItem {
+            Label("Data", systemImage: "chart.bar")
+          }
+        InferenceView().environment(\.managedObjectContext, persistenceController.container.viewContext)
+          .tabItem {
+            Label("Inference", systemImage: "list.number")
+          }
+      }
     }
+  }
 }
 

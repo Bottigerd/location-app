@@ -1,0 +1,364 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "48",
+            "short_name" : "48",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Pirrama Road",
+            "short_name" : "Pirrama Rd",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Pyrmont",
+            "short_name" : "Pyrmont",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "City of Sydney",
+            "short_name" : "City of Sydney",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "New South Wales",
+            "short_name" : "NSW",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "Australia",
+            "short_name" : "AU",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "2009",
+            "short_name" : "2009",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "adr_address" : "\u003cspan class=\"street-address\"\u003e48 Pirrama Rd\u003c/span\u003e, \u003cspan class=\"locality\"\u003ePyrmont\u003c/span\u003e \u003cspan class=\"region\"\u003eNSW\u003c/span\u003e \u003cspan class=\"postal-code\"\u003e2009\u003c/span\u003e, \u003cspan class=\"country-name\"\u003eAustralia\u003c/span\u003e",
+      "business_status" : "OPERATIONAL",
+      "current_opening_hours" : {
+         "open_now" : true,
+         "periods" : [
+            {
+               "close" : {
+                  "date" : "2023-02-06",
+                  "day" : 1,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "date" : "2023-02-06",
+                  "day" : 1,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "date" : "2023-02-07",
+                  "day" : 2,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "date" : "2023-02-07",
+                  "day" : 2,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "date" : "2023-02-08",
+                  "day" : 3,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "date" : "2023-02-08",
+                  "day" : 3,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "date" : "2023-02-09",
+                  "day" : 4,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "date" : "2023-02-09",
+                  "day" : 4,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "date" : "2023-02-03",
+                  "day" : 5,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "date" : "2023-02-03",
+                  "day" : 5,
+                  "time" : "0900"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: 9:00 AM – 5:00 PM",
+            "Tuesday: 9:00 AM – 5:00 PM",
+            "Wednesday: 9:00 AM – 5:00 PM",
+            "Thursday: 9:00 AM – 5:00 PM",
+            "Friday: 9:00 AM – 5:00 PM",
+            "Saturday: Closed",
+            "Sunday: Closed"
+         ]
+      },
+      "formatted_address" : "48 Pirrama Rd, Pyrmont NSW 2009, Australia",
+      "formatted_phone_number" : "(02) 9374 4000",
+      "geometry" : {
+         "location" : {
+            "lat" : -33.866489,
+            "lng" : 151.1958561
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : -33.8655112697085,
+               "lng" : 151.1971156302915
+            },
+            "southwest" : {
+               "lat" : -33.86820923029149,
+               "lng" : 151.1944176697085
+            }
+         }
+      },
+      "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+      "icon_background_color" : "#7B9EB0",
+      "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+      "international_phone_number" : "+61 2 9374 4000",
+      "name" : "Google Workplace 6",
+      "opening_hours" : {
+         "open_now" : true,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 1,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "0900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "1700"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "0900"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: 9:00 AM – 5:00 PM",
+            "Tuesday: 9:00 AM – 5:00 PM",
+            "Wednesday: 9:00 AM – 5:00 PM",
+            "Thursday: 9:00 AM – 5:00 PM",
+            "Friday: 9:00 AM – 5:00 PM",
+            "Saturday: Closed",
+            "Sunday: Closed"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 2268,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/115735146488851991578\"\u003eHelen Marquis\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgNX8JBytSmpgosS40H_RxNbOJn9hU9lpUg5CEHT5b6W5iyRYnv_aCnE08RO-PiYljQ3ED_xuKdku2jrZzEeFwS0r8bu5Y_SedXFxT1L5eMd-tUZwUigQTX9EOuMa3p2SueGrQ8mW4WPo7U3jR4YZxXZr6ObJ9VAMI9TepqAoSTlNmF7",
+            "width" : 4032
+         },
+         {
+            "height" : 3264,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/102493344958625549078\"\u003eThomas Li\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgMijZuRKgGGOIRfCz3NwK3aLmqOFLYpAt9quBioDEVRewCgKnBESAvKKGfuzHjWP27tDkYOw0vVymLSXmKrPamJ4axP33FQOe-_0vhJUSQMMxXEbHmg_g-owi-rPkujcGq2Ty5QRneAtFU5pcEEbANTUNwTyKINsazW_6GHV8GwPJWS",
+            "width" : 4912
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109073253434498369454\"\u003esang suh\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgMXAyxuEqOeU5mvcHK0MFCdaqhNIKwRpp9SitdymE9uwoAF9pxpSOivEWp1ABVRHzw0Vz2o8OFlajb6qSE4BIlsa8XMbfcYX_ebUygyyun7sCsUWuzCcqaIwfkkIjsqtDNtfZ5U1JHDGl_O8NNK3047B_jcidnE1NPGRcYq3Ar8eJFX",
+            "width" : 4032
+         },
+         {
+            "height" : 9000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/105085837755485227993\"\u003eNaveen kumar\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgPx1KpHZn4CANevfRLkoA6j0XS9uMo1130E1_zplQj6nZlA-Z557GI4KZb7f-I_XZ4SblgDKEvMi-A3VUYlyiw2VVKSBw07mMwbzq3uMrnXA_tBQtZvAwejKMc6Q2U97BULEhDcG9SDgkU8ootuGSrJMy-utcInCgDYtgzu6K5x-fWU",
+            "width" : 12000
+         },
+         {
+            "height" : 4032,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/114541402993501063706\"\u003eChidi Ilobi\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgNGOMT9zdbcSKUF4JE5sV96XvpbNiUIEMDcaEd3dbhCpxGGFH77zl79a3hiUZkN3II97eans6tsl8ioPafBbsKtYVvKn99hhyR_-yaMB2BrWB2n8cTbzRZcVYE7PyHg9q45Ocih1p2jLyGkVBd-QnFQD1B-V2Eb-u6ptSCj7mhliYVK",
+            "width" : 3024
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/102987930970147458128\"\u003eGarrett N.\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgNCbWPoy5RSfyK0YweFp60LaX1D4EIJiPCBblOeLnZa4FbZVXEVd-fHmKazkf4v_MwME_C2j8nDQ6wFhf2GgVxcnDCMXxEQT5nJvmjByptHVKAb6MYeBt13r-n0pgVTqvFJldm-XXQ7dV_E9P93ilczv-uev-CywHurc_fP3qkTgvCT",
+            "width" : 4032
+         },
+         {
+            "height" : 2448,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109424226596487740627\"\u003eWilliam Li\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgMj8T05htXFFUkooZXTSq46TDOq_q2BTjSF-60aw0loCgB57Q_ivi8WU_DCTlTZ8AX1WeFDzrmKvPugOswwTBAIToeC2-pHl3cphphg8NaDexfkMvRIi3xeLhbFClHq5XbbAde_4gkTRJUvsz587t8lZWFu5HGlCab8rJdlNDD752da",
+            "width" : 3264
+         },
+         {
+            "height" : 1515,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/112343109286948028063\"\u003eAndrew W\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgMl4PUSDNh2RKbM88D2iLU7Wfvup14a5qyaY2NPhxUZtXurdWGlobghh1WDhSagC9J8I9w3OpKELibANlsavFa44PBIJC16FF52lCjbVTWMPCkq4KjJlWp6IAwb7k3N3OAho790TCXIWalG3z20ITYb6g0C1tGAn3VSoCrv0WD5n-1h",
+            "width" : 2048
+         },
+         {
+            "height" : 3921,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/102987930970147458128\"\u003eGarrett N.\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgOw2xMQcNq3ueIJo-4N20ct6DFJay_BUO_LUFBbmJGrRS-1jFh-PNtOlynqxFv-zDCKBiSG-rIYD1PYA2_Ny9cfRGnwVWgGs0gN_8i9RK7Zx4ij2t4IwdfWs-cIIsRQAeTKDH4I09GL1lLSBsK2AUdBW85mXNfHo6YFgjdkAoiXx_oV",
+            "width" : 2941
+         },
+         {
+            "height" : 3000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/111968521270387148885\"\u003ejonathan hayes\u003c/a\u003e"
+            ],
+            "photo_reference" : "AfLeUgOiAP3Wiwa-KAVastdlcIGQHPWx_TErugVLotQyuxATu6V_8ZtywvBAbKZNMCQpo9XFLAicPVz1TR6syZO0F6pCw2W1gRHqvWq6BCvRJstwZVSwCi3aBsMpdKQr1ML7n9wkTd0mL2RfSu6idye3eDQZlXbSSBndOmxvW7V3dv2oD_fe",
+            "width" : 4000
+         }
+      ],
+      "place_id" : "ChIJN1t_tDeuEmsRUsoyG83frY4",
+      "plus_code" : {
+         "compound_code" : "45MW+C8 Pyrmont NSW, Australia",
+         "global_code" : "4RRH45MW+C8"
+      },
+      "rating" : 4,
+      "reference" : "ChIJN1t_tDeuEmsRUsoyG83frY4",
+      "reviews" : [
+         {
+            "author_name" : "Matty B",
+            "author_url" : "https://www.google.com/maps/contrib/104641095422852249098/reviews",
+            "language" : "en",
+            "original_language" : "en",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a-/AD5-WCmXZgVvxj3rteLT8D0G6vFFf0SLHV5GeYBgAa3DpMY=s128-c0x00000000-cc-rp-mo-ba7",
+            "rating" : 5,
+            "relative_time_description" : "5 months ago",
+            "text" : "Really cool office, with nice views of downtown.",
+            "time" : 1661917885,
+            "translated" : false
+         },
+         {
+            "author_name" : "Maxim Russell",
+            "author_url" : "https://www.google.com/maps/contrib/111398788013038771649/reviews",
+            "language" : "en",
+            "original_language" : "en",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a/AEdFTp5J6Ge0YzibxbHg6qjF1KFFqBuGpF4g15kDaQYG=s128-c0x00000000-cc-rp-mo",
+            "rating" : 1,
+            "relative_time_description" : "5 months ago",
+            "text" : "i have spent years building up good review on google maps. 2 weeks ago google maps has shut down my listing, no explanation, no replies to my emails, no reason as to why, a listing that has been up for years.\n\nI am not losing money daily because of this and no end in sight.\n\nNever rely on google reviews and advertising to market your product like this, learned my mistake the hard way.",
+            "time" : 1661908659,
+            "translated" : false
+         },
+         {
+            "author_name" : "Winston Cooley",
+            "author_url" : "https://www.google.com/maps/contrib/113780946182029773632/reviews",
+            "language" : "en",
+            "original_language" : "en",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a-/AD5-WCla8xAaZS420GhZQuq5Fo6w5Wa6NIN4-nQjQSMC=s128-c0x00000000-cc-rp-mo",
+            "rating" : 1,
+            "relative_time_description" : "3 weeks ago",
+            "text" : "Why does Google let obvious fake accounts put 1 star reviews on business profiles and not delete them upon request. I literally have one called ‘Jimbo Jones’, it’s profile picture is of Jimbo Jones from the Simpsons. Another even says they have never been in the store. Google want you to spend money to promote your profile but why? So people can see fake reviews from fake accounts? Useless company.",
+            "time" : 1673332584,
+            "translated" : false
+         },
+         {
+            "author_name" : "Penny Moore",
+            "author_url" : "https://www.google.com/maps/contrib/115884912287247757019/reviews",
+            "language" : "en",
+            "original_language" : "en",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a/AEdFTp4ndIgPBo4XA1LJcULdtQYn3vIY0BX_AXB-DjE=s128-c0x00000000-cc-rp-mo",
+            "rating" : 1,
+            "relative_time_description" : "4 months ago",
+            "text" : "Our company emails Safe House Property Consultants were suspended last Friday at 5pm.Dispite every effort no response from Google. Call Sydney all I get is links to Google assistance been there last Friday and Saturday. I had same problem wit Goole Maps being suspended took a week to restore no feedback why account was suspended.",
+            "time" : 1663033095,
+            "translated" : false
+         },
+         {
+            "author_name" : "Nice Guy",
+            "author_url" : "https://www.google.com/maps/contrib/104927940923560841672/reviews",
+            "language" : "en",
+            "original_language" : "en",
+            "profile_photo_url" : "https://lh3.googleusercontent.com/a-/AD5-WCmO5FRwyK004cqVvMyMxyPCcvMQivJj6GLljuQDOg=s128-c0x00000000-cc-rp-mo",
+            "rating" : 1,
+            "relative_time_description" : "8 months ago",
+            "text" : "Pathetic service by google. My business profile was suspended without me knowing the reasons behind the suspension. When contacted google staff, i was told they don't know the reason for suspension and that i should submit a reinstatement form. After filling out the reinstatement form, i again get a response that i don't meeting listing requirements. A verified business listing that has been in place for last 6 years suddenly doesn't meet listing requirements is hard to digest. Google gave me hard time even at the time of verification despite that fact that my listing was on google for a couple of years. I cannot comprehend why google was sleeping and suddenly they realized that they have to verify a business that is on the listing for a couple of years. After spending numerous hours trying to resolve the issue, i have hit a dead end. I don't know what to do. When i asked google call center employee to provide with an address where i can serve legal notice,  i was told that they don't know the address for serving legal notices. What kind of services google is offering if their employees don't know basic stuff to assist customers. Until my business profile was suspended i had a smooth ride with google but this is now becoming a nightmare. Either provide specific details about reasons for suspension or not suspend profiles - this is my feedback. I am very stressed about this situation and just don't know what to do. I don't even have the address to serve legal notice to google.",
+            "time" : 1654389256,
+            "translated" : false
+         }
+      ],
+      "types" : [ "point_of_interest", "establishment" ],
+      "url" : "https://maps.google.com/?cid=10281119596374313554",
+      "user_ratings_total" : 968,
+      "utc_offset" : 660,
+      "vicinity" : "48 Pirrama Road, Pyrmont",
+      "website" : "http://google.com/",
+      "wheelchair_accessible_entrance" : true
+   },
+   "status" : "OK"
+}
