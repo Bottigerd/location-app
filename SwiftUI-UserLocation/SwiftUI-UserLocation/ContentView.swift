@@ -31,7 +31,11 @@ struct ContentView: View {
                 .ignoresSafeArea()
                 .accentColor(Color(.systemPink))
                 .onAppear {
-                    viewModel.startUpdatingLocation()
+                    let locServicesEnabled = viewModel.setupLocationManager()
+                    let locServicesValidType = viewModel.checkLocationAuthorizationType()
+                    if (locServicesEnabled && locServicesValidType){
+                        viewModel.startUpdatingLocation()
+                    }
                 }
 
         }
