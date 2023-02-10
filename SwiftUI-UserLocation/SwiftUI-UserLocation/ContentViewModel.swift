@@ -263,11 +263,11 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
     
     internal func getPlaceName() -> String {
-        var place_name = place_results!.result.name
-        var locality: String?
-        var admin_area_1: String?
-        var postal_code: String?
-        var country: String?
+        let place_name = place_results!.result.name
+        var locality = ""
+        var admin_area_1 = ""
+        var postal_code = ""
+        var country = ""
         
         for address_component in reverse_geo_code_results!.results![0].addressComponents {
             if (address_component.types.contains("locality")) {
