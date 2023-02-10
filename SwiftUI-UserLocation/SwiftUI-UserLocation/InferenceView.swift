@@ -11,12 +11,19 @@ import CoreData
 struct InferenceView: View {
     var places = [String]()
     var times = [Date]()
+    let viewContext = PersistenceController.shared.container.viewContext
+
+    
     
     var body: some View {
         VStack{
             Text("Information we know based on your location data: ")
             Text(gethome())
+            
+
         }
+        
+        
     }
     
     
@@ -58,7 +65,6 @@ struct InferenceView: View {
     
     // gets all location data from CoreData. Location data includes name,latitude,longitude,altitude and timestamp
     private func getAllLocationHistory() -> [Location] {
-        let viewContext = PersistenceController.shared.container.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
         let result = try! viewContext.fetch(fetchRequest) as! [Location]
         for i in result{
@@ -66,6 +72,47 @@ struct InferenceView: View {
         }
         return result
     }
+    
+    private func getAllLocationCounts() -> [NSFetchRequestResult] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+        
+        let sortOrder = NSSortDescriptor(key: "count", ascending: false)
+        fetchRequest.sortDescriptors = [sortOrder]
+        let result = try! viewContext.fetch(fetchRequest)
+//        debugPrint(result)
+        return result
+        
+    }
+    
+//   to see how the startTime and endTime formats should be, see Test() function below. Sorts in reverse chronological order with latest being first. if you want to invert it, just make 'ascending: true'
+    
+    private func getAllLocationWithinRange(startTime: Date, endTime: Date) -> [Location] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        let sortOrder = NSSortDescriptor(key: "time", ascending: false)
+        fetchRequest.sortDescriptors = [sortOrder]
+        fetchRequest.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", startTime as CVarArg, endTime as CVarArg)
+        let result = try! viewContext.fetch(fetchRequest) as! [Location]
+//        debugPrint(result)
+        return result
+        
+    }
+    
+//    private func test(){
+//        let date_1_str = "2022-03-20 10:15:30"
+//        let date_2_str = "2022-08-20 10:15:30"
+//        let addDateFormatter = DateFormatter()
+//        addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        let date_1=addDateFormatter.date(from: date_1_str) ?? Date()
+//        let date_2=addDateFormatter.date(from: date_2_str) ?? Date()
+//        getAllLocationWithinRange(startTime: date_1, endTime: date_2)
+//        getAllLocationCounts()
+//    }
+//
+
+    
+    
+    
+    
 
 }
 
