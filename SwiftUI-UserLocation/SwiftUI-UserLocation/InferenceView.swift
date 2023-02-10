@@ -9,6 +9,8 @@ import SwiftUI
 import CoreData
 
 struct InferenceView: View {
+    var places = [String]()
+    var times = [Date]()
     
     var body: some View {
         VStack{
@@ -25,39 +27,31 @@ struct InferenceView: View {
     //            do xyz....
     //        }
 
-    private func gethome() -> String{
+    private mutating func gethome() -> String{
         var home = Dictionary<String, Int>()
-        errno = 0
-        //ISSUE:
-        let path = "dataset.txt"
-        if freopen(path, "r",stdin) == nil {
-            perror(path)
+        storeData()
+        for i in 0...times.count{
+           
+            var hoursSpent = times[i+1].timeIntervalSince(times[i])
+            print(hoursSpent)
         }
-        while let line = readLine() {
-            let location = line.components(separatedBy: ",")
-            print("location: ", location)
-            let time: String = location[0]
-            print("time: ", time)
-            let place: String = location[1]
-            print("place: ", place)
-            let final_time = time.components(separatedBy: " ")
-            //The one we want
-            let clock: String = final_time[1]
-
-            if ((Int(clock.prefix(2)) ?? 0 >= 22) || (Int(clock.prefix(2)) ?? 0 <= 6) ) {
-                var count = home[place] ?? 0
-                count = count + 1
-                home[place] = count
-            }
-        }
-        //print(home.values.max() ?? 0)
-        let maxVal = home.values.max() ?? 0
-        let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
-        //Since file is not read yet, keys is empty and won't print anything
-        //let address = "You most likely live in " + keys[0]
+        
         let address = "HOME: Cassat"
         return address
 
+    }
+    
+    private mutating func storeData() {
+        let data = getAllLocationHistory()
+        for i in data{
+            //print(i.name ?? "hi")
+            let j = String(i.name ?? "hi")
+            places.append(j)
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy/MM/dd HH:mm"
+            let someDateTime = formatter.date(from: "2016/10/08 22:31")
+            times.append((i.time ?? someDateTime)!)
+        }
     }
     
     
@@ -67,6 +61,9 @@ struct InferenceView: View {
         let viewContext = PersistenceController.shared.container.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
         let result = try! viewContext.fetch(fetchRequest) as! [Location]
+        for i in result{
+            print(i.name ?? "hi")
+        }
         return result
     }
 
