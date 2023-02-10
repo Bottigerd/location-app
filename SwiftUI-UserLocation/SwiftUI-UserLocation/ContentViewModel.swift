@@ -280,7 +280,15 @@ final class ContentViewModel: NSObject, ObservableObject,
                 country = address_component.shortName
             }
         }
-        return place_name + ", " + locality + ", " + admin_area_1 + " " + postal_code + ", " + country
+        
+        /*
+         It's weird to split this up, I know, but it was occassionally causing this error:
+         The compiler is unable to type-check this expression in reasonable time;
+         try breaking up the expression into distinct sub-expressions.
+        */
+        let full_name_pt1 = place_name + ", " + locality + ", " + admin_area_1
+        let full_name_pt2 = " " + postal_code + ", " + country
+        return full_name_pt1 + full_name_pt2
     }
     
     // MARK: - API Calls
