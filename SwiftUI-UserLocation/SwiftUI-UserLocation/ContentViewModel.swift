@@ -172,16 +172,40 @@ final class ContentViewModel: NSObject, ObservableObject,
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
     
-    func checkIfLocationServicesIsEnabled() -> Bool {
+    // Checks for locaiton permissions, sets up location manager if true
+    func setupLocationManager() -> Bool {
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
+            locationManager!.desiredAccuracy = kCLLocationAccuracyBest;
+            locationManager!.distanceFilter = 50; // Distance in meters, trigger for location update
             return true
             
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
             return false
         }
+    }
+    
+    func startUpdatingLocation(){
+        let locServicesEnabled = setupLocationManager()
+        let locServicesValidType = checkLocationAuthorizationType()
+        if (locServicesEnabled && locServicesValidType){
+            locationManager?.startUpdatingLocation()
+        }
+    }
+    
+    /*
+     Handles automated location updating, uses distance filter set up in setupLocationManager
+     */
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
+        let coordinates = fetchCoordinates()
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
+        updateAddress(coordinates: coordinates)
     }
     
     // MARK: - Location Functions
@@ -211,21 +235,18 @@ final class ContentViewModel: NSObject, ObservableObject,
      Public so it can be called from ContentView
      */
     func updateDisplay(){
-        let locServicesEnabled = checkIfLocationServicesIsEnabled()
+        let locServicesEnabled = setupLocationManager()
         let locServicesValidType = checkLocationAuthorizationType()
         if (locServicesEnabled && locServicesValidType){
-            let coordinates = updateLocation()
+            let coordinates = fetchCoordinates()
             updateAddress(coordinates: coordinates)
         }
     }
     
     // gets updated coordinates from location manager, also updates mapview.
-     func updateLocation() -> CLLocationCoordinate2D {
+     func fetchCoordinates() -> CLLocationCoordinate2D {
         // if locationManager fails to get location, revert to previously fetched coordinates
         let coordinates = locationManager?.location?.coordinate ?? previous_coordinates
-        region = MKCoordinateRegion(center: coordinates,
-                                    span: MapDetails.defaultSpan)
-        
         previous_coordinates = coordinates
         return coordinates
     }
@@ -253,7 +274,7 @@ final class ContentViewModel: NSObject, ObservableObject,
                 
             }
         }
-        self.address = temp_address ?? "Pending Location"
+        address = temp_address ?? "Pending Location"
         
     }
     
