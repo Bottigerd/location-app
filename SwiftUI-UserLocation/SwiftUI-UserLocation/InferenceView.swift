@@ -37,21 +37,41 @@ struct InferenceView: View {
     private func gethome() -> String{
         var home = Dictionary<String, Int>()
         //storeData()
-
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        print(dateFormatter.string(from: date))
         //end is today current time
         //start is 4 days before today (10 pm)
+        let start = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
+        print(dateFormatter.string(from: start))
         
-//        let data = getAllLocationWithinRange(start, end)
+        let data = getAllLocationWithinRange(startTime: start, endTime: date)
+        for i in data{
+            let time = i.time
+            if let time = time {
+                let time_s = dateFormatter.string(from: time)
+                let final_time = time_s.components(separatedBy: " ")
+                let hours = final_time[1]
+                
+                if ((Int(hours.prefix(2)) ?? 0 >= 22) || (Int(hours.prefix(2)) ?? 0 <= 8) ) {
+                    
+                }
+                
+            }
+            
+            
+        }
         
         //filter the data to only include 10pm-7am
         
         //loop through
         //calculate time for each name change, add it to map (Name = key, TimeSpent = value)
-        for i in 0...times.count{
-           
-            var hoursSpent = times[i+1].timeIntervalSince(times[i])
-            print(hoursSpent)
-        }
+//        for i in 0...times.count{
+//
+//            //var hoursSpent = times[i+1].timeIntervalSince(times[i])
+//            //print(hoursSpent)
+//        }
         
         //go through map to find highest value -> that key is home
         
