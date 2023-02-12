@@ -33,10 +33,8 @@ struct InferenceView: View {
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        print(dateFormatter.string(from: date))
    
         let start = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
-        print(dateFormatter.string(from: start))
         
         let data = getAllLocationWithinRange(startTime: start, endTime: date)
         
@@ -49,18 +47,19 @@ struct InferenceView: View {
         while(i != data.count-1){
             i += 1
             if (originloc.name != data[i].name){
-                print("DATA:");
-                print(data[i].time, data[i].name)
-                print(originloc.time, originloc.name)
-                
                 let time_s = dateFormatter.string(from: originloc.time!)
                 let final_time = time_s.components(separatedBy: " ")
                 let hours = final_time[1]
 
                 if ((Int(hours.prefix(2)) ?? 0 >= 22) || (Int(hours.prefix(2)) ?? 0 <= 8) ) {
                     let interval = data[i].time?.timeIntervalSince(originloc.time!)
-                   
-                    home[originloc.name ?? "Invalid Location"] = interval
+                    //check if key exists in map, add interval to curr value
+                    if (home[originloc.name!] != nil)
+                    {
+                        home[originloc.name ?? "Invalid location"] = home[originloc.name ?? "Invalid location"]! + (interval ?? 0.0)
+                    }else {
+                        home[originloc.name ?? "Invalid Location"] = interval
+                    }
                     originloc = data[i]
                 } else {
                     originloc = data[i]
@@ -72,7 +71,7 @@ struct InferenceView: View {
         }
         
         if (home.isEmpty == true){
-            return "Not enough data recieved between 22:00:00 and 07:00:00"
+            return "Not enough data recieved between 10:00pm and 07:00am"
         }
         
         let maxVal = home.values.max() ?? 0
