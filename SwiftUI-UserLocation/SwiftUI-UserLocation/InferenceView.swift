@@ -39,13 +39,19 @@ struct InferenceView: View {
         print(dateFormatter.string(from: start))
         
         let data = getAllLocationWithinRange(startTime: start, endTime: date)
-
+        
+        if (data.count == 0){
+            return "Insufficient Data. Not enough to make an inference!"
+        }
+        
         var i = 0
         var originloc = data[0]
         while(i != data.count-1){
             i += 1
             if (originloc.name != data[i].name){
-               
+                print("DATA:");
+                print(data[i].time, data[i].name)
+                print(originloc.time, originloc.name)
                 
                 let time_s = dateFormatter.string(from: originloc.time!)
                 let final_time = time_s.components(separatedBy: " ")
@@ -53,7 +59,10 @@ struct InferenceView: View {
 
                 if ((Int(hours.prefix(2)) ?? 0 >= 22) || (Int(hours.prefix(2)) ?? 0 <= 8) ) {
                     let interval = data[i].time?.timeIntervalSince(originloc.time!)
+                   
                     home[originloc.name ?? "Invalid Location"] = interval
+                    originloc = data[i]
+                } else {
                     originloc = data[i]
                 }
                 
@@ -61,6 +70,11 @@ struct InferenceView: View {
                 
             }
         }
+        
+        if (home.isEmpty == true){
+            return "Not enough data recieved between 22:00:00 and 07:00:00"
+        }
+        
         let maxVal = home.values.max() ?? 0
         let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
      
