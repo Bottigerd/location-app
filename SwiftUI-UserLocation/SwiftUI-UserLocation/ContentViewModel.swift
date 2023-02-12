@@ -6,6 +6,14 @@
 //
 
 import MapKit
+import CoreData
+
+
+extension Date {
+    func currentTimeMillis() -> Int64 {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
+}
 
 enum MapDetails {
     static let startingLocation = CLLocationCoordinate2D(latitude: 44.460505,                                                                              longitude: -93.156647)
@@ -171,6 +179,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
+    var viewContext = PersistenceController.shared.container.viewContext
     
     // Checks for locaiton permissions, sets up location manager if true
     func setupLocationManager() -> Bool {
@@ -271,8 +280,12 @@ final class ContentViewModel: NSObject, ObservableObject,
                 }
                 
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            addLocationFromAPI(givenTime: Date(), givenLat: coordinates.latitude, givenLong: coordinates.longitude, givenAlt: 0, givenName: place_id ?? String("place name"))
         }
         address = temp_address ?? "Pending Location"
+
         
     }
     
@@ -389,9 +402,57 @@ final class ContentViewModel: NSObject, ObservableObject,
         task.resume()
     }
     
+    
+    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+        
+        let name_db = Name(context: viewContext)
+        let location = Location(context: viewContext)
+        location.time=givenTime
+        location.latitude = Double(givenLat)
+        location.longitude = Double(givenLong)
+        location.altitude = Double(givenAlt)
+        let count = getCount(Name: givenName)
+        location.name = givenName
+        
+        
+        // find if exists first
+        // if no, initialize count to 1
+        // if yes, fetch request, modify count to +1
+        if (count==1){
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
+            let result = try! viewContext.fetch(fetchRequest)
+            let objectUpdate = result[0] as! NSManagedObject
+            let curCount = objectUpdate.value(forKey: "count")
+            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+        }
+        else{
+            name_db.name=givenName
+            name_db.count = 1
+        }
+
+        saveContext()
+    }
+
+    private func getCount(Name: String) -> Int {
+       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+       fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
+        let count = try! viewContext.count(for:fetchRequest)
+       return count
+    }
+
+    private func saveContext() {
+        do {
+            try viewContext.save()
+        } catch {
+            let error = error as NSError
+            fatalError("An error occured: \(error)")
+        }
+    }
+
+
+
+
 }
-
-
-
 
 
