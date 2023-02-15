@@ -24,7 +24,8 @@ struct DataView: View {
     @State var fileURL=URL(string: "https://www.google.com")
     @State var openFile=false
     @State var dateFormatter = DateFormatter()
-    
+    @State private var showingAlert = false
+
     
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -61,7 +62,17 @@ struct DataView: View {
 
                         Spacer()
                         Button("Nuke") {
-                            nukeData()
+                            showingAlert = true
+                        }
+                        .alert(isPresented: $showingAlert) {
+                            Alert(
+                                title: Text("Are you sure you want to clear all data?"),
+                                message: Text("There is no undo"),
+                                primaryButton: .destructive(Text("Delete")) {
+                                    nukeData()
+                                },
+                                secondaryButton: .cancel()
+                            )
                         }
 
                        Spacer()
