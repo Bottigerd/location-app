@@ -142,7 +142,7 @@ struct DataView: View {
     private func addLocation() {
             
             withAnimation {
-                let name_db = Name(context: viewContext)
+                
                 let location = Location(context: viewContext)
                 let addDateFormatter = DateFormatter()
                 addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -175,6 +175,7 @@ struct DataView: View {
 //                    debugPrint(objectUpdate.value(forKey: "count"))
                 }
                 else{
+                    let name_db = Name(context: viewContext)
                     name_db.name=name
                     name_db.count = 1
                 }
@@ -301,10 +302,10 @@ struct DataView: View {
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
-            var csvText = "Timestamp,Longitude,Latitude,Altitude,Name\n"
+            var csvText = "Timestamp,Latitude,Longitude,Altitude,Name\n"
 
             for location in locations {
-                csvText += "\(location.time! ), \(location.longitude  ),\(location.latitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
+                csvText += "\(location.time! ),\(location.latitude  ),\(location.longitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
             }
 
             do {
@@ -340,8 +341,8 @@ struct DataView: View {
                         let name_db = Name(context: viewContext)
                         let castedDate = importDateFormatter.date(from: columns[0] )
                         location.time = castedDate ?? Date()
-                        location.longitude = Double(columns[1]) ?? 0.0
-                        location.latitude = Double(columns[2]) ?? 0.0
+                        location.latitude = Double(columns[1]) ?? 0.0
+                        location.longitude = Double(columns[2]) ?? 0.0
                         location.altitude = Double(columns[3]) ?? 0.0
                         location.name = columns[4]
 //                        location.count = 1
