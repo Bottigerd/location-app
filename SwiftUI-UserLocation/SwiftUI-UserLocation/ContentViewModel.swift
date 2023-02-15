@@ -177,10 +177,9 @@ final class ContentViewModel: NSObject, ObservableObject,
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
-            locationManager!.desiredAccuracy = kCLLocationAccuracyBest;
-            locationManager!.distanceFilter = 50; // Distance in meters, trigger for location update
+            locationManager!.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager!.distanceFilter = 50 // Distance in meters, trigger for location update
             return true
-            
         } else {
             print("Show an alert letting them know this is off and to go turn it on.")
             return false
@@ -202,10 +201,8 @@ final class ContentViewModel: NSObject, ObservableObject,
         _ manager: CLLocationManager,
         didUpdateLocations locations: [CLLocation]
     ) {
-        let coordinates = fetchCoordinates()
-        region = MKCoordinateRegion(center: coordinates,
-                                    span: MapDetails.defaultSpan)
-        updateAddress(coordinates: coordinates)
+        print("\nUpdating Location")
+        updateDisplay()
     }
     
     // MARK: - Location Functions
@@ -232,13 +229,18 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     /*
      Fetches new location and updates the location display with the new information.
-     Public so it can be called from ContentView
+     Public so it can be called from ContentView.
      */
     func updateDisplay(){
         let coordinates = fetchCoordinates()
         region = MKCoordinateRegion(center: coordinates,
                                     span: MapDetails.defaultSpan)
-        updateAddress(coordinates: coordinates)
+        callLocationAPIs(coordiantes: coordinates)
+        let api_delay_seconds = 1.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + api_delay_seconds) {
+            // Waiting... (to let API calls and JSON decoder finish
+            self.updateAddress(coordiantes: coordinates)
+        }
     }
     
     // gets updated coordinates from location manager, also updates mapview.
@@ -249,29 +251,43 @@ final class ContentViewModel: NSObject, ObservableObject,
         return coordinates
     }
     
+    
+    // calls reverse geocoding api and places api if applicable,
+    private func callLocationAPIs(coordiantes: CLLocationCoordinate2D) {
+        let coordinates_string = getCoordinatesString(coordinates2d: coordiantes)
+        getReverseGeocode(coordinates: coordinates_string)
+        
+        let status = reverse_geo_code_results?.status
+        if (status == "OK") {
+            let place_id = reverse_geo_code_results?.results?[0].placeID ?? nil
+            if (place_id != nil) {
+                getPlace(place_id: place_id!)
+            }
+        }
+    }
+    
     // using location manager coordinates, updates displayed address
-    private func updateAddress(coordinates: CLLocationCoordinate2D) {
-        let coordinates_string = getCoordinatesString(coordinates2d: coordinates)
+    private func updateAddress(coordiantes: CLLocationCoordinate2D) {
         var temp_address: String?
         
-        let globalQueue = DispatchQueue.global()
-        globalQueue.sync {
-            getReverseGeocode(coordinates: coordinates_string)
-        }
-        if (reverse_geo_code_results?.status == "OK") {
+        let status = reverse_geo_code_results?.status
+        if (status == "OK") {
             let place_id = reverse_geo_code_results?.results?[0].placeID ?? nil
             temp_address = reverse_geo_code_results?.results?[0].formattedAddress
             
             if (place_id != nil) {
-                globalQueue.sync {
-                    getPlace(place_id: place_id!)
-                }
+                getPlace(place_id: place_id!)
+                
                 if (place_results?.status == "OK"){
                     temp_address = getPlaceName()
                 }
                 
             }
         }
+        else if (status == "ZERO_RESULTS"){
+            temp_address = "No address at " + String(coordiantes.latitude) + ", " + String(coordiantes.longitude)
+        }
+        
         address = temp_address ?? "Pending Location"
         
     }
@@ -302,15 +318,17 @@ final class ContentViewModel: NSObject, ObservableObject,
         
         /*
          It's weird to split this up, I know, but it was occassionally causing this error:
-         The compiler is unable to type-check this expression in reasonable time;
+         The compiler is unable to type-check this expression in reasonable timel
          try breaking up the expression into distinct sub-expressions.
-         */
+        */
         let full_name_pt1 = place_name + ", " + locality + ", " + admin_area_1
         let full_name_pt2 = " " + postal_code + ", " + country
         return full_name_pt1 + full_name_pt2
     }
     
     // MARK: - API Calls
+    
+    
     
     // MARK: - Reverse Geocoding API
     // transforms the json from the reverse geocoding API call into a struct for referencing
@@ -321,16 +339,17 @@ final class ContentViewModel: NSObject, ObservableObject,
             return
         }
         
-        let task = URLSession.shared.dataTask(with: url) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) {
             data, response, error in
             
             let decoder = JSONDecoder()
             if let data = data {
                 do {
                     let reverse_geo_code_struct = try decoder.decode(ReverseGeoCodingResponseStruct.self, from: data)
-                    DispatchQueue.main.sync {
-                        self.reverse_geo_code_results = reverse_geo_code_struct
-                    }
+                    self.reverse_geo_code_results = reverse_geo_code_struct
                 } catch {
                     print("ERROR: Could not decode JSON response (GET REVERSE GEOCODE)")
                     return
@@ -338,15 +357,12 @@ final class ContentViewModel: NSObject, ObservableObject,
             }
             
             print("REVERSE GEOCODING API CALL: " + coordinates)
-            
             /*
-             // print JSON for testing purposes
-             if let data = data, let string = String(data: data, encoding: .utf8){
-             print(string)
-             }
-             */
-            
-            
+            // print formatted address for testing purposes
+            if (self.reverse_geo_code_results?.status == "OK"){
+                print(self.reverse_geo_code_results?.results?[0].formattedAddress ?? "")
+            }
+            */
         }
         task.resume()
     }
@@ -361,17 +377,17 @@ final class ContentViewModel: NSObject, ObservableObject,
             return
         }
         
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: url) {
+        let task = URLSession.shared.dataTask(with: request) {
             data, response, error in
             
             let decoder = JSONDecoder()
             if let data = data {
                 do {
                     let place_struct = try decoder.decode(PlaceResponseStruct.self, from: data)
-                    DispatchQueue.main.sync {
-                        self.place_results = place_struct
-                    }
+                    self.place_results = place_struct
                 } catch {
                     print("ERROR: Could not decode JSON response (GET PLACE)")
                 }
@@ -391,6 +407,17 @@ final class ContentViewModel: NSObject, ObservableObject,
     
 }
 
+// MARK: - NetworkLoader
+protocol NetworkLoader {
+    func loadData(using request: URLRequest, with completion: @escaping (Data?, URLResponse?, Error?) -> Void)
+}
+
+extension URLSession: NetworkLoader {
+    // call dataTask and resume, passing the completionHandler
+    func loadData(using request: URLRequest, with completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    self.dataTask(with: request, completionHandler: completion).resume()
+    }
+}
 
 
 
