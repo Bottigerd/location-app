@@ -14,8 +14,12 @@ struct ContentView: View {
     
 
     var body: some View {
-        VStack{Text(viewModel.address);
-            Button(action: { viewModel.checkIfLocationServicesIsEnabled()}){
+        VStack{
+            Text(viewModel.address);
+            Button(action: {
+                viewModel.updateDisplay()
+                viewModel.startUpdatingLocation()
+            }){
                 Text("Get Location")
                     .foregroundColor(Color.white)
                     .padding()
@@ -27,8 +31,13 @@ struct ContentView: View {
                 .ignoresSafeArea()
                 .accentColor(Color(.systemPink))
                 .onAppear {
-                    viewModel.checkIfLocationServicesIsEnabled()
+                    let locServicesEnabled = viewModel.setupLocationManager()
+                    let locServicesValidType = viewModel.checkLocationAuthorizationType()
+                    if (locServicesEnabled && locServicesValidType){
+                        viewModel.startUpdatingLocation()
+                    }
                 }
+
         }
 
     }
