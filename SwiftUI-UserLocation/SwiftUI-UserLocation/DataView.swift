@@ -58,6 +58,12 @@ struct DataView: View {
                             name = ""
                             
                        }
+
+                        Spacer()
+                        Button("Nuke") {
+                            nukeData()
+                        }
+
                        Spacer()
                         Button("Export CSV") {
                             exportCSV()
@@ -174,14 +180,14 @@ struct DataView: View {
        return count
     }
         
-        private func saveContext() {
-            do {
-                try viewContext.save()
-            } catch {
-                let error = error as NSError
-                fatalError("An error occured: \(error)")
-            }
+    private func saveContext() {
+        do {
+            try viewContext.save()
+        } catch {
+            let error = error as NSError
+            fatalError("An error occured: \(error)")
         }
+    }
     
     private func deleteLocations(offsets: IndexSet) {
         // not sure if actually deletes properly or nah, but looks like it
@@ -215,6 +221,72 @@ struct DataView: View {
         
     }
     
+    
+    // Deletes all data from core data (from both Entities)
+    private func nukeData() {
+//        On the offchance that there is a performance issue, uncomment
+//        the following two lines and delete the "for name in names" loop
+        
+//        let nameFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+//        batchDeletion(fetch: nameFetch)
+        
+        for location in locations {
+            viewContext.delete(location)
+        }
+        for name in names {
+            viewContext.delete(name)
+        }
+        
+        saveContext()
+
+    }
+
+    // Deletes an entire fetch request from core data
+    private func batchDeletion(fetch: NSFetchRequest<NSFetchRequestResult>){
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetch)
+        batchDeleteRequest.resultType = .resultTypeObjectIDs
+        do {
+            _ = try viewContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
+        } catch {
+            fatalError("Failed to execute request: \(error)")
+        }
+
+        do {
+            let result = try viewContext.execute(batchDeleteRequest) as? NSBatchDeleteResult
+            let objectIDArray = result?.result as? [NSManagedObjectID]
+            let changes = [NSDeletedObjectsKey : objectIDArray]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable : Any], into: [viewContext])
+        } catch {
+            fatalError("Failed to perform batch update: \(error)")
+        }
+        
+        saveContext()
+    }
+    
+    
+    // Debugging: Prints out how many objects are in Location entity
+    func getLocationRecordsCount(){
+           let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+           do {
+               let count = try viewContext.count(for: fetchRequest)
+               print(count)
+           } catch {
+               print(error.localizedDescription)
+           }
+
+       }
+    
+    // Debugging: Prints out how many objects are in Name entity
+    func getNameRecordsCount(){
+           let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+           do {
+               let count = try viewContext.count(for: fetchRequest)
+               print(count)
+           } catch {
+               print(error.localizedDescription)
+           }
+       }
+
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
