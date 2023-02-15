@@ -130,7 +130,7 @@ struct DataView: View {
     private func addLocation() {
             
             withAnimation {
-                let name_db = Name(context: viewContext)
+                
                 let location = Location(context: viewContext)
                 let addDateFormatter = DateFormatter()
                 addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -149,7 +149,7 @@ struct DataView: View {
                 
                 
             
-                if (count==1){
+                if (count>=1){
 //                    debugPrint("here")
                     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                     fetchRequest.predicate = NSPredicate(format: "(name = %@)", name)
@@ -163,6 +163,7 @@ struct DataView: View {
 //                    debugPrint(objectUpdate.value(forKey: "count"))
                 }
                 else{
+                let name_db = Name(context: viewContext)
                     name_db.name=name
                     name_db.count = 1
                 }

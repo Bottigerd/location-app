@@ -19,6 +19,10 @@ struct InferenceView: View {
         VStack{
             Text("Information we know based on your location data: ")
             Text(gethome())
+            Button("test") {
+                test()
+                
+           }
             
 
         }
@@ -94,13 +98,15 @@ struct InferenceView: View {
         return result
     }
     
-    private func getAllLocationCounts() -> [NSFetchRequestResult] {
+    
+    
+    // gets all counts for all locations. access results the same way as getAllLocationHistory()
+    private func getAllLocationCounts() -> [Name] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
         
         let sortOrder = NSSortDescriptor(key: "count", ascending: false)
         fetchRequest.sortDescriptors = [sortOrder]
-        let result = try! viewContext.fetch(fetchRequest)
-//        debugPrint(result)
+        let result = try! viewContext.fetch(fetchRequest) as! [Name]
         return result
         
     }
@@ -118,7 +124,7 @@ struct InferenceView: View {
         
     }
     
-//    private func test(){
+    private func test(){
 //        let date_1_str = "2022-03-20 10:15:30"
 //        let date_2_str = "2022-08-20 10:15:30"
 //        let addDateFormatter = DateFormatter()
@@ -126,8 +132,8 @@ struct InferenceView: View {
 //        let date_1=addDateFormatter.date(from: date_1_str) ?? Date()
 //        let date_2=addDateFormatter.date(from: date_2_str) ?? Date()
 //        getAllLocationWithinRange(startTime: date_1, endTime: date_2)
-//        getAllLocationCounts()
-//    }
+        getAllLocationCounts()
+    }
 //
 
     
