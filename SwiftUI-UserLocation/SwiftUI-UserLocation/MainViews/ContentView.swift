@@ -28,6 +28,7 @@ struct ContentView: View {
                 .background(Color.green)
                 .cornerRadius(10)
             Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
+                .accentColor(Color(.systemPink))
                 .edgesIgnoringSafeArea(.top)
                 .onAppear {
                     viewModel.checkIfLocationServicesIsEnabled()
