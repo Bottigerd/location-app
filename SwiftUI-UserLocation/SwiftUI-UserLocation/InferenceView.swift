@@ -95,26 +95,33 @@ struct InferenceView: View {
     
     //returns the 5 most frequented locations of user excluding their home
     private func getTop5Locations() -> String{
+        //IMPORTANT it doesn't delete API calls from data yet
         let data = getAllLocationCounts();
         print(data.count)
-//        if(data.count < 5){
-//            return "Less than 5 locations in data"
-//        } else{
-//            var topPlaces: Array<String> = Array();
-//            topPlaces = [data[0].name!, data[1].name!, data[2].name!, data[3].name!, data[5].name!]
-//            var topCounts: Array<Int16> = Array();
-//            topCounts = [data[0].count, data[1].count, data[2].count, data[3].count, data[5].count]
-//            var min = topCounts.min();
-//
-//            for i in data{
-//                if((!topPlaces.contains(i.name!)) && (min! < i.count)) {
-//                        print(i.name!)
-//                }
-//            }
-//
-//            let ret = "hi"
-//            return ret
-//        }
+        if((data.count < 5) || (data[4].name == nil)){
+            return "Less than 5 locations in data"
+        }
+        else{
+            var topPlaces: Array<String> = Array();
+            topPlaces = [data[0].name!, data[1].name!, data[2].name!, data[3].name!, data[4].name!]
+            var topCounts: Array<Int16> = Array();
+            topCounts = [data[0].count, data[1].count, data[2].count, data[3].count, data[4].count]
+            var min = topCounts.min();
+            
+            for i in data{
+                if((i.name != nil) && (!topPlaces.contains(i.name!)) && (min! < i.count)) {
+                        //print(i.name!)
+                    var index = topCounts.firstIndex(of: min!)
+                    topCounts[index!] = i.count
+                    topPlaces[index!] = i.name!
+                    min = topCounts.min()
+                }
+            }
+            
+            let ret =  topPlaces.joined(separator: ",")
+            return ret
+
+        }
         return "hi"
     }
     
