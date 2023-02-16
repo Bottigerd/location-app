@@ -19,33 +19,34 @@ struct InferenceView: View {
         VStack{
             Text("Information we know based on your location data: ")
             Text(gethome())
-            Button("test") {
-                test()
-                
-           }
-            
-
+//            Button("test") {
+//                test()
+//
+//
+            Text(getTop5Locations())
         }
-        
-        
     }
     
-    
-
+    //Returns user's home based on data from last four days
     private func gethome() -> String{
+        //dictory to store all locations between 10pm-8am and the hours spent there
         var home = Dictionary<String, Double>()
+        
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-   
         let start = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
         
         let data = getAllLocationWithinRange(startTime: start, endTime: date)
         
+        //if no data
         if (data.count == 0){
             return "Insufficient Data. Not enough to make an inference!"
         }
         
+        //loop through data
+        //NOTE: cases to handle: what if they get home before 10pm?
+        //also what if no data from next morning? - have a default end time
         var i = 0
         var originloc = data[0]
         while(i != data.count-1){
@@ -68,23 +69,53 @@ struct InferenceView: View {
                 } else {
                     originloc = data[i]
                 }
-                
-                
-                
             }
         }
         
+        //No data from 10pm-8am
         if (home.isEmpty == true){
-            return "Not enough data recieved between 10:00pm and 07:00am"
+            return "Not enough data recieved between 10:00pm and 08:00am"
         }
-        
         let maxVal = home.values.max() ?? 0
         let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
-     
-        
         let address = "You most likely live in " +  keys[0]
         return address
 
+    }
+    
+    //Cassat 5
+    //Olin 1
+    //Watson 3
+    //Anserson 4
+    //Sayles 7
+    //Leighton 9
+    //Libe 12
+    //[C,L,Li,A,S]
+    //[5,9,12,4,7]
+    
+    //returns the 5 most frequented locations of user excluding their home
+    private func getTop5Locations() -> String{
+        let data = getAllLocationCounts();
+        print(data.count)
+//        if(data.count < 5){
+//            return "Less than 5 locations in data"
+//        } else{
+//            var topPlaces: Array<String> = Array();
+//            topPlaces = [data[0].name!, data[1].name!, data[2].name!, data[3].name!, data[5].name!]
+//            var topCounts: Array<Int16> = Array();
+//            topCounts = [data[0].count, data[1].count, data[2].count, data[3].count, data[5].count]
+//            var min = topCounts.min();
+//
+//            for i in data{
+//                if((!topPlaces.contains(i.name!)) && (min! < i.count)) {
+//                        print(i.name!)
+//                }
+//            }
+//
+//            let ret = "hi"
+//            return ret
+//        }
+        return "hi"
     }
     
     

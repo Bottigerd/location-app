@@ -17,6 +17,7 @@
 		7CB2CC20297B8401005C248E /* SwiftUI_UserLocationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC1F297B8401005C248E /* SwiftUI_UserLocationUITests.swift */; };
 		7CB2CC22297B8401005C248E /* SwiftUI_UserLocationUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC21297B8401005C248E /* SwiftUI_UserLocationUITestsLaunchTests.swift */; };
 		7CB2CC2F297B9458005C248E /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC2E297B9458005C248E /* ContentViewModel.swift */; };
+		7CB407E3299DEDBA00F92591 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CB407E2299DEDBA00F92591 /* config.json */; };
 		7CCB3F7D29821104005DB670 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F7C29821104005DB670 /* DataView.swift */; };
 		7CCB3F7F29821326005DB670 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F7E29821326005DB670 /* Persistence.swift */; };
 		7CCB3F8229821372005DB670 /* Locations.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB3F8029821372005DB670 /* Locations.xcdatamodeld */; };
@@ -57,6 +58,7 @@
 		7CB2CC1F297B8401005C248E /* SwiftUI_UserLocationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_UserLocationUITests.swift; sourceTree = "<group>"; };
 		7CB2CC21297B8401005C248E /* SwiftUI_UserLocationUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_UserLocationUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7CB2CC2E297B9458005C248E /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		7CB407E2299DEDBA00F92591 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = config.json; path = ../../config.json; sourceTree = "<group>"; };
 		7CCB3F7C29821104005DB670 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
 		7CCB3F7E29821326005DB670 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		7CCB3F8129821372005DB670 /* Locations.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Locations.xcdatamodel; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 		7CB2CBF8297B83FE005C248E = {
 			isa = PBXGroup;
 			children = (
+				7CB407E2299DEDBA00F92591 /* config.json */,
 				7CB2CC03297B83FE005C248E /* SwiftUI-UserLocation */,
 				7CB2CC14297B8400005C248E /* SwiftUI-UserLocationTests */,
 				7CB2CC1E297B8401005C248E /* SwiftUI-UserLocationUITests */,
@@ -271,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CB2CC0C297B8400005C248E /* Preview Assets.xcassets in Resources */,
+				7CB407E3299DEDBA00F92591 /* config.json in Resources */,
 				7C7589E1298736CE00A2443A /* dataset.txt in Resources */,
 				7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */,
 			);
