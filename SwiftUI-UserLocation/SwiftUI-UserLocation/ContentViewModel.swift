@@ -244,7 +244,7 @@ final class ContentViewModel: NSObject, ObservableObject,
      */
     func updateDisplay(coordinates: CLLocationCoordinate2D){
         callLocationAPIs(coordiantes: coordinates)
-        let api_delay_seconds = 2.0
+        let api_delay_seconds = 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + api_delay_seconds) {
             // Waiting... (to let API calls and JSON decoder finish
             self.updateAddress(coordiantes: coordinates)
@@ -416,19 +416,3 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
     
 }
-
-// MARK: - NetworkLoader
-protocol NetworkLoader {
-    func loadData(using request: URLRequest, with completion: @escaping (Data?, URLResponse?, Error?) -> Void)
-}
-
-extension URLSession: NetworkLoader {
-    // call dataTask and resume, passing the completionHandler
-    func loadData(using request: URLRequest, with completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
-    self.dataTask(with: request, completionHandler: completion).resume()
-    }
-}
-
-
-
-
