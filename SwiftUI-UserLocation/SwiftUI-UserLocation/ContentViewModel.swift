@@ -166,11 +166,37 @@ final class ContentViewModel: NSObject, ObservableObject,
     @Published var address = "Pending Location"
     private var config = Config(fileName: "config")
     var previous_coordinates = MapDetails.startingLocation
-    
     // API Responses (URLSession discards response before completion, so we save to a class variable
     var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
+    //    map from place id to Carleton Buildings
+     var place_dict:[String:String] = ["ChIJDa9m6rdT9ocReWbwDkfk7YU" : "Severance Hall / Burton Hall",
+                          "ChIJc61YtLdT9ocR7Cr5WtVvW_g" : "Laird Stadium / Facilities Building / West Gym",
+                          "ChIJTZQLpbdT9ocRqvqVtggIPhs" : "Willis Hall / Sayles",
+                          "ChIJZQ1g8bdT9ocRjAlA8KvQSok" : "Davis Hall",
+                          "ChIJp7q2lLdT9ocRHBsYjwG9ceE" : "Scoville Hall",
+                          "ChIJ73W88LdT9ocRVeBRJm1aCU4" : "Musser Hall",
+                          "ChIJveYnVbZT9ocRUeG2LmtNKYQ" : "Leighton Hall",
+                          "ChIJV7Vl37ZT9ocRdKyoCrESLHQ" : "Laurence McKiny Gould Library",
+                          "ChIJI7Ide7dT9ocR8-ZMITh6qAs" : "Skinner Memorial Chapel",
+                          "ChIJV2kfO7dT9ocRkLNf1wMNvDc" : "The Bold Spot",
+                          "ChIJjdlF_jhT9ocRB2WNC8wfu8E" : "Center for Mathematics and Computing",
+                          "ChIJj58vk7RT9ocRAo2NbglMiRs" : "Boliou Hall",
+                          "ChIJM9HO1rBT9ocRE7KzwWT4BTM" : "Goodsell Observatory",
+                          "ChIJqXjdzLBT9ocRiyR1NFp_or8" : "Olin Hall of Science / Hulings Hall / Anderson",
+                          "ChIJ4wZEyLBT9ocRsuHGwEZEKDw" : "Norse Hall",
+                          "ChIJEY7-k45T9ocR6zi3hMMKCXw" : "Ardis and Robert James Hall / Casset Hall",
+                          "ChIJhzudb7BT9ocRWxttpsHoQ_4" : "Myers Hall / The Cave at Carleton College",
+                          "ChIJ90cSh7pT9ocRRWLkRdbBxnA" : "Watson Hall / Cowling Gymnasium",
+                          "ChIJ35h_jrFT9ocRF_dYcIPXW5k" : "Goodhue Hall / Recreration Center at Carleton College",
+                          " ChIJpw728LhT9ocRurmgIi9AE8k" : "Weitz Center for creativity",
+                          "ChIJD5D9yrdT9ocRe9yS44RH-68" : "Allen House",
+                          "ChIJQ2q6D8hT9ocRhyqPEyfnGIs" : "Wilson House",
+                          "ChIJTzVZBshT9ocRXih5mEYdNR8" : "Prentice House",
+                        "ChIJnyIJxrBT9ocRyiDLmcJrhSc" : "Language and Dining Center"
+        ]
+
     
     // Checks for locaiton permissions, sets up location manager if true
     func setupLocationManager() -> Bool {
@@ -266,8 +292,13 @@ final class ContentViewModel: NSObject, ObservableObject,
                 globalQueue.sync {
                     getPlace(place_id: place_id!)
                 }
+//              if the place_id shows that the person is in one of Carleton Buildings, then the address will equals to the building name
                 if (place_results?.status == "OK"){
-                    temp_address = getPlaceName()
+                    if place_id != nil && self.place_dict[place_id!] != nil{
+                        temp_address = self.place_dict[place_id!]
+                    }else{
+                        temp_address = getPlaceName()
+                    }
                 }
                 
             }
