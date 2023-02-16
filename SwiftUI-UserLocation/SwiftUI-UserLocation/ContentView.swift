@@ -17,7 +17,6 @@ struct ContentView: View {
         VStack{
             Text(viewModel.address);
             Button(action: {
-                viewModel.updateDisplay()
                 viewModel.startUpdatingLocation()
             }){
                 Text("Get Location")
