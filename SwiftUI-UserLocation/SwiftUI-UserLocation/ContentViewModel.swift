@@ -171,7 +171,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
     //    map from place id to Carleton Buildings
-     var place_dict:[String:String] = ["ChIJDa9m6rdT9ocReWbwDkfk7YU" : "Severance Hall / Burton Hall",
+    var place_dict:[String:String] = ["ChIJDa9m6rdT9ocReWbwDkfk7YU" : "Severance Hall / Burton Hall",
                           "ChIJc61YtLdT9ocR7Cr5WtVvW_g" : "Laird Stadium / Facilities Building / West Gym",
                           "ChIJTZQLpbdT9ocRqvqVtggIPhs" : "Willis Hall / Sayles",
                           "ChIJZQ1g8bdT9ocRjAlA8KvQSok" : "Davis Hall",
