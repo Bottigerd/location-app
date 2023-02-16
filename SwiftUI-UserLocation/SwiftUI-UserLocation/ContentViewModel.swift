@@ -201,8 +201,14 @@ final class ContentViewModel: NSObject, ObservableObject,
         _ manager: CLLocationManager,
         didUpdateLocations locations: [CLLocation]
     ) {
-        print("\nUpdating Location")
-        updateDisplay()
+        let accuracy = locationManager?.location?.horizontalAccuracy
+        let coordinates = fetchCoordinates()
+        updateMapRegion(coordinates: coordinates)
+        if (accuracy! <= 10.0) { // Only call API if accuracy is high enough; within 10 meters
+            print("\nUpdating Location")
+            updateDisplay(coordinates: coordinates)
+        }
+        
     }
     
     // MARK: - Location Functions
@@ -227,16 +233,18 @@ final class ContentViewModel: NSObject, ObservableObject,
         return false
     }
     
+    func updateMapRegion(coordinates: CLLocationCoordinate2D){
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
+    }
+    
     /*
      Fetches new location and updates the location display with the new information.
      Public so it can be called from ContentView.
      */
-    func updateDisplay(){
-        let coordinates = fetchCoordinates()
-        region = MKCoordinateRegion(center: coordinates,
-                                    span: MapDetails.defaultSpan)
+    func updateDisplay(coordinates: CLLocationCoordinate2D){
         callLocationAPIs(coordiantes: coordinates)
-        let api_delay_seconds = 1.0
+        let api_delay_seconds = 2.0
         DispatchQueue.main.asyncAfter(deadline: .now() + api_delay_seconds) {
             // Waiting... (to let API calls and JSON decoder finish
             self.updateAddress(coordiantes: coordinates)
@@ -357,12 +365,14 @@ final class ContentViewModel: NSObject, ObservableObject,
             }
             
             print("REVERSE GEOCODING API CALL: " + coordinates)
+            
             /*
             // print formatted address for testing purposes
             if (self.reverse_geo_code_results?.status == "OK"){
                 print(self.reverse_geo_code_results?.results?[0].formattedAddress ?? "")
             }
             */
+            
         }
         task.resume()
     }
