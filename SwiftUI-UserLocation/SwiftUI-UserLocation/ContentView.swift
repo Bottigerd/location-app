@@ -8,6 +8,7 @@
 import SwiftUI
 import MapKit
 
+
 struct ContentView: View {
     //takes you to region
     @StateObject private var viewModel = ContentViewModel()
@@ -26,7 +27,7 @@ struct ContentView: View {
                 .buttonStyle(.bordered)
                 .background(Color.green)
                 .cornerRadius(10)
-            Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
+            MapView(region: $viewModel.region )
                 .ignoresSafeArea()
                 .accentColor(Color(.systemPink))
                 .onAppear {
