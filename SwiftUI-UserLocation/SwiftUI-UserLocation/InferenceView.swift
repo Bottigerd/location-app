@@ -25,8 +25,6 @@ struct InferenceView: View {
         
         
     }
-    
-    
 
     private func gethome() -> String{
         var home = Dictionary<String, Double>()
