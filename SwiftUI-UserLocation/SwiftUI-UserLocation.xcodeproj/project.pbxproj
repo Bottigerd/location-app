@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F73652F2996B20700B7E2EF /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F73652E2996B20700B7E2EF /* LaunchScreen.swift */; };
+		4FA0BA53299A008A00A5EBBC /* NavigationTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0BA52299A008A00A5EBBC /* NavigationTabs.swift */; };
+		4FABFEA529A0012000E979E1 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 4FABFEA429A0011F00E979E1 /* config.json */; };
 		7C7589DF29871BC300A2443A /* InferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7589DE29871BC300A2443A /* InferenceView.swift */; };
 		7C7589E1298736CE00A2443A /* dataset.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C7589E0298736CE00A2443A /* dataset.txt */; };
 		7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */; };
@@ -24,7 +27,6 @@
 		7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */; };
 		7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */; };
 		7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */; };
-		7CFDD925299444F80075838C /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CFDD924299444F80075838C /* config.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +47,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F73652E2996B20700B7E2EF /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
+		4FA0BA52299A008A00A5EBBC /* NavigationTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTabs.swift; sourceTree = "<group>"; };
+		4FABFEA329A000FC00E979E1 /* config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = config.json; path = ../../config.json; sourceTree = "<group>"; };
+		4FABFEA429A0011F00E979E1 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = config.json; path = ../../../../../.Trash/config.json; sourceTree = "<group>"; };
 		7C7589DE29871BC300A2443A /* InferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceView.swift; sourceTree = "<group>"; };
 		7C7589E0298736CE00A2443A /* dataset.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dataset.txt; sourceTree = "<group>"; };
 		7CB2CC01297B83FE005C248E /* SwiftUI-UserLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-UserLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,7 +72,6 @@
 		7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		7CFDD924299444F80075838C /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,10 +99,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F73652D2996B1E900B7E2EF /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				4F73652E2996B20700B7E2EF /* LaunchScreen.swift */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
+		4F7365322996B4DD00B7E2EF /* MainViews */ = {
+			isa = PBXGroup;
+			children = (
+				7CB2CC06297B83FE005C248E /* ContentView.swift */,
+				7CCB3F7C29821104005DB670 /* DataView.swift */,
+				7C7589DE29871BC300A2443A /* InferenceView.swift */,
+				4FA0BA52299A008A00A5EBBC /* NavigationTabs.swift */,
+			);
+			path = MainViews;
+			sourceTree = "<group>";
+		};
 		7CB2CBF8297B83FE005C248E = {
 			isa = PBXGroup;
 			children = (
-				7CFDD924299444F80075838C /* config.json */,
+				4FABFEA329A000FC00E979E1 /* config.json */,
+				4FABFEA429A0011F00E979E1 /* config.json */,
+				4F73652D2996B1E900B7E2EF /* LaunchScreen */,
 				7CB2CC03297B83FE005C248E /* SwiftUI-UserLocation */,
 				7CB2CC14297B8400005C248E /* SwiftUI-UserLocationTests */,
 				7CB2CC1E297B8401005C248E /* SwiftUI-UserLocationUITests */,
@@ -121,11 +147,9 @@
 				7CCB3F8B29821420005DB670 /* Models */,
 				7CCB3F8029821372005DB670 /* Locations.xcdatamodeld */,
 				7CCB3F7E29821326005DB670 /* Persistence.swift */,
-				7CCB3F7C29821104005DB670 /* DataView.swift */,
 				7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */,
 				7CB2CC2E297B9458005C248E /* ContentViewModel.swift */,
-				7CB2CC06297B83FE005C248E /* ContentView.swift */,
-				7C7589DE29871BC300A2443A /* InferenceView.swift */,
+				4F7365322996B4DD00B7E2EF /* MainViews */,
 				7C7589E0298736CE00A2443A /* dataset.txt */,
 				7CB2CC08297B8400005C248E /* Assets.xcassets */,
 				7CB2CC0A297B8400005C248E /* Preview Content */,
@@ -274,7 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CB2CC0C297B8400005C248E /* Preview Assets.xcassets in Resources */,
-				7CFDD925299444F80075838C /* config.json in Resources */,
+				4FABFEA529A0012000E979E1 /* config.json in Resources */,
 				7C7589E1298736CE00A2443A /* dataset.txt in Resources */,
 				7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */,
 			);
@@ -305,10 +329,12 @@
 				7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */,
 				7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */,
 				7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */,
+				4FA0BA53299A008A00A5EBBC /* NavigationTabs.swift in Sources */,
 				7CD934EB29861FB400E98C33 /* Location+CoreDataClass.swift in Sources */,
 				7CB2CC07297B83FE005C248E /* ContentView.swift in Sources */,
 				7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */,
 				7CCB3F7D29821104005DB670 /* DataView.swift in Sources */,
+				4F73652F2996B20700B7E2EF /* LaunchScreen.swift in Sources */,
 				7CB2CC2F297B9458005C248E /* ContentViewModel.swift in Sources */,
 				7CCB3F8229821372005DB670 /* Locations.xcdatamodeld in Sources */,
 				7CCB3F7F29821326005DB670 /* Persistence.swift in Sources */,
@@ -467,6 +493,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI-UserLocation/Preview Content\"";
@@ -478,6 +505,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -496,6 +524,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI-UserLocation/Preview Content\"";
@@ -507,6 +536,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
