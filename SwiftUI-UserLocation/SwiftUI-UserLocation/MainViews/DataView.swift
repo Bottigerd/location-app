@@ -4,6 +4,10 @@
 //
 //  Created by CS Lab User on 1/25/23.
 
+// Data View:
+// This view allows you to manually enter datapoints into the
+// set, import data from a CSV file, and export data to a CSV file.
+
 
 import SwiftUI
 import CoreData
