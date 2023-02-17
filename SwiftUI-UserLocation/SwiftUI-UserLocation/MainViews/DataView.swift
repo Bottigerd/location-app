@@ -52,6 +52,11 @@ struct DataView: View {
                         Spacer()
                         Button("Add") {
                             addLocation()
+                            time = ""
+                            latitude = ""
+                            longitude = ""
+                            altitude = ""
+                            name = ""
                         }
                         Spacer()
                         Button("Clear") {

@@ -17,4 +17,3 @@ struct SwiftUI_UserLocationApp: App {
     }
   }
 
-

@@ -6,6 +6,14 @@
 //
 
 import MapKit
+import CoreData
+
+
+extension Date {
+    func currentTimeMillis() -> Int64 {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
+}
 
 enum MapDetails {
     static let startingLocation = CLLocationCoordinate2D(latitude: 44.460505,                                                                              longitude: -93.156647)
@@ -171,11 +179,15 @@ final class ContentViewModel: NSObject, ObservableObject,
     var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
+    var viewContext = PersistenceController.shared.container.viewContext
     
-    func checkIfLocationServicesIsEnabled() -> Bool {
+    // Checks for locaiton permissions, sets up location manager if true
+    func setupLocationManager() -> Bool {
         if CLLocationManager.locationServicesEnabled() {
             locationManager = CLLocationManager()
             locationManager!.delegate = self
+            locationManager!.desiredAccuracy = kCLLocationAccuracyBest;
+            locationManager!.distanceFilter = 50; // Distance in meters, trigger for location update
             return true
             
         } else {
@@ -184,24 +196,45 @@ final class ContentViewModel: NSObject, ObservableObject,
         }
     }
     
+    func startUpdatingLocation(){
+        let locServicesEnabled = setupLocationManager()
+        let locServicesValidType = checkLocationAuthorizationType()
+        if (locServicesEnabled && locServicesValidType){
+            locationManager?.startUpdatingLocation()
+        }
+    }
+    
+    /*
+     Handles automated location updating, uses distance filter set up in setupLocationManager
+     */
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
+        let coordinates = fetchCoordinates()
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
+        updateAddress(coordinates: coordinates)
+    }
+    
     // MARK: - Location Functions
     func checkLocationAuthorizationType() -> Bool {
         guard let locationManager = locationManager else { return false }
         
         switch locationManager.authorizationStatus {
-            case .notDetermined:
-                locationManager.requestWhenInUseAuthorization()
-                return false
-            case .restricted:
-                print("location is restricted likely due to parental controls")
-                return false
-            case .denied:
-                print("You have denied this app location permission. Go into settings to change it.")
-                return false
-            case .authorizedAlways, .authorizedWhenInUse:
-                return true
-            @unknown default:
-                break
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            return false
+        case .restricted:
+            print("location is restricted likely due to parental controls")
+            return false
+        case .denied:
+            print("You have denied this app location permission. Go into settings to change it.")
+            return false
+        case .authorizedAlways, .authorizedWhenInUse:
+            return true
+        @unknown default:
+            break
         }
         return false
     }
@@ -211,21 +244,16 @@ final class ContentViewModel: NSObject, ObservableObject,
      Public so it can be called from ContentView
      */
     func updateDisplay(){
-        let locServicesEnabled = checkIfLocationServicesIsEnabled()
-        let locServicesValidType = checkLocationAuthorizationType()
-        if (locServicesEnabled && locServicesValidType){
-            let coordinates = updateLocation()
-            updateAddress(coordinates: coordinates)
-        }
+        let coordinates = fetchCoordinates()
+        region = MKCoordinateRegion(center: coordinates,
+                                    span: MapDetails.defaultSpan)
+        updateAddress(coordinates: coordinates)
     }
     
     // gets updated coordinates from location manager, also updates mapview.
-     func updateLocation() -> CLLocationCoordinate2D {
+    func fetchCoordinates() -> CLLocationCoordinate2D {
         // if locationManager fails to get location, revert to previously fetched coordinates
         let coordinates = locationManager?.location?.coordinate ?? previous_coordinates
-        region = MKCoordinateRegion(center: coordinates,
-                                    span: MapDetails.defaultSpan)
-        
         previous_coordinates = coordinates
         return coordinates
     }
@@ -252,8 +280,12 @@ final class ContentViewModel: NSObject, ObservableObject,
                 }
                 
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            addLocationFromAPI(givenTime: Date(), givenLat: coordinates.latitude, givenLong: coordinates.longitude, givenAlt: 0, givenName: place_id ?? String("place name"))
         }
-        self.address = temp_address ?? "Pending Location"
+        address = temp_address ?? "Pending Location"
+
         
     }
     
@@ -285,7 +317,7 @@ final class ContentViewModel: NSObject, ObservableObject,
          It's weird to split this up, I know, but it was occassionally causing this error:
          The compiler is unable to type-check this expression in reasonable time;
          try breaking up the expression into distinct sub-expressions.
-        */
+         */
         let full_name_pt1 = place_name + ", " + locality + ", " + admin_area_1
         let full_name_pt2 = " " + postal_code + ", " + country
         return full_name_pt1 + full_name_pt2
@@ -323,9 +355,9 @@ final class ContentViewModel: NSObject, ObservableObject,
             /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
-                 print(string)
+             print(string)
              }
-            */
+             */
             
             
         }
@@ -362,7 +394,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
-                print(string)
+             print(string)
              }
              */
             
@@ -370,9 +402,57 @@ final class ContentViewModel: NSObject, ObservableObject,
         task.resume()
     }
     
+    
+    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+        
+        let name_db = Name(context: viewContext)
+        let location = Location(context: viewContext)
+        location.time=givenTime
+        location.latitude = Double(givenLat)
+        location.longitude = Double(givenLong)
+        location.altitude = Double(givenAlt)
+        let count = getCount(Name: givenName)
+        location.name = givenName
+        
+        
+        // find if exists first
+        // if no, initialize count to 1
+        // if yes, fetch request, modify count to +1
+        if (count==1){
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
+            let result = try! viewContext.fetch(fetchRequest)
+            let objectUpdate = result[0] as! NSManagedObject
+            let curCount = objectUpdate.value(forKey: "count")
+            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+        }
+        else{
+            name_db.name=givenName
+            name_db.count = 1
+        }
+
+        saveContext()
+    }
+
+    private func getCount(Name: String) -> Int {
+       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+       fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
+        let count = try! viewContext.count(for:fetchRequest)
+       return count
+    }
+
+    private func saveContext() {
+        do {
+            try viewContext.save()
+        } catch {
+            let error = error as NSError
+            fatalError("An error occured: \(error)")
+        }
+    }
+
+
+
+
 }
-
-
-
 
 
