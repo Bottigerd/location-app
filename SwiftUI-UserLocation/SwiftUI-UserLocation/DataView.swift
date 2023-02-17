@@ -24,7 +24,8 @@ struct DataView: View {
     @State var fileURL=URL(string: "https://www.google.com")
     @State var openFile=false
     @State var dateFormatter = DateFormatter()
-    
+    @State private var showingAlert = false
+
     
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -63,6 +64,22 @@ struct DataView: View {
                             name = ""
                             
                        }
+
+                        Spacer()
+                        Button("Nuke") {
+                            showingAlert = true
+                        }
+                        .alert(isPresented: $showingAlert) {
+                            Alert(
+                                title: Text("Are you sure you want to clear all data?"),
+                                message: Text("There is no undo"),
+                                primaryButton: .destructive(Text("Delete")) {
+                                    nukeData()
+                                },
+                                secondaryButton: .cancel()
+                            )
+                        }
+
                        Spacer()
                         Button("Export CSV") {
                             exportCSV()
@@ -130,7 +147,7 @@ struct DataView: View {
     private func addLocation() {
             
             withAnimation {
-                let name_db = Name(context: viewContext)
+                
                 let location = Location(context: viewContext)
                 let addDateFormatter = DateFormatter()
                 addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -163,6 +180,7 @@ struct DataView: View {
 //                    debugPrint(objectUpdate.value(forKey: "count"))
                 }
                 else{
+                    let name_db = Name(context: viewContext)
                     name_db.name=name
                     name_db.count = 1
                 }
@@ -179,14 +197,14 @@ struct DataView: View {
        return count
     }
         
-        private func saveContext() {
-            do {
-                try viewContext.save()
-            } catch {
-                let error = error as NSError
-                fatalError("An error occured: \(error)")
-            }
+    private func saveContext() {
+        do {
+            try viewContext.save()
+        } catch {
+            let error = error as NSError
+            fatalError("An error occured: \(error)")
         }
+    }
     
     private func deleteLocations(offsets: IndexSet) {
         // not sure if actually deletes properly or nah, but looks like it
@@ -220,13 +238,79 @@ struct DataView: View {
         
     }
     
+    
+    // Deletes all data from core data (from both Entities)
+    private func nukeData() {
+//        On the offchance that there is a performance issue, uncomment
+//        the following two lines and delete the "for name in names" loop
+        
+//        let nameFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+//        batchDeletion(fetch: nameFetch)
+        
+        for location in locations {
+            viewContext.delete(location)
+        }
+        for name in names {
+            viewContext.delete(name)
+        }
+        
+        saveContext()
+
+    }
+
+    // Deletes an entire fetch request from core data
+    private func batchDeletion(fetch: NSFetchRequest<NSFetchRequestResult>){
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetch)
+        batchDeleteRequest.resultType = .resultTypeObjectIDs
+        do {
+            _ = try viewContext.execute(batchDeleteRequest) as! NSBatchDeleteResult
+        } catch {
+            fatalError("Failed to execute request: \(error)")
+        }
+
+        do {
+            let result = try viewContext.execute(batchDeleteRequest) as? NSBatchDeleteResult
+            let objectIDArray = result?.result as? [NSManagedObjectID]
+            let changes = [NSDeletedObjectsKey : objectIDArray]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable : Any], into: [viewContext])
+        } catch {
+            fatalError("Failed to perform batch update: \(error)")
+        }
+        
+        saveContext()
+    }
+    
+    
+    // Debugging: Prints out how many objects are in Location entity
+    func getLocationRecordsCount(){
+           let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+           do {
+               let count = try viewContext.count(for: fetchRequest)
+               print(count)
+           } catch {
+               print(error.localizedDescription)
+           }
+
+       }
+    
+    // Debugging: Prints out how many objects are in Name entity
+    func getNameRecordsCount(){
+           let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+           do {
+               let count = try viewContext.count(for: fetchRequest)
+               print(count)
+           } catch {
+               print(error.localizedDescription)
+           }
+       }
+
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
-            var csvText = "Timestamp,Longitude,Latitude,Altitude,Name\n"
+            var csvText = "Timestamp,Latitude,Longitude,Altitude,Name\n"
 
             for location in locations {
-                csvText += "\(location.time! ), \(location.longitude  ),\(location.latitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
+                csvText += "\(location.time! ),\(location.latitude  ),\(location.longitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
             }
 
             do {
@@ -262,8 +346,8 @@ struct DataView: View {
                         let name_db = Name(context: viewContext)
                         let castedDate = importDateFormatter.date(from: columns[0] )
                         location.time = castedDate ?? Date()
-                        location.longitude = Double(columns[1]) ?? 0.0
-                        location.latitude = Double(columns[2]) ?? 0.0
+                        location.latitude = Double(columns[1]) ?? 0.0
+                        location.longitude = Double(columns[2]) ?? 0.0
                         location.altitude = Double(columns[3]) ?? 0.0
                         location.name = columns[4]
 //                        location.count = 1
