@@ -19,11 +19,11 @@ struct InferenceView: View {
         VStack{
             Text("Information we know based on your location data: ")
             Text(gethome())
-//            Button("test") {
-//                test()
+            Button("test") {
+                test()}
 //
 //
-            Text(getTop5Locations())
+//            Text(getTop 5Locations())
         }
     }
     
@@ -145,6 +145,7 @@ struct InferenceView: View {
         let sortOrder = NSSortDescriptor(key: "count", ascending: false)
         fetchRequest.sortDescriptors = [sortOrder]
         let result = try! viewContext.fetch(fetchRequest) as! [Name]
+        debugPrint(result)
         return result
         
     }
