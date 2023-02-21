@@ -38,8 +38,12 @@ struct InferenceView: View {
             Text("Information we know based on your location data: ")
             Text(gethome())
             Text(getTop5Locations())
+        } .refreshable {
+            print("RAAHHH")
         }
     }
+    
+    
     
     //Returns user's home based on data from last four days
     private func gethome() -> String{
@@ -132,7 +136,7 @@ struct InferenceView: View {
             
             var ret =  "Here Are Your Top 5 Places On Campus: \n"
             var topcount = 1
-            for (place, count) in sortedVals{
+            for (place, _) in sortedVals{
                 print(topcount, place)
                 ret += String(topcount) + " " + place + "\n"
                 topcount += 1
@@ -140,6 +144,26 @@ struct InferenceView: View {
             return ret
 
         }
+    }
+    
+    private func getRoutine() -> String{
+        let data = getAllLocationHistory();
+        var mwTimes: Array<String> = Array();
+        mwTimes = ["08:30:00", "09:50:00", "11:10:00", "12:30:00", "13:50:00", "15:10:00"];
+        var tthTimes: Array<String> = Array();
+        tthTimes = ["08:15:00", "10:10:00", "13:15:00", "15:10:00"];
+        var fTimes: Array<String> = Array();
+        fTimes = ["08:30:00", "09:40:00", "12:00:00", "13:10:00", "14:20:00", "15:30:00"];
+        
+        
+        // create 5 dicts for each day
+        //loop through data
+            //get day, (if Sat or Sun ignore data) else if time matches time in array, add to that dict for that day
+            //if already in dict, increment count
+        
+        //go though dicts and find routines
+    
+        return "GJWRHGERQGHG"
     }
     
     
