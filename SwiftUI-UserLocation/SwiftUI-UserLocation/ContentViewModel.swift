@@ -324,7 +324,7 @@ final class ContentViewModel: NSObject, ObservableObject,
             if (placeId != nil) {
                 if (self.carletonDict[placeId!] != nil){
                     let carletonBuilding = self.carletonDict[placeId!]
-                    tempAddress = getCarletonAddress(placeName: carletonBuilding!)
+                    tempAddress = carletonBuilding! + ", Carleton College, Northfield, MN 55057 USA"
                 } else {
                     getPlace(placeId: placeId!)
                     if (placeResults?.status == "OK"){
@@ -385,34 +385,6 @@ final class ContentViewModel: NSObject, ObservableObject,
         return fullNamePt1 + fullNamePt2
     }
     
-    internal func getCarletonAddress(placeName: String) -> String {
-        var locality = ""
-        var AdminArea1 = ""
-        var postalCode = ""
-        var country = ""
-        
-        for addressComponent in reverseGeoCodeResults!.results![0].addressComponents {
-            if (addressComponent.types.contains("locality")) {
-                locality = addressComponent.longName
-            } else if (addressComponent.types.contains("administrative_area_level_1")) {
-                AdminArea1 = addressComponent.shortName
-            } else if (addressComponent.types.contains("postalCode")) {
-                postalCode = addressComponent.shortName
-            } else if (addressComponent.types.contains("country")) {
-                country = addressComponent.shortName
-            }
-        }
-        
-        /*
-         It's weird to split this up, I know, but it was occassionally causing this error:
-         The compiler is unable to type-check this expression in reasonable timel
-         try breaking up the expression into distinct sub-expressions.
-        */
-        let fullNamePt1 = placeName + ", " + locality + ", " + AdminArea1
-        let fullNamePt2 = " " + postalCode + ", " + country
-        return fullNamePt1 + fullNamePt2
-    }
-    
     // MARK: - API Calls
     
     // MARK: - Reverse Geocoding API
@@ -443,11 +415,12 @@ final class ContentViewModel: NSObject, ObservableObject,
             
             print("REVERSE GEOCODING API CALL: " + coordinates)
             
-            
+            /*
             // print formatted address for testing purposes
             if (self.reverseGeoCodeResults?.status == "OK"){
                 print(self.reverseGeoCodeResults?.results?[0].formattedAddress ?? "")
             }
+            */
             
             
         }
