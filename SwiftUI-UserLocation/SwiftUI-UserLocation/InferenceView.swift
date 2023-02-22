@@ -15,6 +15,19 @@ extension Date {
     func fullDistance(from date: Date, resultIn component: Calendar.Component, calendar: Calendar = .current) -> Int? {
         calendar.dateComponents([component], from: self, to: date).value(for: component)
     }
+    
+    func getDayOfWeek(_ today:String) -> Int? {
+        let formatter  = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let todayDate = formatter.date(from: today) else { return nil }
+        let myCalendar = Calendar(identifier: .gregorian)
+        let weekDay = myCalendar.component(.weekday, from: todayDate)
+        return weekDay
+    }
+    
+    func dayNumberOfWeek(_ currDay:Date) -> Int? {
+            return Calendar.current.dateComponents([.weekday], from: currDay).weekday
+    }
 
     func distance(from date: Date, only component: Calendar.Component, calendar: Calendar = .current) -> Int {
         let days1 = calendar.component(component, from: self)
@@ -38,6 +51,7 @@ struct InferenceView: View {
             Text("Information we know based on your location data: ")
             Text(gethome())
             Text(getTop5Locations())
+            Text(getRoutine())
         } .refreshable {
             print("RAAHHH")
         }
@@ -154,8 +168,94 @@ struct InferenceView: View {
         tthTimes = ["08:15:00", "10:10:00", "13:15:00", "15:10:00"];
         var fTimes: Array<String> = Array();
         fTimes = ["08:30:00", "09:40:00", "12:00:00", "13:10:00", "14:20:00", "15:30:00"];
+        var Mon = Dictionary<[String], Int>()
+        var Tues = Dictionary<[String], Int>()
+        var Wed = Dictionary<[String], Int>()
+        var Th = Dictionary<[String], Int>()
+        var Fri = Dictionary<[String], Int>()
         
-        
+        for i in data{
+            if let weekday = Date().dayNumberOfWeek(i.time!){
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let time_s = dateFormatter.string(from: i.time!)
+                let final_time = time_s.components(separatedBy: " ")
+                let hours = final_time[1]
+                
+                if (weekday == 2 && mwTimes.contains(hours)){
+                    let place = [i.name!, mwTimes[mwTimes.firstIndex(of: hours)!]]
+                    if (Mon[place] != nil){
+                        Mon[place]! += 1
+                    }else{
+                        print(place)
+                        Mon[place] = 1
+                    }
+                   
+                }
+                else if(weekday == 3 && tthTimes.contains(hours)){
+                    let place = [i.name!, tthTimes[tthTimes.firstIndex(of: hours)!]]
+                    if (Tues[place] != nil){
+                        Tues[place]! += 1
+                    }else{
+                        Tues[place] = 1
+                    }
+                }
+                else if(weekday == 4 && mwTimes.contains(hours)){
+                    let place = [i.name!, mwTimes[mwTimes.firstIndex(of: hours)!]]
+                    if (Wed[place] != nil){
+                        Wed[place]! += 1
+                    }else{
+                        Wed[place] = 1
+                    }
+                }
+                else if(weekday == 5 && tthTimes.contains(hours)){
+                    let place = [i.name!, tthTimes[tthTimes.firstIndex(of: hours)!]]
+                    if (Th[place] != nil){
+                        Th[place]! += 1
+                    }else{
+                        Th[place] = 1
+                    }
+                }
+                else if(weekday == 6 && fTimes.contains(hours)){
+                    let place = [i.name!, fTimes[fTimes.firstIndex(of: hours)!]]
+                    if (Fri[place] != nil){
+                        Fri[place]! += 1
+                    }else{
+                        Fri[place] = 1
+                    }
+                }
+            }
+        }
+        var ret = "This is you routine for Monday: \n"
+        for (l, c) in Mon{
+            if(c >= 3){
+                ret += l[0] + ": " + l[1] + "\n"
+            }
+        }
+        ret += "This is you routine for Tuesday: \n"
+        for (l, c) in Tues{
+            if(c >= 3){
+                ret += l[0] + ": " + l[1] + "\n"
+            }
+        }
+        ret += "This is you routine for Wednesday: \n"
+        for (l, c) in Wed{
+            if(c >= 3){
+                ret += l[0] + ": " + l[1] + "\n"
+            }
+        }
+        ret += "This is you routine for Thursday: \n"
+        for (l, c) in Th{
+            if(c >= 3){
+                ret += l[0] + ": " + l[1] + "\n"
+            }
+        }
+        ret += "This is you routine for Friday: \n"
+        for (l, c) in Fri{
+            if(c >= 3){
+                ret += l[0] + ": " + l[1] + "\n"
+            }
+        }
         // create 5 dicts for each day
         //loop through data
             //get day, (if Sat or Sun ignore data) else if time matches time in array, add to that dict for that day
@@ -163,7 +263,7 @@ struct InferenceView: View {
         
         //go though dicts and find routines
     
-        return "GJWRHGERQGHG"
+        return ret
     }
     
     
