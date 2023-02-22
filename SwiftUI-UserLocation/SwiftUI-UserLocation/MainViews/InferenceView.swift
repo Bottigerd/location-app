@@ -4,6 +4,9 @@
 //
 //  Created by CS Lab Account on 1/29/23.
 //
+// Inference View:
+// This view shares the inferences made by the app
+// using your location data.
 
 import SwiftUI
 import CoreData
@@ -25,8 +28,6 @@ struct InferenceView: View {
         
         
     }
-    
-    
 
     private func gethome() -> String{
         var home = Dictionary<String, Double>()

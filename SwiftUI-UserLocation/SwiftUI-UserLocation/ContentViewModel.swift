@@ -6,6 +6,14 @@
 //
 
 import MapKit
+import CoreData
+
+
+extension Date {
+    func currentTimeMillis() -> Int64 {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
+}
 
 enum MapDetails {
     static let startingLocation = CLLocationCoordinate2D(latitude: 44.460505,                                                                              longitude: -93.156647)
@@ -166,11 +174,40 @@ final class ContentViewModel: NSObject, ObservableObject,
     @Published var address = "Pending Location"
     private var config = Config(fileName: "config")
     var previous_coordinates = MapDetails.startingLocation
-    
     // API Responses (URLSession discards response before completion, so we save to a class variable
     var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
     var place_results: PlaceResponseStruct?
     var locationManager: CLLocationManager?
+
+    //    map from place id to Carleton Buildings
+    var place_dict:[String:String] = [
+        "ChIJDa9m6rdT9ocReWbwDkfk7YU" : "Severance Hall / Burton Hall",
+        "ChIJc61YtLdT9ocR7Cr5WtVvW_g" : "Laird Stadium / Facilities Building / West Gym",
+        "ChIJTZQLpbdT9ocRqvqVtggIPhs" : "Willis Hall / Sayles",
+        "ChIJZQ1g8bdT9ocRjAlA8KvQSok" : "Davis Hall",
+        "ChIJp7q2lLdT9ocRHBsYjwG9ceE" : "Scoville Hall",
+        "ChIJ73W88LdT9ocRVeBRJm1aCU4" : "Musser Hall",
+        "ChIJveYnVbZT9ocRUeG2LmtNKYQ" : "Leighton Hall",
+        "ChIJV7Vl37ZT9ocRdKyoCrESLHQ" : "Laurence McKiny Gould Library",
+        "ChIJI7Ide7dT9ocR8-ZMITh6qAs" : "Skinner Memorial Chapel",
+        "ChIJV2kfO7dT9ocRkLNf1wMNvDc" : "The Bold Spot",
+        "ChIJjdlF_jhT9ocRB2WNC8wfu8E" : "Center for Mathematics and Computing",
+        "ChIJj58vk7RT9ocRAo2NbglMiRs" : "Boliou Hall",
+        "ChIJM9HO1rBT9ocRE7KzwWT4BTM" : "Goodsell Observatory",
+        "ChIJqXjdzLBT9ocRiyR1NFp_or8" : "Olin Hall of Science / Hulings Hall / Anderson",
+        "ChIJ4wZEyLBT9ocRsuHGwEZEKDw" : "Norse Hall",
+        "ChIJEY7-k45T9ocR6zi3hMMKCXw" : "Ardis and Robert James Hall / Casset Hall",
+        "ChIJhzudb7BT9ocRWxttpsHoQ_4" : "Myers Hall / The Cave at Carleton College",
+        "ChIJ90cSh7pT9ocRRWLkRdbBxnA" : "Watson Hall / Cowling Gymnasium",
+        "ChIJ35h_jrFT9ocRF_dYcIPXW5k" : "Goodhue Hall / Recreration Center at Carleton College",
+        "ChIJpw728LhT9ocRurmgIi9AE8k" : "Weitz Center for creativity",
+        "ChIJD5D9yrdT9ocRe9yS44RH-68" : "Allen House",
+        "ChIJQ2q6D8hT9ocRhyqPEyfnGIs" : "Wilson House",
+        "ChIJTzVZBshT9ocRXih5mEYdNR8" : "Prentice House",
+        "ChIJnyIJxrBT9ocRyiDLmcJrhSc" : "Language and Dining Center"
+        ]
+
+    var viewContext = PersistenceController.shared.container.viewContext
     
     // Checks for locaiton permissions, sets up location manager if true
     func setupLocationManager() -> Bool {
@@ -247,7 +284,7 @@ final class ContentViewModel: NSObject, ObservableObject,
         let api_delay_seconds = 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + api_delay_seconds) {
             // Waiting... (to let API calls and JSON decoder finish
-            self.updateAddress(coordiantes: coordinates)
+            self.updateAddress(cordinates: coordinates)
         }
     }
     
@@ -275,7 +312,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
     
     // using location manager coordinates, updates displayed address
-    private func updateAddress(coordiantes: CLLocationCoordinate2D) {
+    private func updateAddress(cordinates: CLLocationCoordinate2D) {
         var temp_address: String?
         
         let status = reverse_geo_code_results?.status
@@ -287,16 +324,24 @@ final class ContentViewModel: NSObject, ObservableObject,
                 getPlace(place_id: place_id!)
                 
                 if (place_results?.status == "OK"){
-                    temp_address = getPlaceName()
+                    if place_id != nil && self.place_dict[place_id!] != nil{
+                        temp_address = self.place_dict[place_id!]
+                    }else{
+                        temp_address = getPlaceName()
+                    }
                 }
                 
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            addLocationFromAPI(givenTime: Date(), givenLat: cordinates.latitude, givenLong: cordinates.longitude, givenAlt: 0, givenName: place_id ?? String("place name"))
         }
         else if (status == "ZERO_RESULTS"){
-            temp_address = "No address at " + String(coordiantes.latitude) + ", " + String(coordiantes.longitude)
+            temp_address = "No address at " + String(cordinates.latitude) + ", " + String(cordinates.longitude)
         }
         
         address = temp_address ?? "Pending Location"
+
         
     }
     
@@ -415,4 +460,55 @@ final class ContentViewModel: NSObject, ObservableObject,
         task.resume()
     }
     
+    
+    private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
+        
+        let name_db = Name(context: viewContext)
+        let location = Location(context: viewContext)
+        location.time=givenTime
+        location.latitude = Double(givenLat)
+        location.longitude = Double(givenLong)
+        location.altitude = Double(givenAlt)
+        let count = getCount(Name: givenName)
+        location.name = givenName
+        
+        
+        // find if exists first
+        // if no, initialize count to 1
+        // if yes, fetch request, modify count to +1
+        if (count==1){
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+            fetchRequest.predicate = NSPredicate(format: "(name = %@)", givenName)
+            let result = try! viewContext.fetch(fetchRequest)
+            let objectUpdate = result[0] as! NSManagedObject
+            let curCount = objectUpdate.value(forKey: "count")
+            objectUpdate.setValue(curCount as! Int+1, forKey: "count")
+        }
+        else{
+            name_db.name=givenName
+            name_db.count = 1
+        }
+
+        saveContext()
+    }
+
+    private func getCount(Name: String) -> Int {
+       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+       fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
+        let count = try! viewContext.count(for:fetchRequest)
+       return count
+    }
+
+    private func saveContext() {
+        do {
+            try viewContext.save()
+        } catch {
+            let error = error as NSError
+            fatalError("An error occured: \(error)")
+        }
+    }
+
+
+
+
 }
