@@ -60,45 +60,60 @@ struct InferenceView: View {
         
         NavigationView{
             VStack{
-                HStack{
-                    Image(systemName: "house.circle.fill")
-                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                        .font(.system(size: 60))
-                        
+                if(gethome() != ""){
+                    HStack{
+                        Image(systemName: "house.circle.fill")
+                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                            .font(.system(size: 60))
+                            .offset(x: 10)
+                        Spacer()
+                        Text(gethome())
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
                     Spacer()
-                    Text(gethome())
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                }
+                if (getWork() != "") {
+                    HStack{
+                        Image(systemName: "briefcase.circle.fill")
+                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                            .font(.system(size: 60))
+                            .offset(x: 10)
+                        Spacer()
+                        Text(getWork())
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
+                    Spacer()
+                }
+                if (getTop5Locations() != ""){
+                    HStack{
+                        Image(systemName: "bookmark.circle.fill")
+                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                            .font(.system(size: 60))
+                            .offset(x: 10)
+                        Spacer()
+                        Text(getTop5Locations())
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
+                    Spacer()
+                }
+                if (getRoutine() != ""){
+                    HStack{
+                        Image(systemName: "calendar.circle.fill")
+                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                            .font(.system(size: 60))
+                            .offset(x: 10)
+                        Spacer()
+                        Text(getRoutine())
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
+                }
+                if (gethome() == "" && getRoutine() == "" && getWork() == "" && getTop5Locations() == ""){
+                    HStack{
+                        Text("Insufficient Data. Unable To Make An Inference!")
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
                 }
                 Spacer()
-                HStack{
-                    Image(systemName: "briefcase.circle.fill")
-                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                        .font(.system(size: 60))
-                        
-                    Spacer()
-                    Text(getWork())
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                }
-                Spacer()
-                HStack{
-                    Image(systemName: "bookmark.circle.fill")
-                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                        .font(.system(size: 60))
-                        
-                    Spacer()
-                    Text(getTop5Locations())
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                }
-                Spacer()
-                HStack{
-                    Image(systemName: "calendar.circle.fill")
-                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                        .font(.system(size: 60))
-                        
-                    Spacer()
-                    Text(getRoutine())
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                }
 //                Spacer()
 //                Text(getTop5Locations())
 //                Spacer()
@@ -122,16 +137,14 @@ struct InferenceView: View {
         //dictory to store all locations between 10pm-8am and the hours spent there
         var home = Dictionary<String, Double>()
         
-        let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let start = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
         
-        let data = getAllLocationWithinRange(startTime: start, endTime: date)
+        let data = getAllLocationHistory()
         
         //if no data
         if (data.count == 0){
-            return "Insufficient Data. Not enough to make an inference!"
+            return ""
         }
         
         //loop through data
@@ -163,7 +176,7 @@ struct InferenceView: View {
         
         //No data from 10pm-8am
         if (home.isEmpty == true){
-            return "Not enough data recieved between 10:00pm and 08:00am"
+            return ""
         }
         let maxVal = home.values.max() ?? 0
         let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
@@ -176,17 +189,16 @@ struct InferenceView: View {
         //dictory to store all locations between 10pm-8am and the hours spent there
         var home = Dictionary<String, Double>()
         
-        let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let start = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
+        
         
 //        let data = getAllLocationWithinRange(startTime: start, endTime: date)
         let data = getAllLocationHistory();
         
         //if no data
         if (data.count == 0){
-            return "Insufficient Data. Not enough to make an inference!"
+            return ""
         }
         
         //loop through data
@@ -218,7 +230,7 @@ struct InferenceView: View {
         
         //No data from 10pm-8am
         if (home.isEmpty == true){
-            return "Not enough data recieved between 9am and 5pm"
+            return ""
         }
         let maxVal = home.values.max() ?? 0
         let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
@@ -232,7 +244,7 @@ struct InferenceView: View {
         let data = getAllLocationCounts();
         print(data.count)
         if((data.count < 5) || (data[4].name == nil)){
-            return "Less than 5 locations in data"
+            return ""
         }
         else{
             var topPlaces: Array<String> = Array();
@@ -338,35 +350,50 @@ struct InferenceView: View {
                 }
             }
         }
-        var ret = "This is you routine for Monday: \n"
+        var mon = "This is you routine for Monday: \n"
         for (l, c) in Mon{
             if(c >= 3){
-                ret += l[0] + ": " + l[1] + "\n"
+                mon += l[0] + ": " + l[1] + "\n"
             }
         }
-        ret += "This is you routine for Tuesday: \n"
+        if (mon == "This is you routine for Monday: \n"){
+            mon = ""
+        }
+        var tue = "This is you routine for Tuesday: \n"
         for (l, c) in Tues{
             if(c >= 3){
-                ret += l[0] + ": " + l[1] + "\n"
+                tue += l[0] + ": " + l[1] + "\n"
             }
         }
-        ret += "This is you routine for Wednesday: \n"
+        if (tue == "This is you routine for Tuesday: \n"){
+            tue = ""
+        }
+        var wed = "This is you routine for Wednesday: \n"
         for (l, c) in Wed{
             if(c >= 3){
-                ret += l[0] + ": " + l[1] + "\n"
+                wed += l[0] + ": " + l[1] + "\n"
             }
         }
-        ret += "This is you routine for Thursday: \n"
+        if (wed == "This is you routine for Wednesday: \n"){
+            wed = ""
+        }
+        var thurs = "This is you routine for Thursday: \n"
         for (l, c) in Th{
             if(c >= 3){
-                ret += l[0] + ": " + l[1] + "\n"
+                thurs += l[0] + ": " + l[1] + "\n"
             }
         }
-        ret += "This is you routine for Friday: \n"
+        if (thurs == "This is you routine for Thursday: \n"){
+            thurs = ""
+        }
+        var fri = "This is you routine for Friday: \n"
         for (l, c) in Fri{
             if(c >= 3){
-                ret += l[0] + ": " + l[1] + "\n"
+                fri += l[0] + ": " + l[1] + "\n"
             }
+        }
+        if (fri == "This is you routine for Friday: \n"){
+            fri = ""
         }
         // create 5 dicts for each day
         //loop through data
@@ -374,7 +401,7 @@ struct InferenceView: View {
             //if already in dict, increment count
         
         //go though dicts and find routines
-    
+        let ret = mon + tue + wed + thurs + fri
         return ret
     }
     
