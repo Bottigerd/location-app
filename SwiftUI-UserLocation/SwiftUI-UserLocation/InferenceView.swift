@@ -9,6 +9,16 @@ import SwiftUI
 import CoreData
 import Foundation
 
+
+extension Color {
+    init(hex: Int, opacity: Double = 1.0) {
+        let red = Double((hex & 0xff0000) >> 16) / 255.0
+        let green = Double((hex & 0xff00) >> 8) / 255.0
+        let blue = Double((hex & 0xff) >> 0) / 255.0
+        self.init(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
+    }
+}
+
 //Credit to Stack Overflow: Vasily Bodnarchuk
 extension Date {
 
@@ -47,14 +57,62 @@ struct InferenceView: View {
 
     
     var body: some View {
-        VStack{
-            Text("Information we know based on your location data: ")
-            Text(gethome())
-            Text(getTop5Locations())
-            Text(getRoutine())
-        } .refreshable {
-            print("RAAHHH")
+        
+        NavigationView{
+            VStack{
+                HStack{
+                    Image(systemName: "house.circle.fill")
+                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                        .font(.system(size: 60))
+                        
+                    Spacer()
+                    Text(gethome())
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                }
+                Spacer()
+                HStack{
+                    Image(systemName: "briefcase.circle.fill")
+                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                        .font(.system(size: 60))
+                        
+                    Spacer()
+                    Text(getWork())
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                }
+                Spacer()
+                HStack{
+                    Image(systemName: "bookmark.circle.fill")
+                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                        .font(.system(size: 60))
+                        
+                    Spacer()
+                    Text(getTop5Locations())
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                }
+                Spacer()
+                HStack{
+                    Image(systemName: "calendar.circle.fill")
+                        .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                        .font(.system(size: 60))
+                        
+                    Spacer()
+                    Text(getRoutine())
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                }
+//                Spacer()
+//                Text(getTop5Locations())
+//                Spacer()
+//                Text(getRoutine())
+//                Spacer()
+//                Text(getWork())
+                
+        
+            }
+            .navigationTitle("Inferences:")
+            .background( Color(hex: 0x98C9A3, opacity: 0.8))
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
         }
+       
     }
     
     
@@ -112,6 +170,60 @@ struct InferenceView: View {
         let address = "You most likely live in " +  keys[0]
         return address
 
+    }
+    
+    private func getWork()  -> String {
+        //dictory to store all locations between 10pm-8am and the hours spent there
+        var home = Dictionary<String, Double>()
+        
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let start = Calendar.current.date(byAdding: .day, value: -4, to: Date())!
+        
+//        let data = getAllLocationWithinRange(startTime: start, endTime: date)
+        let data = getAllLocationHistory();
+        
+        //if no data
+        if (data.count == 0){
+            return "Insufficient Data. Not enough to make an inference!"
+        }
+        
+        //loop through data
+        var i = 0
+        var originloc = data[0]
+        while(i != data.count-1){
+            i += 1
+            if (originloc.name != data[i].name){
+                let time_s = dateFormatter.string(from: originloc.time!)
+                let final_time = time_s.components(separatedBy: " ")
+                let hours = final_time[1]
+                
+                
+                if ((Int(hours.prefix(2)) ?? 0 >= 8) || (Int(hours.prefix(2)) ?? 0 <= 17)) {
+                    let interval = data[i].time?.timeIntervalSince(originloc.time!)
+                    //check if key exists in map, add interval to curr value
+                    if (home[originloc.name!] != nil)
+                    {
+                        home[originloc.name ?? "Invalid location"] = home[originloc.name ?? "Invalid location"]! + (interval ?? 0.0)
+                    }else {
+                        home[originloc.name ?? "Invalid Location"] = interval
+                    }
+                    originloc = data[i]
+                } else {
+                    originloc = data[i]
+                }
+            }
+        }
+        
+        //No data from 10pm-8am
+        if (home.isEmpty == true){
+            return "Not enough data recieved between 9am and 5pm"
+        }
+        let maxVal = home.values.max() ?? 0
+        let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
+        let address = "You most likely work in " +  keys[0]
+        return address
     }
     
     
@@ -299,22 +411,9 @@ struct InferenceView: View {
         fetchRequest.sortDescriptors = [sortOrder]
         fetchRequest.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", startTime as CVarArg, endTime as CVarArg)
         let result = try! viewContext.fetch(fetchRequest) as! [Location]
-//        debugPrint(result)
         return result
         
     }
-    
-   // private func test(){
-//        let date_1_str = "2022-03-20 10:15:30"
-//        let date_2_str = "2022-08-20 10:15:30"
-//        let addDateFormatter = DateFormatter()
-//        addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        let date_1=addDateFormatter.date(from: date_1_str) ?? Date()
-//        let date_2=addDateFormatter.date(from: date_2_str) ?? Date()
-//        getAllLocationWithinRange(startTime: date_1, endTime: date_2)
-        //getAllLocationCounts()
-   // }
-//
 
     
     
