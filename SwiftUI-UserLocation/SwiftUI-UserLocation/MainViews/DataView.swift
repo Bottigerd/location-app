@@ -41,33 +41,16 @@ struct DataView: View {
 
     var body: some View {
             NavigationView {
-                VStack {
-                    TextField("Timestamp", text: $time)
-                    TextField("Latitude", text: $latitude)
-                    TextField("Longitude", text: $longitude)
-                    TextField("Altitude", text: $altitude)
-                    TextField("Name", text: $name)
-                    
-                    
+                VStack(spacing: -15) {
+                
                     HStack {
-                        Spacer()
-                        Button("Add") {
-                            addLocation()
-                            time = ""
-                            latitude = ""
-                            longitude = ""
-                            altitude = ""
-                            name = ""
-                        }
-                        Spacer()
-                        Button("Clear") {
-                            time = ""
-                            latitude = ""
-                            longitude = ""
-                            altitude = ""
-                            name = ""
+                        
+                        Button(action: {openFile.toggle()}, label: {
+                            Text("Import \nCSV")
                             
-                       }
+                             
+                    })
+
 
                         Spacer()
                         Button("Nuke") {
@@ -83,9 +66,9 @@ struct DataView: View {
                                 secondaryButton: .cancel()
                             )
                         }
-
-                       Spacer()
-                        Button("Export CSV") {
+                        
+                        Spacer()
+                        Button("Export \nCSV") {
                             exportCSV()
                             time = ""
                             latitude = ""
@@ -93,36 +76,32 @@ struct DataView: View {
                             altitude = ""
                             name = ""
                    }
-                        Spacer()
-                        Button(action: {openFile.toggle()}, label: {
-                            Text("Import CSV")
-                            
-                             
-                    })
+
                     }
-                   .padding()
+                    .padding()
                    .frame(maxWidth: .infinity)
                    
                     List {
                         ForEach(locations) { location in
                             HStack {
-                                Text(castToString(givenDate:location.time!) )
+                               
+                                Text(castToString(givenDate:location.time!)).font(Font.system(size:13))
                                 Spacer()
-                                Text(location.name ?? "no")
+                                Text(location.name ?? "no").font(Font.system(size:13))
                                 Spacer()
-                                Text( String(format: "%f", location.latitude) )
+                                Text( String(format: "%f", location.latitude)).font(Font.system(size:13))
                                 Spacer()
-                                Text(String(format: "%f", location.longitude) )
+                                Text(String(format: "%f", location.longitude)).font(Font.system(size:13))
                                 Spacer()
-                                Text(String(format: "%f", location.altitude) )
-                                Spacer()
+                                Text(String(format: "%f", location.altitude)).font(Font.system(size:13))
+                                
 
                             }
                         }
                         .onDelete(perform: deleteLocations)
                         
                     }
-                   .navigationTitle("Location Database")
+                   .navigationTitle("Location History")
                }
                 .fileImporter(isPresented: $openFile, allowedContentTypes: [.commaSeparatedText], allowsMultipleSelection: false){ (res) in
                     do{
@@ -135,7 +114,6 @@ struct DataView: View {
                         debugPrint(error.localizedDescription)
                     }
                 }
-               .padding()
                .textFieldStyle(RoundedBorderTextFieldStyle())
            }
        }
@@ -347,7 +325,7 @@ struct DataView: View {
                     if !row.isEmpty{
                         let columns = row.components(separatedBy: ",")
                         let location = Location(context: viewContext)
-                        let name_db = Name(context: viewContext)
+                        
                         let castedDate = importDateFormatter.date(from: columns[0] )
                         location.time = castedDate ?? Date()
                         location.latitude = Double(columns[1]) ?? 0.0
@@ -370,6 +348,7 @@ struct DataView: View {
 //                            debugPrint(objectUpdate.value(forKey: "count"))
                         }
                         else{
+                            let name_db = Name(context: viewContext)
                             name_db.name=columns[4]
                             name_db.count = 1
                         }
