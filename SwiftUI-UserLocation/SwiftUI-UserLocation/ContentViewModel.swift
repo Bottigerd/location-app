@@ -285,7 +285,7 @@ final class ContentViewModel: NSObject, ObservableObject,
         DispatchQueue.main.asyncAfter(deadline: .now() + apiDelaySeconds) {
             // Waiting... (to let API calls and JSON decoder finish
             let placeName = self.updateAddress(coordinates: coordinates)
-            if placeName != "Pending Location" || placeName.contains("No Address"){
+            if (placeName != "Pending Location" && placeName.contains("No Address")) {
                 // don't send to core data if there's no address
                 self.addToCoreData(coordinates: coordinates, placeName: placeName)
             }
