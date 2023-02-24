@@ -12,6 +12,7 @@
 		4FABFEA529A0012000E979E1 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 4FABFEA429A0011F00E979E1 /* config.json */; };
 		7C7589DF29871BC300A2443A /* InferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7589DE29871BC300A2443A /* InferenceView.swift */; };
 		7C7589E1298736CE00A2443A /* dataset.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C7589E0298736CE00A2443A /* dataset.txt */; };
+		7CAA7F2C29A822ED00275097 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CAA7F2B29A822ED00275097 /* config.json */; };
 		7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */; };
 		7CB2CC07297B83FE005C248E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC06297B83FE005C248E /* ContentView.swift */; };
 		7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CB2CC08297B8400005C248E /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		4FABFEA429A0011F00E979E1 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = config.json; path = ../../../../../.Trash/config.json; sourceTree = "<group>"; };
 		7C7589DE29871BC300A2443A /* InferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceView.swift; sourceTree = "<group>"; };
 		7C7589E0298736CE00A2443A /* dataset.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dataset.txt; sourceTree = "<group>"; };
+		7CAA7F2B29A822ED00275097 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = config.json; path = ../../.Trash/config.json; sourceTree = "<group>"; };
 		7CB2CC01297B83FE005C248E /* SwiftUI-UserLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-UserLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_UserLocationApp.swift; sourceTree = "<group>"; };
 		7CB2CC06297B83FE005C248E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -123,8 +125,12 @@
 		7CB2CBF8297B83FE005C248E = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
+				7CAA7F2B29A822ED00275097 /* config.json */,
+=======
 				4FABFEA329A000FC00E979E1 /* config.json */,
 				4F73652D2996B1E900B7E2EF /* LaunchScreen */,
+>>>>>>> main
 				7CB2CC03297B83FE005C248E /* SwiftUI-UserLocation */,
 				7CB2CC14297B8400005C248E /* SwiftUI-UserLocationTests */,
 				7CB2CC1E297B8401005C248E /* SwiftUI-UserLocationUITests */,
@@ -298,8 +304,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CAA7F2C29A822ED00275097 /* config.json in Resources */,
 				7CB2CC0C297B8400005C248E /* Preview Assets.xcassets in Resources */,
+<<<<<<< HEAD
+=======
 				7CCF422729A5985900BB7906 /* config.json in Resources */,
+>>>>>>> main
 				7C7589E1298736CE00A2443A /* dataset.txt in Resources */,
 				7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */,
 			);
