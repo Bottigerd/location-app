@@ -125,12 +125,8 @@
 		7CB2CBF8297B83FE005C248E = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-				7CAA7F2B29A822ED00275097 /* config.json */,
-=======
 				4FABFEA329A000FC00E979E1 /* config.json */,
 				4F73652D2996B1E900B7E2EF /* LaunchScreen */,
->>>>>>> main
 				7CB2CC03297B83FE005C248E /* SwiftUI-UserLocation */,
 				7CB2CC14297B8400005C248E /* SwiftUI-UserLocationTests */,
 				7CB2CC1E297B8401005C248E /* SwiftUI-UserLocationUITests */,
@@ -306,10 +302,7 @@
 			files = (
 				7CAA7F2C29A822ED00275097 /* config.json in Resources */,
 				7CB2CC0C297B8400005C248E /* Preview Assets.xcassets in Resources */,
-<<<<<<< HEAD
-=======
 				7CCF422729A5985900BB7906 /* config.json in Resources */,
->>>>>>> main
 				7C7589E1298736CE00A2443A /* dataset.txt in Resources */,
 				7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */,
 			);
