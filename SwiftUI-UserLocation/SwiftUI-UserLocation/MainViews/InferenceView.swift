@@ -132,14 +132,9 @@ struct InferenceView: View {
         }
        
     }
-<<<<<<< HEAD:SwiftUI-UserLocation/SwiftUI-UserLocation/InferenceView.swift
-    
     
     
     //Returns user's home based on data from last four days
-=======
-
->>>>>>> main:SwiftUI-UserLocation/SwiftUI-UserLocation/MainViews/InferenceView.swift
     private func gethome() -> String{
         //dictory to store all locations between 10pm-8am and the hours spent there
         var home = Dictionary<String, Double>()
