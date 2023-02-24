@@ -6,9 +6,12 @@
 //
 import MapKit
 import SwiftUI
+import GoogleMaps
 
 @main
 struct SwiftUI_UserLocationApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
   let persistenceController = PersistenceController.shared
   var body: some Scene {
     WindowGroup {
@@ -16,4 +19,11 @@ struct SwiftUI_UserLocationApp: App {
       }
     }
   }
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        GMSServices.provideAPIKey("")
+        return true
+    }
+}
 

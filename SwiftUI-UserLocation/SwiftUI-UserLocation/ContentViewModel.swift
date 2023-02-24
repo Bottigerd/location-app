@@ -7,7 +7,7 @@
 
 import MapKit
 import CoreData
-
+import GoogleMaps
 
 extension Date {
     func currentTimeMillis() -> Int64 {
@@ -169,6 +169,8 @@ final class ContentViewModel: NSObject, ObservableObject,
                               CLLocationManagerDelegate {
     
     // MARK: - Important Variables
+
+
     @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
                                                span: MapDetails.defaultSpan)
     @Published var address = "Pending Location"
