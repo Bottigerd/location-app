@@ -170,7 +170,7 @@ struct DataView: View {
                 
                 
             
-                if (count>=1){
+                if (count==1){
 //                    debugPrint("here")
                     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                     fetchRequest.predicate = NSPredicate(format: "(name = %@)", name)
@@ -184,11 +184,7 @@ struct DataView: View {
 //                    debugPrint(objectUpdate.value(forKey: "count"))
                 }
                 else{
-<<<<<<< HEAD:SwiftUI-UserLocation/SwiftUI-UserLocation/DataView.swift
-                let name_db = Name(context: viewContext)
-=======
                     let name_db = Name(context: viewContext)
->>>>>>> main:SwiftUI-UserLocation/SwiftUI-UserLocation/MainViews/DataView.swift
                     name_db.name=name
                     name_db.count = 1
                 }

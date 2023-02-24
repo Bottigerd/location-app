@@ -463,7 +463,7 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
         
-        
+        let name_db = Name(context: viewContext)
         let location = Location(context: viewContext)
         location.time=givenTime
         location.latitude = Double(givenLat)
@@ -485,7 +485,6 @@ final class ContentViewModel: NSObject, ObservableObject,
             objectUpdate.setValue(curCount as! Int+1, forKey: "count")
         }
         else{
-            let name_db = Name(context: viewContext)
             name_db.name=givenName
             name_db.count = 1
         }
