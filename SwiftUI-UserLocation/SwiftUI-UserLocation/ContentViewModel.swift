@@ -339,8 +339,6 @@ final class ContentViewModel: NSObject, ObservableObject,
         } else if (status == "ZERO_RESULTS"){
             let coordinateString = String(coordinates.latitude) + ", " + String(coordinates.longitude)
             tempAddress = "No address at " + coordinateString
-            address = tempAddress ?? "Pending Location"
-            return coordinateString // returned value gets added to coreData
         }
         
         address = tempAddress ?? "Pending Location"
