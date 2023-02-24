@@ -1,13 +1,12 @@
-//
 //  InferenceView.swift
-//  SwiftUI-UserLocation
-//
+//  This file has all of the inference made using the Core Data
 //  Created by Jayti and James on 1/29/23.
-//
 
 import SwiftUI
 import CoreData
 import Foundation
+
+//Extension to convert hex color code to RGB color
 extension Color {
     init(hex: Int, opacity: Double = 1.0) {
         let red = Double((hex & 0xff0000) >> 16) / 255.0
@@ -18,11 +17,8 @@ extension Color {
 }
 
 //Credit to Stack Overflow: Vasily Bodnarchuk
+//Extension to find difference between dates and days of week
 extension Date {
-    func fullDistance(from date: Date, resultIn component: Calendar.Component, calendar: Calendar = .current) -> Int? {
-        calendar.dateComponents([component], from: self, to: date).value(for: component)
-    }
-    
     func getDayOfWeek(_ today:String) -> Int? {
         let formatter  = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -35,22 +31,21 @@ extension Date {
     func dayNumberOfWeek(_ currDay:Date) -> Int? {
             return Calendar.current.dateComponents([.weekday], from: currDay).weekday
     }
+    
     func distance(from date: Date, only component: Calendar.Component, calendar: Calendar = .current) -> Int {
         let days1 = calendar.component(component, from: self)
         let days2 = calendar.component(component, from: date)
         return days1 - days2
     }
-    func hasSame(_ component: Calendar.Component, as date: Date) -> Bool {
-        distance(from: date, only: component) == 0
-    }
 }
+
 struct InferenceView: View {
     var places = [String]()
     var times = [Date]()
     let viewContext = PersistenceController.shared.container.viewContext
     
+    //UI tab for Inferences
     var body: some View {
-        
         NavigationView{
             VStack{
                 if(gethome() != ""){
@@ -107,40 +102,26 @@ struct InferenceView: View {
                     }
                 }
                 Spacer()
-//                Spacer()
-//                Text(getTop5Locations())
-//                Spacer()
-//                Text(getRoutine())
-//                Spacer()
-//                Text(getWork())
-                
-        
             }
             .navigationTitle("Inferences:")
             .background( Color(hex: 0x98C9A3, opacity: 0.8))
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
         }
-       
     }
     
-    
-    
-    //Returns user's home based on data from last four days
+    //Returns user's home
     private func gethome() -> String{
         //dictory to store all locations between 10pm-8am and the hours spent there
         var home = Dictionary<String, Double>()
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
         let data = getAllLocationHistory()
-        
-        //if no data
+    
         if (data.count == 0){
             return ""
         }
         
-        //loop through data
         var i = 0
         var originloc = data[0]
         while(i != data.count-1){
@@ -149,15 +130,13 @@ struct InferenceView: View {
                 let time_s = dateFormatter.string(from: originloc.time!)
                 let final_time = time_s.components(separatedBy: " ")
                 let hours = final_time[1]
-                
-                
+
+                //Checks if hours are between 10pm and 8am OR before 10pm to next day
                 if ((Int(hours.prefix(2)) ?? 0 >= 22) || (Int(hours.prefix(2)) ?? 0 <= 8) || ((Int(hours.prefix(2)) ?? 0 < 22) && (data[i].time!.distance(from: originloc.time!, only: .day) == 1)) ) {
                     let interval = data[i].time?.timeIntervalSince(originloc.time!)
-                    //check if key exists in map, add interval to curr value
-                    if (home[originloc.name!] != nil)
-                    {
+                    if (home[originloc.name!] != nil) {
                         home[originloc.name ?? "Invalid location"] = home[originloc.name ?? "Invalid location"]! + (interval ?? 0.0)
-                    }else {
+                    } else {
                         home[originloc.name ?? "Invalid Location"] = interval
                     }
                     originloc = data[i]
@@ -167,33 +146,29 @@ struct InferenceView: View {
             }
         }
         
-        //No data from 10pm-8am
         if (home.isEmpty == true){
             return ""
         }
+        
         let maxVal = home.values.max() ?? 0
         let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
         let address = "You most likely live in " +  keys[0]
         return address
     }
     
+    //Returns user's place of work
     private func getWork()  -> String {
-        //dictory to store all locations between 10pm-8am and the hours spent there
-        var home = Dictionary<String, Double>()
+        //dictory to store all locations between 8am-5pm and the hours spent there
+        var work = Dictionary<String, Double>()
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        
-//        let data = getAllLocationWithinRange(startTime: start, endTime: date)
         let data = getAllLocationHistory();
         
-        //if no data
         if (data.count == 0){
             return ""
         }
         
-        //loop through data
         var i = 0
         var originloc = data[0]
         while(i != data.count-1){
@@ -203,15 +178,13 @@ struct InferenceView: View {
                 let final_time = time_s.components(separatedBy: " ")
                 let hours = final_time[1]
                 
-                
                 if ((Int(hours.prefix(2)) ?? 0 >= 8) || (Int(hours.prefix(2)) ?? 0 <= 17)) {
                     let interval = data[i].time?.timeIntervalSince(originloc.time!)
-                    //check if key exists in map, add interval to curr value
-                    if (home[originloc.name!] != nil)
+                    if (work[originloc.name!] != nil)
                     {
-                        home[originloc.name ?? "Invalid location"] = home[originloc.name ?? "Invalid location"]! + (interval ?? 0.0)
+                        work[originloc.name ?? "Invalid location"] = work[originloc.name ?? "Invalid location"]! + (interval ?? 0.0)
                     }else {
-                        home[originloc.name ?? "Invalid Location"] = interval
+                        work[originloc.name ?? "Invalid Location"] = interval
                     }
                     originloc = data[i]
                 } else {
@@ -220,12 +193,12 @@ struct InferenceView: View {
             }
         }
         
-        //No data from 10pm-8am
-        if (home.isEmpty == true){
+        if (work.isEmpty == true){
             return ""
         }
-        let maxVal = home.values.max() ?? 0
-        let keys = home.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
+        
+        let maxVal = work.values.max() ?? 0
+        let keys = work.filter { (k, v) -> Bool in v == maxVal}.map{ (k, v) -> String in k}
         let address = "You most likely work in " +  keys[0]
         return address
     }
@@ -263,7 +236,7 @@ struct InferenceView: View {
             ]
             let sortedVals = top5.sorted { $0.1 > $1.1 }
             
-            var ret =  "Here Are Your Top 5 Places On Campus: \n"
+            var ret =  "Here Are Your Top 5 Places: \n"
             var topcount = 1
             for (place, _) in sortedVals{
                 print(topcount, place)
@@ -274,14 +247,19 @@ struct InferenceView: View {
         }
     }
     
+    //Returns Carleton users routine in the weekday according to Carleton class times
     private func getRoutine() -> String{
         let data = getAllLocationHistory();
+        
         var mwTimes: Array<String> = Array();
         mwTimes = ["08:30:00", "09:50:00", "11:10:00", "12:30:00", "13:50:00", "15:10:00"];
+        
         var tthTimes: Array<String> = Array();
         tthTimes = ["08:15:00", "10:10:00", "13:15:00", "15:10:00"];
+        
         var fTimes: Array<String> = Array();
         fTimes = ["08:30:00", "09:40:00", "12:00:00", "13:10:00", "14:20:00", "15:30:00"];
+        
         var Mon = Dictionary<[String], Int>()
         var Tues = Dictionary<[String], Int>()
         var Wed = Dictionary<[String], Int>()
@@ -304,7 +282,6 @@ struct InferenceView: View {
                         print(place)
                         Mon[place] = 1
                     }
-                   
                 }
                 else if(weekday == 3 && tthTimes.contains(hours)){
                     let place = [i.name!, tthTimes[tthTimes.firstIndex(of: hours)!]]
@@ -340,6 +317,7 @@ struct InferenceView: View {
                 }
             }
         }
+        
         var mon = "This is you routine for Monday: \n"
         for (l, c) in Mon{
             if(c >= 3){
@@ -385,12 +363,6 @@ struct InferenceView: View {
         if (fri == "This is you routine for Friday: \n"){
             fri = ""
         }
-        // create 5 dicts for each day
-        //loop through data
-            //get day, (if Sat or Sun ignore data) else if time matches time in array, add to that dict for that day
-            //if already in dict, increment count
-        
-        //go though dicts and find routines
         let ret = mon + tue + wed + thurs + fri
         return ret
     }
@@ -421,7 +393,6 @@ struct InferenceView: View {
     }
     
 //   to see how the startTime and endTime formats should be, see Test() function below. Sorts in reverse chronological order with latest being first. if you want to invert it, just make 'ascending: true'
-    
     private func getAllLocationWithinRange(startTime: Date, endTime: Date) -> [Location] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
         let sortOrder = NSSortDescriptor(key: "time", ascending: true)
@@ -431,8 +402,6 @@ struct InferenceView: View {
         return result
         
     }
-    
-    
     
     
 }
