@@ -4,6 +4,9 @@
 //
 //  Created by CS Lab Account on 1/29/23.
 //
+// Inference View:
+// This view shares the inferences made by the app
+// using your location data.
 
 import SwiftUI
 import CoreData
@@ -129,10 +132,14 @@ struct InferenceView: View {
         }
        
     }
+<<<<<<< HEAD:SwiftUI-UserLocation/SwiftUI-UserLocation/InferenceView.swift
     
     
     
     //Returns user's home based on data from last four days
+=======
+
+>>>>>>> main:SwiftUI-UserLocation/SwiftUI-UserLocation/MainViews/InferenceView.swift
     private func gethome() -> String{
         //dictory to store all locations between 10pm-8am and the hours spent there
         var home = Dictionary<String, Double>()
