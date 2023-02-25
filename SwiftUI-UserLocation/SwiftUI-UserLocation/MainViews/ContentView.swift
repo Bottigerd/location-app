@@ -32,7 +32,8 @@ struct ContentView: View {
                 .buttonStyle(.bordered)
                 .background(Color.green)
                 .cornerRadius(10)
-            MapView(viewModel: viewModel)
+            Text(viewModel.address)
+            Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
                 .accentColor(Color(.systemPink))
                 .edgesIgnoringSafeArea(.top)
                 .onAppear {
