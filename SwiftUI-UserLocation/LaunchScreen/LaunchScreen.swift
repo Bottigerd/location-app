@@ -107,6 +107,8 @@ struct LaunchScreen: View {
                               .light)
             }
         }
+        .background(Color("LaunchColor"))
+        .ignoresSafeArea()
         .onAppear {
             
                 //Begin Animation
