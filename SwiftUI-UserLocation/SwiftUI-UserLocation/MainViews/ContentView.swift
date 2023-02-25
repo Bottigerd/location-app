@@ -71,7 +71,7 @@ struct MapView: UIViewControllerRepresentable{
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
         
         // Updates the state of the specified view controller with new information from SwiftUI.
-        uiViewController.loadView()
+        uiViewController.viewToReload()
         uiViewController.updateHeatMap()
     }
 }
@@ -105,7 +105,7 @@ class ViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDel
   
     }
     func viewToReload() {
-        self.loadView()
+        mapView.camera = GMSCameraPosition.camera(withTarget: viewModel.fetchCoordinates(), zoom: 15)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
