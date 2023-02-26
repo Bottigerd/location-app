@@ -33,9 +33,7 @@ struct ContentView: View {
                 .background(Color.green)
                 .cornerRadius(10)
             Text(viewModel.address)
-            Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
-                .accentColor(Color(.systemPink))
-                .edgesIgnoringSafeArea(.top)
+            MapView(viewModel: viewModel)
                 .onAppear {
                     let locServicesEnabled = viewModel.setupLocationManager()
                     let locServicesValidType = viewModel.checkLocationAuthorizationType()

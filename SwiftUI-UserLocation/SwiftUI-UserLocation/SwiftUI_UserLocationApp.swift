@@ -22,7 +22,10 @@ struct SwiftUI_UserLocationApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        GMSServices.provideAPIKey(Config(fileName: "config").get_api_key())
+        //GMSServices.provideAPIKey(Config(fileName: "config").get_api_key())
+        
+        GMSServices.provideAPIKey("AIzaSyAcuBecW01Qa7Gb5XsTWhdcIvt1Avq9hNI")
+        
         return true
     }
 }

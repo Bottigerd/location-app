@@ -29,7 +29,7 @@ DEPENDENCIES:
   - GoogleMaps (= 7.3.0)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - Google-Maps-iOS-Utils
     - GoogleMaps
 
@@ -37,6 +37,6 @@ SPEC CHECKSUMS:
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleMaps: a146f275ee429d14822178c7a841c03366ec92a1
 
-PODFILE CHECKSUM: ce87b0a77956833f20bfcce37379ab2fab749182
+PODFILE CHECKSUM: f27d22096e76f856a76660a0b78a09d50a24ed21
 
 COCOAPODS: 1.11.3
