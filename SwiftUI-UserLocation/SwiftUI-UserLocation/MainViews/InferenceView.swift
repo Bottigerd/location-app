@@ -5,7 +5,7 @@
 import SwiftUI
 import CoreData
 import Foundation
-
+import SwiftUICharts
 //Extension to convert hex color code to RGB color
 extension Color {
     init(hex: Int, opacity: Double = 1.0) {
@@ -81,6 +81,7 @@ struct InferenceView: View {
                         Spacer()
                         Text(getTop5Locations())
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        BarChartView(data: ChartData(values: [("James",21), ("Anderson",10), ("library",5), ("Sayles",5), ("LDC",5)]), title: "Top 5 location",legend: "hours/counts",form: ChartForm.medium, animatedToBack:true) // legend is optional
                     }
                     Spacer()
                 }

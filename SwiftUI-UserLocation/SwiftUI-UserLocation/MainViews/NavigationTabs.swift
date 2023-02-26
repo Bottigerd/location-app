@@ -26,6 +26,10 @@ struct NavigationTabs: View {
                     .tabItem{
                         Label("Inference", systemImage: "list.number")
                     }
+                DataVisView().environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .tabItem{
+                        Label("BarChart", systemImage: "list.number")
+                    }
             }
         }
     }
