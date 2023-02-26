@@ -79,9 +79,10 @@ struct InferenceView: View {
                             .font(.system(size: 60))
                             .offset(x: 10)
                         Spacer()
+                        
                         Text(getTop5Locations())
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                        BarChartView(data: ChartData(values: [("James",21), ("Anderson",10), ("library",5), ("Sayles",5), ("LDC",5)]), title: "Top 5 location",legend: "hours/counts",form: ChartForm.medium, animatedToBack:true) // legend is optional
+                        BarChartView(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",form: ChartForm.medium, animatedToBack:true) // legend is optional
                     }
                     Spacer()
                 }
@@ -204,11 +205,10 @@ struct InferenceView: View {
         return address
     }
     
-    
-    //returns the 5 most frequented locations of user
     private func getTop5Locations() -> String{
         let data = getAllLocationCounts();
-        print(data.count)
+            
+        
         if((data.count < 5) || (data[4].name == nil)){
             return ""
         }
@@ -239,12 +239,60 @@ struct InferenceView: View {
             
             var ret =  "Here Are Your Top 5 Places: \n"
             var topcount = 1
+        
+            
             for (place, _) in sortedVals{
                 print(topcount, place)
                 ret += String(topcount) + " " + place + "\n"
                 topcount += 1
             }
             return ret
+        }
+    }
+    
+    
+    //returns the 5 most frequented locations of user
+    private func getTop5Locations2() -> ChartData{
+        let data = getAllLocationCounts();
+            
+        
+        if((data.count < 5) || (data[4].name == nil)){
+            return ChartData(values: [("no value",0)])
+        }
+        else{
+            var topPlaces: Array<String> = Array();
+            topPlaces = [data[0].name!, data[1].name!, data[2].name!, data[3].name!, data[4].name!]
+            var topCounts: Array<Int16> = Array();
+            topCounts = [data[0].count, data[1].count, data[2].count, data[3].count, data[4].count]
+            var min = topCounts.min();
+            
+            for i in data{
+                if((i.name != nil) && (!topPlaces.contains(i.name!)) && (min! < i.count)) {
+                    let index = topCounts.firstIndex(of: min!)
+                    topCounts[index!] = i.count
+                    topPlaces[index!] = i.name!
+                    min = topCounts.min()
+                }
+            }
+            
+            let top5 = [
+                topPlaces[0] : topCounts[0],
+                topPlaces[1] : topCounts[1],
+                topPlaces[2] : topCounts[2],
+                topPlaces[3] : topCounts[3],
+                topPlaces[4] : topCounts[4]
+            ]
+            let sortedVals = top5.sorted { $0.1 > $1.1 }
+            
+//            var ret =  "Here Are Your Top 5 Places: \n"
+//            var topcount = 1
+//
+            var topData: [(String,Int)] = Array()
+            for (place,count) in sortedVals{
+                topData.append((place,Int(count)))
+            }
+            return ChartData(values: topData)
+            
         }
     }
     
