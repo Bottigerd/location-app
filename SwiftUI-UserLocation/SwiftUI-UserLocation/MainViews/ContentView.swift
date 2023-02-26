@@ -18,17 +18,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack{
-            Text(viewModel.address);
-            Button(action: {
-                viewModel.startUpdatingLocation()
-            }){
-                Text("Get Location")
-                    .foregroundColor(Color.white)
-                    .padding()
-                }
-                .buttonStyle(.bordered)
-                .background(Color.green)
-                .cornerRadius(10)
+            Text(viewModel.address)
             Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
                 .accentColor(Color(.systemPink))
                 .edgesIgnoringSafeArea(.top)

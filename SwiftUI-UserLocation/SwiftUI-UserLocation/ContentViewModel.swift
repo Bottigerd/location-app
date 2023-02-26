@@ -122,9 +122,9 @@ private class Config {
     
     init(fileName: String){
         print("Initilize Config")
-        let json_raw = readJSONfile(name: fileName)
-        if (json_raw != nil){
-            config = parse(jsonData: json_raw!) ?? ConfigStruct(api_key: "")
+        let jsonRAW = readJSONfile(name: fileName)
+        if (jsonRAW != nil){
+            config = parse(jsonData: jsonRAW!) ?? ConfigStruct(api_key: "")
         } else {
             config = ConfigStruct(api_key: "")
         }
@@ -156,7 +156,7 @@ private class Config {
         return nil
     }
     
-    func get_api_key() -> String {
+    func getApiKey() -> String {
         return config?.api_key ?? ""
     }
 }
@@ -173,14 +173,14 @@ final class ContentViewModel: NSObject, ObservableObject,
                                                span: MapDetails.defaultSpan)
     @Published var address = "Pending Location"
     private var config = Config(fileName: "config")
-    var previous_coordinates = MapDetails.startingLocation
+    var previousCoordinates = MapDetails.startingLocation
     // API Responses (URLSession discards response before completion, so we save to a class variable
-    var reverse_geo_code_results: ReverseGeoCodingResponseStruct?
-    var place_results: PlaceResponseStruct?
+    var reverseGeoCodeResults: ReverseGeoCodingResponseStruct?
+    var placeResults: PlaceResponseStruct?
     var locationManager: CLLocationManager?
 
     //    map from place id to Carleton Buildings
-    var place_dict:[String:String] = [
+    var carletonDict:[String:String] = [
         "ChIJDa9m6rdT9ocReWbwDkfk7YU" : "Severance Hall / Burton Hall",
         "ChIJc61YtLdT9ocR7Cr5WtVvW_g" : "Laird Stadium / Facilities Building / West Gym",
         "ChIJTZQLpbdT9ocRqvqVtggIPhs" : "Willis Hall / Sayles",
@@ -281,68 +281,75 @@ final class ContentViewModel: NSObject, ObservableObject,
      */
     func updateDisplay(coordinates: CLLocationCoordinate2D){
         callLocationAPIs(coordiantes: coordinates)
-        let api_delay_seconds = 1.0
-        DispatchQueue.main.asyncAfter(deadline: .now() + api_delay_seconds) {
+        let apiDelaySeconds = 1.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + apiDelaySeconds) {
             // Waiting... (to let API calls and JSON decoder finish
-            self.updateAddress(cordinates: coordinates)
+            let placeName = self.updateAddress(coordinates: coordinates)
+            if (placeName != "Pending Location" && !placeName.contains("No address at ")) {
+                // don't send to core data if there's no address
+                self.addToCoreData(coordinates: coordinates, placeName: placeName)
+            }
         }
     }
     
     // gets updated coordinates from location manager, also updates mapview.
     func fetchCoordinates() -> CLLocationCoordinate2D {
         // if locationManager fails to get location, revert to previously fetched coordinates
-        let coordinates = locationManager?.location?.coordinate ?? previous_coordinates
-        previous_coordinates = coordinates
+        let coordinates = locationManager?.location?.coordinate ?? previousCoordinates
+        previousCoordinates = coordinates
         return coordinates
     }
     
     
     // calls reverse geocoding api and places api if applicable,
     private func callLocationAPIs(coordiantes: CLLocationCoordinate2D) {
-        let coordinates_string = getCoordinatesString(coordinates2d: coordiantes)
-        getReverseGeocode(coordinates: coordinates_string)
+        let coordinatesString = getCoordinatesString(coordinates2d: coordiantes)
+        getReverseGeocode(coordinates: coordinatesString)
         
-        let status = reverse_geo_code_results?.status
+        let status = reverseGeoCodeResults?.status
         if (status == "OK") {
-            let place_id = reverse_geo_code_results?.results?[0].placeID ?? nil
-            if (place_id != nil) {
-                getPlace(place_id: place_id!)
+            let placeId = reverseGeoCodeResults?.results?[0].placeID ?? nil
+            if (placeId != nil) {
+                getPlace(placeId: placeId!)
             }
         }
     }
     
     // using location manager coordinates, updates displayed address
-    private func updateAddress(cordinates: CLLocationCoordinate2D) {
-        var temp_address: String?
+    private func updateAddress(coordinates: CLLocationCoordinate2D) -> String {
+        var tempAddress: String?
         
-        let status = reverse_geo_code_results?.status
+        let status = reverseGeoCodeResults?.status
         if (status == "OK") {
-            let place_id = reverse_geo_code_results?.results?[0].placeID ?? nil
-            temp_address = reverse_geo_code_results?.results?[0].formattedAddress
+            let placeId = reverseGeoCodeResults?.results?[0].placeID ?? nil
+            tempAddress = reverseGeoCodeResults?.results?[0].formattedAddress
             
-            if (place_id != nil) {
-                getPlace(place_id: place_id!)
-                
-                if (place_results?.status == "OK"){
-                    if place_id != nil && self.place_dict[place_id!] != nil{
-                        temp_address = self.place_dict[place_id!]
-                    }else{
-                        temp_address = getPlaceName()
-                    }
+            if (placeId != nil) {
+                if (self.carletonDict[placeId!] != nil){
+                    let carletonBuilding = self.carletonDict[placeId!]
+                    tempAddress = carletonBuilding! + ", Carleton College, Northfield, MN 55057 USA"
+                } else {
+                    getPlace(placeId: placeId!)
+                    if (placeResults?.status == "OK"){
+                            tempAddress = getPlaceName()
+                        }
                 }
                 
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            addLocationFromAPI(givenTime: Date(), givenLat: cordinates.latitude, givenLong: cordinates.longitude, givenAlt: 0, givenName: place_id ?? String("place name"))
-        }
-        else if (status == "ZERO_RESULTS"){
-            temp_address = "No address at " + String(cordinates.latitude) + ", " + String(cordinates.longitude)
+        } else if (status == "ZERO_RESULTS"){
+            let coordinateString = String(coordinates.latitude) + ", " + String(coordinates.longitude)
+            tempAddress = "No address at " + coordinateString
         }
         
-        address = temp_address ?? "Pending Location"
-
+        address = tempAddress ?? "Pending Location"
+        return address // returned value gets added to coreData
         
+    }
+    
+    internal func addToCoreData(coordinates: CLLocationCoordinate2D, placeName: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        addLocationFromAPI(givenTime: Date(), givenLat: coordinates.latitude, givenLong: coordinates.longitude, givenAlt: 0, givenName: placeName)
     }
     
     // returns coordinates from a CLLocationCoordinate2D as a string for API usage
@@ -351,21 +358,21 @@ final class ContentViewModel: NSObject, ObservableObject,
     }
     
     internal func getPlaceName() -> String {
-        let place_name = place_results!.result.name
+        let placeName = placeResults!.result.name
         var locality = ""
-        var admin_area_1 = ""
-        var postal_code = ""
+        var AdminArea1 = ""
+        var postalCode = ""
         var country = ""
         
-        for address_component in reverse_geo_code_results!.results![0].addressComponents {
-            if (address_component.types.contains("locality")) {
-                locality = address_component.longName
-            } else if (address_component.types.contains("administrative_area_level_1")) {
-                admin_area_1 = address_component.shortName
-            } else if (address_component.types.contains("postal_code")) {
-                postal_code = address_component.shortName
-            } else if (address_component.types.contains("country")) {
-                country = address_component.shortName
+        for addressComponent in reverseGeoCodeResults!.results![0].addressComponents {
+            if (addressComponent.types.contains("locality")) {
+                locality = addressComponent.longName
+            } else if (addressComponent.types.contains("administrative_area_level_1")) {
+                AdminArea1 = addressComponent.shortName
+            } else if (addressComponent.types.contains("postalCode")) {
+                postalCode = addressComponent.shortName
+            } else if (addressComponent.types.contains("country")) {
+                country = addressComponent.shortName
             }
         }
         
@@ -374,19 +381,17 @@ final class ContentViewModel: NSObject, ObservableObject,
          The compiler is unable to type-check this expression in reasonable timel
          try breaking up the expression into distinct sub-expressions.
         */
-        let full_name_pt1 = place_name + ", " + locality + ", " + admin_area_1
-        let full_name_pt2 = " " + postal_code + ", " + country
-        return full_name_pt1 + full_name_pt2
+        let fullNamePt1 = placeName + ", " + locality + ", " + AdminArea1
+        let fullNamePt2 = " " + postalCode + ", " + country
+        return fullNamePt1 + fullNamePt2
     }
     
     // MARK: - API Calls
     
-    
-    
     // MARK: - Reverse Geocoding API
     // transforms the json from the reverse geocoding API call into a struct for referencing
     internal func getReverseGeocode(coordinates: String) {
-        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + config.get_api_key())
+        guard let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&location_type=ROOFTOP&result_type=street_address&key=" + config.getApiKey())
         else{
             print("ERROR: Malformed Request (GET REVERSE GEOCODE)")
             return
@@ -401,8 +406,8 @@ final class ContentViewModel: NSObject, ObservableObject,
             let decoder = JSONDecoder()
             if let data = data {
                 do {
-                    let reverse_geo_code_struct = try decoder.decode(ReverseGeoCodingResponseStruct.self, from: data)
-                    self.reverse_geo_code_results = reverse_geo_code_struct
+                    let reverseGeoCodeStruct = try decoder.decode(ReverseGeoCodingResponseStruct.self, from: data)
+                    self.reverseGeoCodeResults = reverseGeoCodeStruct
                 } catch {
                     print("ERROR: Could not decode JSON response (GET REVERSE GEOCODE)")
                     return
@@ -413,20 +418,21 @@ final class ContentViewModel: NSObject, ObservableObject,
             
             /*
             // print formatted address for testing purposes
-            if (self.reverse_geo_code_results?.status == "OK"){
-                print(self.reverse_geo_code_results?.results?[0].formattedAddress ?? "")
+            if (self.reverseGeoCodeResults?.status == "OK"){
+                print(self.reverseGeoCodeResults?.results?[0].formattedAddress ?? "")
             }
             */
+            
             
         }
         task.resume()
     }
     
     // MARK: - Places API
-    internal func getPlace(place_id: String) {
+    internal func getPlace(placeId: String) {
         
         guard let url = URL(string: "https://maps.googleapis.com/maps/api/place/details/json?place_id="
-                            + place_id + "&fields=name%2Crating%2Cformatted_phone_number&key=" + config.get_api_key())
+                            + placeId + "&fields=name%2Crating%2Cformatted_phone_number&key=" + config.getApiKey())
         else{
             print("ERROR: Malformed Request (GET PLACE)")
             return
@@ -441,14 +447,14 @@ final class ContentViewModel: NSObject, ObservableObject,
             let decoder = JSONDecoder()
             if let data = data {
                 do {
-                    let place_struct = try decoder.decode(PlaceResponseStruct.self, from: data)
-                    self.place_results = place_struct
+                    let placeStruct = try decoder.decode(PlaceResponseStruct.self, from: data)
+                    self.placeResults = placeStruct
                 } catch {
                     print("ERROR: Could not decode JSON response (GET PLACE)")
                 }
             }
             
-            print("PLACE API CALL: " + place_id)
+            print("PLACE API CALL: " + placeId)
             /*
              // print JSON for testing purposes
              if let data = data, let string = String(data: data, encoding: .utf8){
