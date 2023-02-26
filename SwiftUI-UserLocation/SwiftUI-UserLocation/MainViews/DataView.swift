@@ -289,10 +289,10 @@ struct DataView: View {
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
-            var csvText = "Timestamp,Latitude,Longitude,Altitude,Name\n"
+            var csvText = "Timestamp;Latitude;Longitude;Altitude;Name\n"
 
             for location in locations {
-                csvText += "\(location.time! ),\(location.latitude  ),\(location.longitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
+                csvText += "\(location.time! );\(location.latitude  );\(location.longitude );\(location.altitude );\(location.name ?? "Not Found")\n"
             }
 
             do {
@@ -323,7 +323,7 @@ struct DataView: View {
                 rows.removeFirst()
                 for row in rows {
                     if !row.isEmpty{
-                        let columns = row.components(separatedBy: ",")
+                        let columns = row.components(separatedBy: ";")
                         let location = Location(context: viewContext)
                         
                         let castedDate = importDateFormatter.date(from: columns[0] )
