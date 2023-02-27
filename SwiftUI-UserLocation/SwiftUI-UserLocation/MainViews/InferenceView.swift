@@ -105,6 +105,7 @@ struct InferenceView: View {
             }
             .navigationTitle("Inferences:")
             .background( Color(hex: 0x98C9A3, opacity: 0.8))
+            .padding(.bottom)
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
         }
     }
