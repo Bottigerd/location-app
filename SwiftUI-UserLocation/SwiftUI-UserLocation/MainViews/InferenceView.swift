@@ -88,7 +88,7 @@ struct InferenceView: View {
                             //                        Styles.barChartMidnightGreenLight
                             let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color(hex: 0x98C9A3, opacity: 0.8), secondGradientColor: Color(hex: 0x98C9A3, opacity: 0.8), textColor: Color.black, legendTextColor: Color.black,dropShadowColor:Color.gray )
                             //                        , animatedToBack:true
-                            BarChartView2(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",style: chartStyle,form: ChartForm.medium)
+                            BarChartView2(data: getTop5Locations2(), title: "Top 5 location",legend: "times visited",style: chartStyle,form: ChartForm.medium)
                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
                             // legend is optional
                             
