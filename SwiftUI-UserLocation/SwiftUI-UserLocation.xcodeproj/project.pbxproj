@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29DAA1E729AC4DCA0048965F /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 29DAA1E629AC4DCA0048965F /* config.json */; };
 		4F73652F2996B20700B7E2EF /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F73652E2996B20700B7E2EF /* LaunchScreen.swift */; };
 		4FA0BA53299A008A00A5EBBC /* NavigationTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0BA52299A008A00A5EBBC /* NavigationTabs.swift */; };
-		7C38A6D029AAFDBB00B68D38 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C38A6CF29AAFDBB00B68D38 /* config.json */; };
+		6993E6731FDCE1FCCBE3E0AB /* Pods_SwiftUI_UserLocationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D8747BB65134D30D07A2A05 /* Pods_SwiftUI_UserLocationTests.framework */; };
 		7C7589DF29871BC300A2443A /* InferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7589DE29871BC300A2443A /* InferenceView.swift */; };
 		7C7589E1298736CE00A2443A /* dataset.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C7589E0298736CE00A2443A /* dataset.txt */; };
 		7CB2CC05297B83FE005C248E /* SwiftUI_UserLocationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2CC04297B83FE005C248E /* SwiftUI_UserLocationApp.swift */; };
@@ -27,6 +28,8 @@
 		7CD934EC29861FB400E98C33 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */; };
 		7CD934ED29861FB400E98C33 /* Name+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */; };
 		7CD934EE29861FB400E98C33 /* Name+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */; };
+		8A002A44442B43239195229D /* Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A2515C098D5F19BC0EF70 /* Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests.framework */; };
+		9DBEB36F79F443925FEF0FE2 /* Pods_SwiftUI_UserLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 844EEBCD1697F822D561D885 /* Pods_SwiftUI_UserLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,9 +50,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		29DAA1E629AC4DCA0048965F /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
+		3D8747BB65134D30D07A2A05 /* Pods_SwiftUI_UserLocationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_UserLocationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F73652E2996B20700B7E2EF /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		4FA0BA52299A008A00A5EBBC /* NavigationTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTabs.swift; sourceTree = "<group>"; };
-		7C38A6CF29AAFDBB00B68D38 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = config.json; path = ../../config.json; sourceTree = "<group>"; };
+		5D8B61723A0A32095B739A17 /* Pods-SwiftUI-UserLocation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI-UserLocation.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI-UserLocation/Pods-SwiftUI-UserLocation.debug.xcconfig"; sourceTree = "<group>"; };
 		7C7589DE29871BC300A2443A /* InferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceView.swift; sourceTree = "<group>"; };
 		7C7589E0298736CE00A2443A /* dataset.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dataset.txt; sourceTree = "<group>"; };
 		7CB2CC01297B83FE005C248E /* SwiftUI-UserLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-UserLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +76,13 @@
 		7CD934E829861FB400E98C33 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7CD934E929861FB400E98C33 /* Name+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7CD934EA29861FB400E98C33 /* Name+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Name+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		844EEBCD1697F822D561D885 /* Pods_SwiftUI_UserLocation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_UserLocation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		850A2515C098D5F19BC0EF70 /* Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EA6B048DE9141820D01BB13 /* Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.release.xcconfig"; sourceTree = "<group>"; };
+		A7A186E5E7E847942652A6D8 /* Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C30A8E9E2DE8D68C03A442C9 /* Pods-SwiftUI-UserLocationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI-UserLocationTests.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI-UserLocationTests/Pods-SwiftUI-UserLocationTests.release.xcconfig"; sourceTree = "<group>"; };
+		D525C996B041A26E34F91E69 /* Pods-SwiftUI-UserLocation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI-UserLocation.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI-UserLocation/Pods-SwiftUI-UserLocation.release.xcconfig"; sourceTree = "<group>"; };
+		ECC1854C3133762265EBD4AF /* Pods-SwiftUI-UserLocationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI-UserLocationTests.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI-UserLocationTests/Pods-SwiftUI-UserLocationTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DBEB36F79F443925FEF0FE2 /* Pods_SwiftUI_UserLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6993E6731FDCE1FCCBE3E0AB /* Pods_SwiftUI_UserLocationTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,12 +106,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A002A44442B43239195229D /* Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18042B9F91F3678A5349D57D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5D8B61723A0A32095B739A17 /* Pods-SwiftUI-UserLocation.debug.xcconfig */,
+				D525C996B041A26E34F91E69 /* Pods-SwiftUI-UserLocation.release.xcconfig */,
+				A7A186E5E7E847942652A6D8 /* Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.debug.xcconfig */,
+				8EA6B048DE9141820D01BB13 /* Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.release.xcconfig */,
+				ECC1854C3133762265EBD4AF /* Pods-SwiftUI-UserLocationTests.debug.xcconfig */,
+				C30A8E9E2DE8D68C03A442C9 /* Pods-SwiftUI-UserLocationTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		48FF35B8A5F9CF6DB6688A7C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				844EEBCD1697F822D561D885 /* Pods_SwiftUI_UserLocation.framework */,
+				850A2515C098D5F19BC0EF70 /* Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests.framework */,
+				3D8747BB65134D30D07A2A05 /* Pods_SwiftUI_UserLocationTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4F73652D2996B1E900B7E2EF /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,23 +155,17 @@
 			path = MainViews;
 			sourceTree = "<group>";
 		};
-		7C4E547229A83F2D001FEC16 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		7CB2CBF8297B83FE005C248E = {
 			isa = PBXGroup;
 			children = (
-				7C38A6CF29AAFDBB00B68D38 /* config.json */,
+				29DAA1E629AC4DCA0048965F /* config.json */,
 				4F73652D2996B1E900B7E2EF /* LaunchScreen */,
 				7CB2CC03297B83FE005C248E /* SwiftUI-UserLocation */,
 				7CB2CC14297B8400005C248E /* SwiftUI-UserLocationTests */,
 				7CB2CC1E297B8401005C248E /* SwiftUI-UserLocationUITests */,
 				7CB2CC02297B83FE005C248E /* Products */,
-				7C4E547229A83F2D001FEC16 /* Recovered References */,
+				18042B9F91F3678A5349D57D /* Pods */,
+				48FF35B8A5F9CF6DB6688A7C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -206,9 +238,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7CB2CC25297B8401005C248E /* Build configuration list for PBXNativeTarget "SwiftUI-UserLocation" */;
 			buildPhases = (
+				7F14D814AEC1FFB3254343C0 /* [CP] Check Pods Manifest.lock */,
 				7CB2CBFD297B83FE005C248E /* Sources */,
 				7CB2CBFE297B83FE005C248E /* Frameworks */,
 				7CB2CBFF297B83FE005C248E /* Resources */,
+				5BFB2E73E80A87B4949056B7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -223,6 +257,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7CB2CC28297B8401005C248E /* Build configuration list for PBXNativeTarget "SwiftUI-UserLocationTests" */;
 			buildPhases = (
+				95436C7478BDA7A9009F5501 /* [CP] Check Pods Manifest.lock */,
 				7CB2CC0D297B8400005C248E /* Sources */,
 				7CB2CC0E297B8400005C248E /* Frameworks */,
 				7CB2CC0F297B8400005C248E /* Resources */,
@@ -241,9 +276,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7CB2CC2B297B8401005C248E /* Build configuration list for PBXNativeTarget "SwiftUI-UserLocationUITests" */;
 			buildPhases = (
+				8A347CEF732F131FA8B5B10A /* [CP] Check Pods Manifest.lock */,
 				7CB2CC17297B8401005C248E /* Sources */,
 				7CB2CC18297B8401005C248E /* Frameworks */,
 				7CB2CC19297B8401005C248E /* Resources */,
+				10AE86DB7DF5537965925604 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -305,7 +342,7 @@
 			files = (
 				7CB2CC0C297B8400005C248E /* Preview Assets.xcassets in Resources */,
 				7C7589E1298736CE00A2443A /* dataset.txt in Resources */,
-				7C38A6D029AAFDBB00B68D38 /* config.json in Resources */,
+				29DAA1E729AC4DCA0048965F /* config.json in Resources */,
 				7CB2CC09297B8400005C248E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +362,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		10AE86DB7DF5537965925604 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5BFB2E73E80A87B4949056B7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI-UserLocation/Pods-SwiftUI-UserLocation-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI-UserLocation/Pods-SwiftUI-UserLocation-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftUI-UserLocation/Pods-SwiftUI-UserLocation-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7F14D814AEC1FFB3254343C0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftUI-UserLocation-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8A347CEF732F131FA8B5B10A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		95436C7478BDA7A9009F5501 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftUI-UserLocationTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7CB2CBFD297B83FE005C248E /* Sources */ = {
@@ -496,7 +636,9 @@
 		};
 		7CB2CC26297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D8B61723A0A32095B739A17 /* Pods-SwiftUI-UserLocation.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -527,7 +669,9 @@
 		};
 		7CB2CC27297B8401005C248E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D525C996B041A26E34F91E69 /* Pods-SwiftUI-UserLocation.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -558,8 +702,9 @@
 		};
 		7CB2CC29297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ECC1854C3133762265EBD4AF /* Pods-SwiftUI-UserLocationTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -577,8 +722,9 @@
 		};
 		7CB2CC2A297B8401005C248E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C30A8E9E2DE8D68C03A442C9 /* Pods-SwiftUI-UserLocationTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -596,8 +742,9 @@
 		};
 		7CB2CC2C297B8401005C248E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7A186E5E7E847942652A6D8 /* Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -613,8 +760,9 @@
 		};
 		7CB2CC2D297B8401005C248E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8EA6B048DE9141820D01BB13 /* Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;

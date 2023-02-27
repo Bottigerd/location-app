@@ -1,0 +1,6 @@
+framework module Pods_SwiftUI_UserLocation_SwiftUI_UserLocationUITests {
+  umbrella header "Pods-SwiftUI-UserLocation-SwiftUI-UserLocationUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
