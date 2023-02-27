@@ -80,9 +80,14 @@ struct InferenceView: View {
                             .offset(x: 10)
                         Spacer()
                         
-                        Text(getTop5Locations())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                        BarChartView(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",form: ChartForm.medium, animatedToBack:true) // legend is optional
+//                        Text("Top 5 place visited: ")
+//                        Color(hex: 0x98C9A3, opacity: 0.8)
+//                        Styles.barChartMidnightGreenLight
+                        let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color(hex: 0x98C9A3, opacity: 0.8), secondGradientColor: Color(hex: 0x98C9A3, opacity: 0.8), textColor: Color.black, legendTextColor: Color.black,dropShadowColor:Color.gray )
+                        
+                        BarChartView(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",style: chartStyle,form: ChartForm.medium, animatedToBack:true)
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100) // legend is optional
+                        
                     }
                     Spacer()
                 }
@@ -289,7 +294,8 @@ struct InferenceView: View {
 //
             var topData: [(String,Int)] = Array()
             for (place,count) in sortedVals{
-                topData.append((place,Int(count)))
+                var processed_place = String(place.split(separator: ",")[0])
+                topData.append((processed_place,Int(count)))
             }
             return ChartData(values: topData)
             
