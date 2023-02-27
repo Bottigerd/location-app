@@ -28,6 +28,8 @@ class HapticFeedback {
     }
     #endif
 }
+
+//I changed the size of the conversational bar.
 struct LabelView: View {
     @Binding var arrowOffset: CGFloat
     @Binding var title:String
@@ -44,7 +46,7 @@ struct LabelView: View {
             }
         }
     }
-    
+    //changed the limit to allow the arrow above the box move.
     func getArrowOffset(offset: CGFloat) -> CGFloat {
 // max(-36,min(36, offset))
         return max(-80,min(30, offset))
