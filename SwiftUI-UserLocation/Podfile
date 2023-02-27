@@ -1,0 +1,21 @@
+# Uncomment the next line to define a global platform for your project
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '13.0'
+
+target 'SwiftUI-UserLocation' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+  pod 'GoogleMaps', '7.3.0'
+  pod 'Google-Maps-iOS-Utils'
+  # Pods for SwiftUI-UserLocation
+
+  target 'SwiftUI-UserLocationTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'SwiftUI-UserLocationUITests' do
+    # Pods for testing
+  end
+
+end
