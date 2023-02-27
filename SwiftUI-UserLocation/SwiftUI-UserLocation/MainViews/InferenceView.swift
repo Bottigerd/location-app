@@ -49,73 +49,75 @@ struct InferenceView: View {
     //UI tab for Inferences
     var body: some View {
         NavigationView{
-            VStack{
-                if(gethome() != ""){
-                    HStack{
-                        Image(systemName: "house.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
+            ScrollView{
+                VStack{
+                    if(gethome() != ""){
+                        HStack{
+                            Image(systemName: "house.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            Text(gethome())
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
                         Spacer()
-                        Text(gethome())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
+                    if (getWork() != "") {
+                        HStack{
+                            Image(systemName: "briefcase.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            Text(getWork())
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
+                        Spacer()
+                    }
+                    if (getTop5Locations() != ""){
+                        HStack{
+                            Image(systemName: "bookmark.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            
+                            //                        Text("Top 5 place visited: ")
+                            //                        Color(hex: 0x98C9A3, opacity: 0.8)
+                            //                        Styles.barChartMidnightGreenLight
+                            let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color(hex: 0x98C9A3, opacity: 0.8), secondGradientColor: Color(hex: 0x98C9A3, opacity: 0.8), textColor: Color.black, legendTextColor: Color.black,dropShadowColor:Color.gray )
+                            //                        , animatedToBack:true
+                            BarChartView2(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",style: chartStyle,form: ChartForm.medium)
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                            // legend is optional
+                            
+                        }
+                        Spacer()
+                    }
+                    if (getRoutine() != ""){
+                        HStack{
+                            Image(systemName: "calendar.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            Text(getRoutine())
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
+                    }
+                    if (gethome() == "" && getRoutine() == "" && getWork() == "" && getTop5Locations() == ""){
+                        HStack{
+                            Text("Insufficient Data. Unable To Make An Inference!")
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
                     }
                     Spacer()
                 }
-                if (getWork() != "") {
-                    HStack{
-                        Image(systemName: "briefcase.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
-                        Spacer()
-                        Text(getWork())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                    Spacer()
-                }
-                if (getTop5Locations() != ""){
-                    HStack{
-                        Image(systemName: "bookmark.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
-                        Spacer()
-                        
-//                        Text("Top 5 place visited: ")
-//                        Color(hex: 0x98C9A3, opacity: 0.8)
-//                        Styles.barChartMidnightGreenLight
-                        let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color(hex: 0x98C9A3, opacity: 0.8), secondGradientColor: Color(hex: 0x98C9A3, opacity: 0.8), textColor: Color.black, legendTextColor: Color.black,dropShadowColor:Color.gray )
-//                        , animatedToBack:true
-                        BarChartView2(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",style: chartStyle,form: ChartForm.medium)
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                        // legend is optional
-                        
-                    }
-                    Spacer()
-                }
-                if (getRoutine() != ""){
-                    HStack{
-                        Image(systemName: "calendar.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
-                        Spacer()
-                        Text(getRoutine())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                }
-                if (gethome() == "" && getRoutine() == "" && getWork() == "" && getTop5Locations() == ""){
-                    HStack{
-                        Text("Insufficient Data. Unable To Make An Inference!")
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                }
-                Spacer()
-            }
-            .navigationTitle("Inferences:")
-            .background( Color(hex: 0x98C9A3, opacity: 0.8))
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
+                .navigationTitle("Inferences:")
+                .background( Color(hex: 0x98C9A3, opacity: 0.8))
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
+            }.background( Color(hex: 0x98C9A3))
         }
     }
     

@@ -40,8 +40,8 @@ struct LabelView: View {
             ArrowUp().fill(Color.white).frame(width: 30, height: 12, alignment: .center).shadow(color: Color.gray, radius: 8, x: 0, y: 0).offset(x: getArrowOffset(offset:self.arrowOffset-25), y: 12)
             ZStack{
                 RoundedRectangle(cornerRadius: 8).frame(width: 200, height: 40, alignment: .center).foregroundColor(Color.white).shadow(radius: 8)
-                Text(self.title).font(.caption).bold()
-                ArrowUp().fill(Color.white).frame(width: 30, height: 12, alignment: .center).zIndex(999).offset(x: getArrowOffset(offset:self.arrowOffset-25), y: -20)
+                Text(self.title).font(.caption).bold().truncationMode(.tail)
+                ArrowUp().fill(Color.white).frame(width: 30, height: 12, alignment: .center).zIndex(999).offset(x: getArrowOffset(offset:self.arrowOffset-25), y: -25)
 
             }
         }
@@ -215,7 +215,7 @@ public struct BarChartView2 : View {
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }else{
-                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
+                        Text("\(self.currentValue, specifier: self.valueSpecifier) times visited" )
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }
