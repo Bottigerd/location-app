@@ -6,6 +6,7 @@ import SwiftUI
 import CoreData
 import Foundation
 import SwiftUICharts
+
 //Extension to convert hex color code to RGB color
 extension Color {
     init(hex: Int, opacity: Double = 1.0) {
@@ -38,6 +39,7 @@ extension Date {
         return days1 - days2
     }
 }
+ 
 
 struct InferenceView: View {
     var places = [String]()
@@ -84,9 +86,10 @@ struct InferenceView: View {
 //                        Color(hex: 0x98C9A3, opacity: 0.8)
 //                        Styles.barChartMidnightGreenLight
                         let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color(hex: 0x98C9A3, opacity: 0.8), secondGradientColor: Color(hex: 0x98C9A3, opacity: 0.8), textColor: Color.black, legendTextColor: Color.black,dropShadowColor:Color.gray )
-                        
-                        BarChartView(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",style: chartStyle,form: ChartForm.medium, animatedToBack:true)
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100) // legend is optional
+//                        , animatedToBack:true
+                        BarChartView2(data: getTop5Locations2(), title: "Top 5 location",legend: "counts",style: chartStyle,form: ChartForm.medium)
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        // legend is optional
                         
                     }
                     Spacer()
