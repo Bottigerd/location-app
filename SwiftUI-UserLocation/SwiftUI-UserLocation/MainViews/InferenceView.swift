@@ -118,6 +118,7 @@ struct InferenceView: View {
                 .background( Color(hex: 0x98C9A3, opacity: 0.8))
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
             }.background( Color(hex: 0x98C9A3))
+
         }
     }
     
