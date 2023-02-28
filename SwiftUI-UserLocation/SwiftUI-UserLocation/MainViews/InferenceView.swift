@@ -5,6 +5,7 @@
 import SwiftUI
 import CoreData
 import Foundation
+import SwiftUICharts
 
 //Extension to convert hex color code to RGB color
 extension Color {
@@ -38,6 +39,7 @@ extension Date {
         return days1 - days2
     }
 }
+ 
 
 struct InferenceView: View {
     var places = [String]()
@@ -47,66 +49,76 @@ struct InferenceView: View {
     //UI tab for Inferences
     var body: some View {
         NavigationView{
-            VStack{
-                if(gethome() != ""){
-                    HStack{
-                        Image(systemName: "house.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
+            ScrollView{
+                VStack{
+                    if(gethome() != ""){
+                        HStack{
+                            Image(systemName: "house.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            Text(gethome())
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
                         Spacer()
-                        Text(gethome())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                    }
+                    if (getWork() != "") {
+                        HStack{
+                            Image(systemName: "briefcase.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            Text(getWork())
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
+                        Spacer()
+                    }
+                    if (getTop5Locations() != ""){
+                        HStack{
+                            Image(systemName: "bookmark.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            
+                            //                        Text("Top 5 place visited: ")
+                            //                        Color(hex: 0x98C9A3, opacity: 0.8)
+                            //                        Styles.barChartMidnightGreenLight
+                            let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color(hex: 0x98C9A3, opacity: 0.8), secondGradientColor: Color(hex: 0x98C9A3, opacity: 0.8), textColor: Color.black, legendTextColor: Color.black,dropShadowColor:Color.gray )
+                            //                        , animatedToBack:true
+                            BarChartView2(data: getTop5Locations2(), title: "Top 5 location",legend: "times visited",style: chartStyle,form: ChartForm.medium)
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                            // legend is optional
+                            
+                        }
+                        Spacer()
+                    }
+                    if (getRoutine() != ""){
+                        HStack{
+                            Image(systemName: "calendar.circle.fill")
+                                .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
+                                .font(.system(size: 60))
+                                .offset(x: 10)
+                            Spacer()
+                            Text(getRoutine())
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
+                    }
+                    if (gethome() == "" && getRoutine() == "" && getWork() == "" && getTop5Locations() == ""){
+                        HStack{
+                            Text("Insufficient Data. Unable To Make An Inference!")
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
+                        }
                     }
                     Spacer()
                 }
-                if (getWork() != "") {
-                    HStack{
-                        Image(systemName: "briefcase.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
-                        Spacer()
-                        Text(getWork())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                    Spacer()
-                }
-                if (getTop5Locations() != ""){
-                    HStack{
-                        Image(systemName: "bookmark.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
-                        Spacer()
-                        Text(getTop5Locations())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                    Spacer()
-                }
-                if (getRoutine() != ""){
-                    HStack{
-                        Image(systemName: "calendar.circle.fill")
-                            .foregroundColor(Color(hex: 0xfefee3, opacity: 0.8))
-                            .font(.system(size: 60))
-                            .offset(x: 10)
-                        Spacer()
-                        Text(getRoutine())
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                }
-                if (gethome() == "" && getRoutine() == "" && getWork() == "" && getTop5Locations() == ""){
-                    HStack{
-                        Text("Insufficient Data. Unable To Make An Inference!")
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100)
-                    }
-                }
-                Spacer()
-            }
-            .navigationTitle("Inferences:")
-            .background( Color(hex: 0x98C9A3, opacity: 0.8))
-            .padding(.bottom)
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
+                .navigationTitle("Inferences:")
+                .background( Color(hex: 0x98C9A3, opacity: 0.8))
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .leading)
+            }.background( Color(hex: 0x98C9A3))
+
         }
     }
     
@@ -204,11 +216,10 @@ struct InferenceView: View {
         return address
     }
     
-    
-    //returns the 5 most frequented locations of user
     private func getTop5Locations() -> String{
         let data = getAllLocationCounts();
-        print(data.count)
+            
+        
         if((data.count < 5) || (data[4].name == nil)){
             return ""
         }
@@ -239,12 +250,61 @@ struct InferenceView: View {
             
             var ret =  "Here Are Your Top 5 Places: \n"
             var topcount = 1
+        
+            
             for (place, _) in sortedVals{
                 print(topcount, place)
                 ret += String(topcount) + " " + place + "\n"
                 topcount += 1
             }
             return ret
+        }
+    }
+    
+    
+    //returns the 5 most frequented locations of user
+    private func getTop5Locations2() -> ChartData{
+        let data = getAllLocationCounts();
+            
+        
+        if((data.count < 5) || (data[4].name == nil)){
+            return ChartData(values: [("no value",0)])
+        }
+        else{
+            var topPlaces: Array<String> = Array();
+            topPlaces = [data[0].name!, data[1].name!, data[2].name!, data[3].name!, data[4].name!]
+            var topCounts: Array<Int16> = Array();
+            topCounts = [data[0].count, data[1].count, data[2].count, data[3].count, data[4].count]
+            var min = topCounts.min();
+            
+            for i in data{
+                if((i.name != nil) && (!topPlaces.contains(i.name!)) && (min! < i.count)) {
+                    let index = topCounts.firstIndex(of: min!)
+                    topCounts[index!] = i.count
+                    topPlaces[index!] = i.name!
+                    min = topCounts.min()
+                }
+            }
+            
+            let top5 = [
+                topPlaces[0] : topCounts[0],
+                topPlaces[1] : topCounts[1],
+                topPlaces[2] : topCounts[2],
+                topPlaces[3] : topCounts[3],
+                topPlaces[4] : topCounts[4]
+            ]
+            let sortedVals = top5.sorted { $0.1 > $1.1 }
+            
+//            var ret =  "Here Are Your Top 5 Places: \n"
+//            var topcount = 1
+//
+            var topData: [(String,Int)] = Array()
+            for (place,count) in sortedVals{
+                var processed_place = String(place.split(separator: ",")[0])
+                topData.append((processed_place,Int(count)))
+            }
+            return ChartData(values: topData)
+            
         }
     }
     

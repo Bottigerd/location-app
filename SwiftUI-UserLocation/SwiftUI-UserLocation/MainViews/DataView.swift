@@ -41,16 +41,33 @@ struct DataView: View {
 
     var body: some View {
             NavigationView {
-                VStack(spacing: -15) {
-                
+                VStack {
+                    TextField("Timestamp", text: $time)
+                    TextField("Latitude", text: $latitude)
+                    TextField("Longitude", text: $longitude)
+                    TextField("Altitude", text: $altitude)
+                    TextField("Name", text: $name)
+                    
+                    
                     HStack {
-                        
-                        Button(action: {openFile.toggle()}, label: {
-                            Text("Import \nCSV")
+                        Spacer()
+                        Button("Add") {
+                            addLocation()
+                            time = ""
+                            latitude = ""
+                            longitude = ""
+                            altitude = ""
+                            name = ""
+                        }
+                        Spacer()
+                        Button("Clear") {
+                            time = ""
+                            latitude = ""
+                            longitude = ""
+                            altitude = ""
+                            name = ""
                             
-                             
-                    })
-
+                       }
 
                         Spacer()
                         Button("Nuke") {
@@ -66,9 +83,9 @@ struct DataView: View {
                                 secondaryButton: .cancel()
                             )
                         }
-                        
-                        Spacer()
-                        Button("Export \nCSV") {
+
+                       Spacer()
+                        Button("Export CSV") {
                             exportCSV()
                             time = ""
                             latitude = ""
@@ -76,32 +93,36 @@ struct DataView: View {
                             altitude = ""
                             name = ""
                    }
-
+                        Spacer()
+                        Button(action: {openFile.toggle()}, label: {
+                            Text("Import CSV")
+                            
+                             
+                    })
                     }
-                    .padding()
+                   .padding()
                    .frame(maxWidth: .infinity)
                    
                     List {
                         ForEach(locations) { location in
                             HStack {
-                               
-                                Text(castToString(givenDate:location.time!)).font(Font.system(size:13))
+                                Text(castToString(givenDate:location.time!) )
                                 Spacer()
-                                Text(location.name ?? "no").font(Font.system(size:13))
+                                Text(location.name ?? "no")
                                 Spacer()
-                                Text( String(format: "%f", location.latitude)).font(Font.system(size:13))
+                                Text( String(format: "%f", location.latitude) )
                                 Spacer()
-                                Text(String(format: "%f", location.longitude)).font(Font.system(size:13))
+                                Text(String(format: "%f", location.longitude) )
                                 Spacer()
-                                Text(String(format: "%f", location.altitude)).font(Font.system(size:13))
-                                
+                                Text(String(format: "%f", location.altitude) )
+                                Spacer()
 
                             }
                         }
                         .onDelete(perform: deleteLocations)
                         
                     }
-                   .navigationTitle("Location History")
+                   .navigationTitle("Location Database")
                }
                 .fileImporter(isPresented: $openFile, allowedContentTypes: [.commaSeparatedText], allowsMultipleSelection: false){ (res) in
                     do{
@@ -114,6 +135,7 @@ struct DataView: View {
                         debugPrint(error.localizedDescription)
                     }
                 }
+               .padding()
                .textFieldStyle(RoundedBorderTextFieldStyle())
            }
        }
@@ -289,10 +311,10 @@ struct DataView: View {
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
-            var csvText = "Timestamp;Latitude;Longitude;Altitude;Name\n"
+            var csvText = "Timestamp,Latitude,Longitude,Altitude,Name\n"
 
             for location in locations {
-                csvText += "\(location.time! );\(location.latitude  );\(location.longitude );\(location.altitude );\(location.name ?? "Not Found")\n"
+                csvText += "\(location.time! ),\(location.latitude  ),\(location.longitude ),\(location.altitude ),\(location.name ?? "Not Found")\n"
             }
 
             do {
@@ -323,9 +345,9 @@ struct DataView: View {
                 rows.removeFirst()
                 for row in rows {
                     if !row.isEmpty{
-                        let columns = row.components(separatedBy: ";")
+                        let columns = row.components(separatedBy: ",")
                         let location = Location(context: viewContext)
-                        
+                        let name_db = Name(context: viewContext)
                         let castedDate = importDateFormatter.date(from: columns[0] )
                         location.time = castedDate ?? Date()
                         location.latitude = Double(columns[1]) ?? 0.0
@@ -348,7 +370,6 @@ struct DataView: View {
 //                            debugPrint(objectUpdate.value(forKey: "count"))
                         }
                         else{
-                            let name_db = Name(context: viewContext)
                             name_db.name=columns[4]
                             name_db.count = 1
                         }
