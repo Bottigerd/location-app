@@ -178,6 +178,8 @@ final class ContentViewModel: NSObject, ObservableObject,
     var reverseGeoCodeResults: ReverseGeoCodingResponseStruct?
     var placeResults: PlaceResponseStruct?
     var locationManager: CLLocationManager?
+    private var DataController = DataView()
+    var viewContext = PersistenceController.shared.container.viewContext
 
     //    map from place id to Carleton Buildings
     var carletonDict:[String:String] = [
@@ -207,7 +209,7 @@ final class ContentViewModel: NSObject, ObservableObject,
         "ChIJnyIJxrBT9ocRyiDLmcJrhSc" : "Language and Dining Center"
         ]
 
-    var viewContext = PersistenceController.shared.container.viewContext
+    
     
     // Checks for locaiton permissions, sets up location manager if true
     func setupLocationManager() -> Bool {
@@ -468,14 +470,12 @@ final class ContentViewModel: NSObject, ObservableObject,
     
     
     private func addLocationFromAPI(givenTime:Date, givenLat: Double, givenLong: Double, givenAlt: Double, givenName:String){
-        
-        
         let location = Location(context: viewContext)
         location.time=givenTime
         location.latitude = Double(givenLat)
         location.longitude = Double(givenLong)
         location.altitude = Double(givenAlt)
-        let count = getCount(Name: givenName)
+        let count = DataController.getCount(Name: givenName)
         location.name = givenName
         
         
@@ -496,24 +496,11 @@ final class ContentViewModel: NSObject, ObservableObject,
             name_db.count = 1
         }
 
-        saveContext()
+        DataController.saveContext()
     }
 
-    private func getCount(Name: String) -> Int {
-       let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
-       fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
-        let count = try! viewContext.count(for:fetchRequest)
-       return count
-    }
 
-    private func saveContext() {
-        do {
-            try viewContext.save()
-        } catch {
-            let error = error as NSError
-            fatalError("An error occured: \(error)")
-        }
-    }
+
 
 
 

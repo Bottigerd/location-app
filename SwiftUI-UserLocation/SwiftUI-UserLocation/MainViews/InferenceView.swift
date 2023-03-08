@@ -6,6 +6,7 @@ import SwiftUI
 import CoreData
 import Foundation
 
+
 //Extension to convert hex color code to RGB color
 extension Color {
     init(hex: Int, opacity: Double = 1.0) {
@@ -42,7 +43,7 @@ extension Date {
 struct InferenceView: View {
     var places = [String]()
     var times = [Date]()
-    let viewContext = PersistenceController.shared.container.viewContext
+    private var DataController = DataView()
     
     //UI tab for Inferences
     var body: some View {
@@ -117,7 +118,7 @@ struct InferenceView: View {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let data = getAllLocationHistory()
+        let data = DataController.getAllLocationHistory()
     
         if (data.count == 0){
             return ""
@@ -164,7 +165,7 @@ struct InferenceView: View {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let data = getAllLocationHistory();
+        let data = DataController.getAllLocationHistory();
         
         if (data.count == 0){
             return ""
@@ -207,7 +208,7 @@ struct InferenceView: View {
     
     //returns the 5 most frequented locations of user
     private func getTop5Locations() -> String{
-        let data = getAllLocationCounts();
+        let data = DataController.getAllLocationCounts();
         print(data.count)
         if((data.count < 5) || (data[4].name == nil)){
             return ""
@@ -250,7 +251,7 @@ struct InferenceView: View {
     
     //Returns Carleton users routine in the weekday according to Carleton class times
     private func getRoutine() -> String{
-        let data = getAllLocationHistory();
+        let data = DataController.getAllLocationHistory();
         
         var mwTimes: Array<String> = Array();
         mwTimes = ["08:30:00", "09:50:00", "11:10:00", "12:30:00", "13:50:00", "15:10:00"];
@@ -369,40 +370,7 @@ struct InferenceView: View {
     }
     
     
-    // gets all location data from CoreData. Location data includes name,latitude,longitude,altitude and timestamp
-    private func getAllLocationHistory() -> [Location] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
-        let result = try! viewContext.fetch(fetchRequest) as! [Location]
-        for i in result{
-            print(i.name ?? "hi")
-        }
-        return result
-    }
-    
-    
-    
-    // gets all counts for all locations. access results the same way as getAllLocationHistory()
-    private func getAllLocationCounts() -> [Name] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
-        
-        let sortOrder = NSSortDescriptor(key: "count", ascending: false)
-        fetchRequest.sortDescriptors = [sortOrder]
-        let result = try! viewContext.fetch(fetchRequest) as! [Name]
-        debugPrint(result)
-        return result
-        
-    }
-    
-//   to see how the startTime and endTime formats should be, see Test() function below. Sorts in reverse chronological order with latest being first. if you want to invert it, just make 'ascending: true'
-    private func getAllLocationWithinRange(startTime: Date, endTime: Date) -> [Location] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
-        let sortOrder = NSSortDescriptor(key: "time", ascending: true)
-        fetchRequest.sortDescriptors = [sortOrder]
-        fetchRequest.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", startTime as CVarArg, endTime as CVarArg)
-        let result = try! viewContext.fetch(fetchRequest) as! [Location]
-        return result
-        
-    }
+
     
     
 }
