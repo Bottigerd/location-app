@@ -1,12 +1,12 @@
 
 //  DataView.swift
-//  DataDemo
 //
 //  Created by CS Lab User on 1/25/23.
 
+// Initial Version built following a tutorial from here https://www.answertopia.com/ios/an-ios-core-data-tutorial/
+
 // Data View:
-// This view allows you to manually enter datapoints into the
-// set, import data from a CSV file, and export data to a CSV file.
+// This view allows you to view all location logs, import data from a CSV file, and export data to a CSV file.
 
 
 import SwiftUI
