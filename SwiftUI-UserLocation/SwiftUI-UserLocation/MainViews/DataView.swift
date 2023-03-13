@@ -1,12 +1,12 @@
 
 //  DataView.swift
-//  DataDemo
 //
 //  Created by CS Lab User on 1/25/23.
 
+// Initial Version built following a tutorial from here https://www.answertopia.com/ios/an-ios-core-data-tutorial/
+
 // Data View:
-// This view allows you to manually enter datapoints into the
-// set, import data from a CSV file, and export data to a CSV file.
+// This view allows you to view all location logs, import data from a CSV file, and export data to a CSV file.
 
 
 import SwiftUI
@@ -31,8 +31,7 @@ struct DataView: View {
     @State private var showingAlert = false
 
     
-    @Environment(\.managedObjectContext) private var viewContext
-    
+    let viewContext = PersistenceController.shared.container.viewContext
     @FetchRequest(entity: Location.entity(), sortDescriptors: [])
     private var locations: FetchedResults<Location>
     
@@ -42,16 +41,10 @@ struct DataView: View {
     var body: some View {
             NavigationView {
                 VStack(spacing: -15) {
-                
                     HStack {
-                        
                         Button(action: {openFile.toggle()}, label: {
                             Text("Import \nCSV")
-                            
-                             
                     })
-
-
                         Spacer()
                         Button("Nuke") {
                             showingAlert = true
@@ -66,7 +59,6 @@ struct DataView: View {
                                 secondaryButton: .cancel()
                             )
                         }
-                        
                         Spacer()
                         Button("Export \nCSV") {
                             exportCSV()
@@ -76,11 +68,9 @@ struct DataView: View {
                             altitude = ""
                             name = ""
                    }
-
                     }
                     .padding()
                    .frame(maxWidth: .infinity)
-                   
                     List {
                         ForEach(locations) { location in
                             HStack {
@@ -94,19 +84,16 @@ struct DataView: View {
                                 Text(String(format: "%f", location.longitude)).font(Font.system(size:13))
                                 Spacer()
                                 Text(String(format: "%f", location.altitude)).font(Font.system(size:13))
-                                
-
                             }
                         }
                         .onDelete(perform: deleteLocations)
-                        
                     }
                    .navigationTitle("Location History")
                }
+//                Credit to Stack Overflow: Sergei Volkov
                 .fileImporter(isPresented: $openFile, allowedContentTypes: [.commaSeparatedText], allowsMultipleSelection: false){ (res) in
                     do{
                         let fileURL=try res.get()[0]
-//                        debugPrint(fileURL)
                         importCSV(url: fileURL)
                     }
                     catch{
@@ -134,9 +121,6 @@ struct DataView: View {
                 let addDateFormatter = DateFormatter()
                 addDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 location.time = addDateFormatter.date(from: time) ?? Date()
-//                debugPrint(time)
-//                debugPrint(addDateFormatter.date(from: time))
-//                location.addToTimes(timestamp)
                 location.latitude = Double(latitude) ?? 0.0
                 location.longitude = Double(longitude) ?? 0.0
                 location.altitude = Double(altitude) ?? 0.0
@@ -146,20 +130,13 @@ struct DataView: View {
                 // if no, initialize count to 1
                 // if yes, fetch request, modify count to +1
                 
-                
-            
                 if (count==1){
-//                    debugPrint("here")
                     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                     fetchRequest.predicate = NSPredicate(format: "(name = %@)", name)
                     let result = try! viewContext.fetch(fetchRequest)
-//                    debugPrint(result)
                     let objectUpdate = result[0] as! NSManagedObject
-//                    objectUpdate.setValue(, forKey: "name")
                     let curCount = objectUpdate.value(forKey: "count")
-//                    debugPrint(objectUpdate.value(forKey: "count"))
                     objectUpdate.setValue(curCount as! Int+1, forKey: "count")
-//                    debugPrint(objectUpdate.value(forKey: "count"))
                 }
                 else{
                     let name_db = Name(context: viewContext)
@@ -171,15 +148,14 @@ struct DataView: View {
             }
         }
     
-    private func getCount(Name: String) -> Int {
+    func getCount(Name: String) -> Int {
        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
        fetchRequest.predicate = NSPredicate(format: "(name = %@)", Name)
         let count = try! viewContext.count(for:fetchRequest)
-//        debugPrint(count)
        return count
     }
         
-    private func saveContext() {
+    func saveContext() {
         do {
             try viewContext.save()
         } catch {
@@ -189,15 +165,12 @@ struct DataView: View {
     }
     
     private func deleteLocations(offsets: IndexSet) {
-        // not sure if actually deletes properly or nah, but looks like it
-//        debugPrint(offsets.map {locations[$0]}[0].value(forKey: "name")!)
         let deleted_name = offsets.map{locations[$0]}[0].value(forKey: "name") as! NSString
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
         fetchRequest.predicate = NSPredicate(format: "(name = %@)", deleted_name)
         let result = try! viewContext.fetch(fetchRequest)
         let objectUpdate = result[0] as! NSManagedObject
         let curCount = objectUpdate.value(forKey: "count") as! Int
-//        debugPrint(curCount)
         
         if curCount>1{
             objectUpdate.setValue(curCount-1, forKey: "count")
@@ -212,11 +185,6 @@ struct DataView: View {
                 saveContext()
             
             }
-
-//        let fetchRequest2 = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
-//        fetchRequest2.predicate = NSPredicate(format: "(name = %@)", deleted_name)
-//        let result2 = try! viewContext.fetch(fetchRequest2)
-//        debugPrint(result2)
         
     }
     
@@ -225,9 +193,6 @@ struct DataView: View {
     private func nukeData() {
 //        On the offchance that there is a performance issue, uncomment
 //        the following two lines and delete the "for name in names" loop
-        
-//        let nameFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
-//        batchDeletion(fetch: nameFetch)
         
         for location in locations {
             viewContext.delete(location)
@@ -286,6 +251,8 @@ struct DataView: View {
            }
        }
 
+    
+    //   Credit to Stack Overflow: Justin Chung
     func exportCSV() {
             let fileName = "export.csv"
             let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
@@ -305,11 +272,8 @@ struct DataView: View {
 
             var filesToShare = [Any]()
             filesToShare.append(path!)
-
             let av = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
-
             UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
-
             isShareSheetShowing.toggle()
         }
     
@@ -332,20 +296,15 @@ struct DataView: View {
                         location.longitude = Double(columns[2]) ?? 0.0
                         location.altitude = Double(columns[3]) ?? 0.0
                         location.name = columns[4]
-//                        location.count = 1
                         let count = getCount(Name: columns[4])
                         
                         if (count==1){
-//                            debugPrint("here")
                             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
                             fetchRequest.predicate = NSPredicate(format: "(name = %@)", columns[4])
                             let result = try! viewContext.fetch(fetchRequest)
-//                            debugPrint(result)
                             let objectUpdate = result[0] as! NSManagedObject
-        //                    objectUpdate.setValue(, forKey: "name")
                             let curCount = objectUpdate.value(forKey: "count")
                             objectUpdate.setValue(curCount as! Int+1, forKey: "count")
-//                            debugPrint(objectUpdate.value(forKey: "count"))
                         }
                         else{
                             let name_db = Name(context: viewContext)
@@ -370,6 +329,38 @@ struct DataView: View {
         
         
         }
+    
+    // gets all location data from CoreData. Location data includes name,latitude,longitude,altitude and timestamp
+     func getAllLocationHistory() -> [Location] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        let result = try! viewContext.fetch(fetchRequest) as! [Location]
+
+        return result
+    }
+    
+    
+    
+    // gets all counts for all locations. access results the same way as getAllLocationHistory()
+     func getAllLocationCounts() -> [Name] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Name")
+        let sortOrder = NSSortDescriptor(key: "count", ascending: false)
+        fetchRequest.sortDescriptors = [sortOrder]
+        let result = try! viewContext.fetch(fetchRequest) as! [Name]
+         
+        return result
+        
+    }
+    
+//   to see how the startTime and endTime formats should be, see Test() function below. Sorts in reverse chronological order with latest being first. if you want to invert it, just make 'ascending: true'
+     func getAllLocationWithinRange(startTime: Date, endTime: Date) -> [Location] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        let sortOrder = NSSortDescriptor(key: "time", ascending: true)
+        fetchRequest.sortDescriptors = [sortOrder]
+        fetchRequest.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", startTime as CVarArg, endTime as CVarArg)
+        let result = try! viewContext.fetch(fetchRequest) as! [Location]
+        return result
+        
+    }
     
     
 
